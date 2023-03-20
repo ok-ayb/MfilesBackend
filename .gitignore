@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local config ###
+src/main/resources/application-local-postgres.yml
+/src/main/resources/application-local-h2.yml
+/logs/
