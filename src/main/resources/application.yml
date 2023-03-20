@@ -5,8 +5,8 @@ server:
   port: ${APPLICATION_PORT:8080}
 
 spring:
-  #profiles:
-    #active: local-postgres
+  profiles:
+    active: local-postgres
   datasource:
     initialization-mode: always
     url: ${DB_URL}
