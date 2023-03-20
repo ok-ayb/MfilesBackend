@@ -1,0 +1,84 @@
+server:
+  compression:
+    enabled: true
+    mime-types: application/json
+  port: ${APPLICATION_PORT:8080}
+
+spring:
+  #profiles:
+    #active: local-postgres
+  datasource:
+    initialization-mode: always
+    url: ${DB_URL}
+    driverClassName: org.postgresql.Driver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:100}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectUri: ${BACK_END_URL}/api/oauth2/callback/{registrationId}
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: ${FACEBOOK_CLIENT_ID}
+            clientSecret: ${FACEBOOK_CLIENT_SECRET}
+            redirectUri: ${BACK_END_URL}/api/oauth2/callback/{registrationId}
+            scope:
+              - email
+              - public_profile
+          linkedin:
+            clientId: ${LINKEDIN_CLIENT_ID}
+            clientSecret: ${LINKEDIN_SECRET}
+            authorization-grant-type: authorization_code
+            client-name: Linkedin
+            client-authentication-method: post
+            scope:
+              - r_liteprofile
+              - r_emailaddress
+            redirectUri: ${BACK_END_URL}/api/oauth2/callback/{registrationId}
+
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,email
+
+          linkedin:
+            authorization-uri: https://www.linkedin.com/oauth/v2/authorization
+            token-uri: https://www.linkedin.com/uas/oauth2/accessToken
+            user-info-uri: https://api.linkedin.com/v2/me
+            jwk-set-uri:
+            user-name-attribute: id
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    #hibernate.ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 100
+          order_updates: true
+        generate_statistics: false
+        temp:
+          use_jdbc_metadata_defaults: false
+  flyway:
+    baseline-on-migrate: true
+    enabled: false
+    baseline-version: 0.1.0
+    table: sm_wall
+    locations: classpath:migration
+  h2:
+    console:
+      enabled: false
+  thymeleaf:
+    template-loader-path: classpath:/templates
+    suffix: .html
+    cache: false
+
