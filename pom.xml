@@ -21,7 +21,6 @@
 		<mapstruct.version>1.3.1.Final</mapstruct.version>
 		<jpamodelgen.version>5.3.10.Final</jpamodelgen.version>
 		<h2.version>1.4.200</h2.version>
-		<h2.version>1.4.200</h2.version>
 		<spring-tools-xhub.version>0.0.1-SNAPSHOT</spring-tools-xhub.version>
 		<jakarta.version>2.1.1</jakarta.version>
 		<apache-common.version>3.9</apache-common.version>
@@ -29,6 +28,7 @@
 		<apache-common-io.version>2.6</apache-common-io.version>
 		<power-mock.version>2.0.7</power-mock.version>
 		<hibernate-validator.version>6.2.0.final</hibernate-validator.version>
+		<keycloak.version>7.0.0</keycloak.version>
 		<surefire.argLine>-Xmx1024m --illegal-access=permit --add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
 		</surefire.argLine>
 		<json-path.version>2.4.0</json-path.version>
@@ -40,7 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -53,6 +53,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-spring-boot-starter</artifactId>
+			<version>${keycloak.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -81,11 +86,6 @@
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
 			<version>${apache-common-validator.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
