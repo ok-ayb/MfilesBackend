@@ -57,7 +57,8 @@ spring:
             jwk-set-uri:
             user-name-attribute: id
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
     #hibernate.ddl-auto: update
     show-sql: false
     properties:
@@ -68,6 +69,10 @@ spring:
         generate_statistics: false
         temp:
           use_jdbc_metadata_defaults: false
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: UNSPECIFIED
   flyway:
     baseline-on-migrate: true
     enabled: false

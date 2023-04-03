@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.9</version>
+		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>smwall</groupId>
@@ -14,21 +14,21 @@
 	<name>sm-backend</name>
 	<description>Social media wall app</description>
 	<properties>
-		<java.version>11</java.version>
-		<springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+		<java.version>17</java.version>
+		<springfox-swagger-ui.version>3.0.0</springfox-swagger-ui.version>
 		<jjwt.version>0.9.1</jjwt.version>
 		<docker.image.prefix>rg.fr-par.scw.cloud/thns</docker.image.prefix>
 		<mapstruct.version>1.3.1.Final</mapstruct.version>
 		<jpamodelgen.version>5.3.10.Final</jpamodelgen.version>
 		<h2.version>1.4.200</h2.version>
+		<h2.version>1.4.200</h2.version>
 		<spring-tools-xhub.version>0.0.1-SNAPSHOT</spring-tools-xhub.version>
-		<jaxb.version>2.3.0</jaxb.version>
-		<javax.version>1.3.2</javax.version>
+		<jakarta.version>2.1.1</jakarta.version>
 		<apache-common.version>3.9</apache-common.version>
 		<apache-common-validator.version>1.4.1</apache-common-validator.version>
 		<apache-common-io.version>2.6</apache-common-io.version>
 		<power-mock.version>2.0.7</power-mock.version>
-		<hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.2.0.final</hibernate-validator.version>
 		<surefire.argLine>-Xmx1024m --illegal-access=permit --add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
 		</surefire.argLine>
 		<json-path.version>2.4.0</json-path.version>
@@ -59,10 +59,9 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -136,9 +135,9 @@
 			<version>${hibernate-validator.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>${javax.version}</version>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>${jakarta.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -157,7 +156,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
+			<artifactId>springfox-boot-starter</artifactId>
 			<version>${springfox-swagger-ui.version}</version>
 		</dependency>
 		<dependency>
@@ -220,14 +219,14 @@
 							<version>${jpamodelgen.version}</version>
 						</path>
 						<path>
-							<groupId>javax.xml.bind</groupId>
-							<artifactId>jaxb-api</artifactId>
-							<version>${jaxb.version}</version>
+							<groupId>jakarta.xml.bind</groupId>
+							<artifactId>jakarta.xml.bind-api</artifactId>
+							<version>2.3.2</version>
 						</path>
 						<path>
-							<groupId>javax.annotation</groupId>
-							<artifactId>javax.annotation-api</artifactId>
-							<version>${javax.version}</version>
+							<groupId>jakarta.annotation</groupId>
+							<artifactId>jakarta.annotation-api</artifactId>
+							<version>${jakarta.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
