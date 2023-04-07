@@ -25,4 +25,8 @@ spring:
     console:
       enabled: false
 
-
+application:
+  webhooks:
+    meta:
+      verify-token:
+      app-secret:

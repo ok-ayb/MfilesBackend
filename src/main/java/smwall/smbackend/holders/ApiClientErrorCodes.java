@@ -7,7 +7,10 @@ import java.util.Map;
 public enum ApiClientErrorCodes {
 
     //user *example*
-    USER_NOT_FOUND(1, "user.not.found");
+    USER_NOT_FOUND(1, "user.not.found"),
+
+    WEBHOOKS_SUBSCRIPTION_DENIED(2, "webhooks.subscription.failed");
+
 
     private Integer code;
     private String msgKey;
