@@ -22,6 +22,13 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(ApiPaths.V1 + ApiPaths.WEBHOOKS + "/**").permitAll()
+                .requestMatchers("/swagger-resources/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/configuration/ui",
+                        "/h2/**",
+                        "/login",
+                        "/config").permitAll()
                 .anyRequest().authenticated();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
