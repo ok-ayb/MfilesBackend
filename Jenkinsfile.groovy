@@ -44,6 +44,12 @@ pipeline {
             }
         }
         stage('Sonar') {
+            tools {
+                jdk "Java17"
+            }
+            environment {
+                scannerHome = tool 'sonar_scanner'
+            }
             when {
                 expression { return (env.GIT_BRANCH =~ '.*develop.*|.*master.*').matches() }
             }
