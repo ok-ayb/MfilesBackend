@@ -10,11 +10,11 @@ spring:
     active: local-mongodb
   data:
     mongodb:
-      host: ${DB_HOST}
-      port: ${DB_PORT}
-      database: ${DB_NAME}
-      username: ${DB_USER_NAME}
-      password: ${DB_USER_PASSWORD}
+      host: ${DB_HOST:localhost}
+      port: ${DB_PORT:27017}
+      database: ${DB_NAME:smwall-database}
+      username: ${DB_USER_NAME:root}
+      password: ${DB_USER_PASSWORD:root}
   flyway:
     baseline-on-migrate: true
     enabled: false
