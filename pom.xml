@@ -267,7 +267,7 @@
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
-					<version>3.6.1.1688</version>
+					<version>3.9.0.2155</version>
 					<configuration>
 						<sonar.host.url>https://sonar.sdf.x-hub.io</sonar.host.url>
 						<sonar.version>7.9.1</sonar.version>
