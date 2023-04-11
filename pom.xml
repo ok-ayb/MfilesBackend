@@ -270,7 +270,6 @@
 					<version>3.9.0.2155</version>
 					<configuration>
 						<sonar.host.url>https://sonar.sdf.x-hub.io</sonar.host.url>
-						<sonar.version>7.9.1</sonar.version>
 					</configuration>
 				</plugin>
 				<plugin>
