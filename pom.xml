@@ -268,13 +268,6 @@
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>3.4.0.905</version>
-					<dependencies>
-       					<dependency>
-            				<groupId>org.sonatype.plexus</groupId>
-           					<artifactId>plexus-cipher</artifactId>
-            				<version>1.4</version>
-        				</dependency>
-    				</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.sonatype.plugins</groupId>
