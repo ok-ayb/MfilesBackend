@@ -285,6 +285,9 @@
 					<version>3.10.1</version>
 					<configuration>
 						<release>17</release>
+						<excludes>
+							<exclude>**/org/sonarsource/scanner/maven/*</exclude>
+						</excludes>
 					</configuration>
 				</plugin>
 				<plugin>
