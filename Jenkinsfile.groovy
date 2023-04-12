@@ -44,7 +44,9 @@ pipeline {
             }
         }
         stage('Sonar') {
-
+            tools {
+                jdk 'Java17'
+            }
         environment {
             scannerHome = tool 'sonar_scanner'
         }
