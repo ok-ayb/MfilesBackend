@@ -43,8 +43,8 @@ pipeline {
                 }
             }
         }
-        /*stage('Sonar') {
-            tools {
+        stage('Sonar') {
+            /*tools {
                 jdk 'Java17'
             }
         environment {
@@ -60,9 +60,9 @@ pipeline {
                             "-Dsonar.login=$TOKEN"
                     // archiveArtifacts allowEmptyArchive: true, onlyIfSuccessful: false
                 }
-            }
+            }*/
         }
-*/
+
         stage('Snapshot And Deploy') {
             when {
                 expression {
