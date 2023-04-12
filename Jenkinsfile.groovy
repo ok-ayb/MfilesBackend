@@ -44,11 +44,18 @@ pipeline {
             }
         }
         stage('Sonar') {
+
+        environment {
+            scannerHome = tool 'sonar_scanner'
+        }
             when {
                 expression { return (env.GIT_BRANCH =~ '.*develop.*|.*master.*').matches() }
             }
 
             steps {
+                withSonarQubeEnv(installationName: 'SonarQube') {
+                    sh "${scannerHome}/bin/sonar-scanner -X"
+                }
                 withCredentials([string(credentialsId: 'sonar', variable: 'TOKEN')]) {
                     sh 'mvn sonar:sonar -Dsonar.host.url=https://sonar.sdf.x-hub.io ' +
                             "-Dsonar.login=$TOKEN"
