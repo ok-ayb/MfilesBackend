@@ -43,7 +43,7 @@ pipeline {
                 }
             }
         }
-        stage('Sonar') {
+        /*stage('Sonar') {
             tools {
                 jdk 'Java17'
             }
@@ -62,7 +62,7 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Snapshot And Deploy') {
             when {
                 expression {
