@@ -1,6 +1,6 @@
-package smwall.smbackend.holders;
+package io.xhub.smwall.smbackend.holders;
 
-import smwall.smbackend.exceptions.ErrorMessage;
+import io.xhub.smwall.smbackend.exceptions.ErrorMessage;
 
 import java.util.Map;
 

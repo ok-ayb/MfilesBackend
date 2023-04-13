@@ -1,4 +1,4 @@
-package smwall.smbackend.exceptions;
+package io.xhub.smwall.smbackend.exceptions;
 
 import lombok.*;
 

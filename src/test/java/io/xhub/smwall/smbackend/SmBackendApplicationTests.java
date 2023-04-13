@@ -1,4 +1,4 @@
-package smwall.smbackend;
+package io.xhub.smwall.smbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,11 +1,11 @@
-package smwall.smbackend.api;
+package io.xhub.smwall.smbackend.api;
 
+import io.xhub.smwall.smbackend.holders.ApiPaths;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import smwall.smbackend.holders.ApiPaths;
-import smwall.smbackend.service.WebhooksService;
+import io.xhub.smwall.smbackend.service.WebhooksService;
 
 @RestController
 @RequestMapping(ApiPaths.V1 + ApiPaths.WEBHOOKS)

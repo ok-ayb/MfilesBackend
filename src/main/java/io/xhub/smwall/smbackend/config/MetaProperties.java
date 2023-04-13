@@ -1,4 +1,4 @@
-package smwall.smbackend.config;
+package io.xhub.smwall.smbackend.config;
 
 import lombok.Getter;
 import lombok.Setter;

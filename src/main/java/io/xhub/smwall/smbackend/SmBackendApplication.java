@@ -1,9 +1,9 @@
-package smwall.smbackend;
+package io.xhub.smwall.smbackend;
 
+import io.xhub.smwall.smbackend.config.MetaProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import smwall.smbackend.config.MetaProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({MetaProperties.class})

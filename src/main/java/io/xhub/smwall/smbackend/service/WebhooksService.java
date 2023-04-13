@@ -1,11 +1,11 @@
-package smwall.smbackend.service;
+package io.xhub.smwall.smbackend.service;
 
+import io.xhub.smwall.smbackend.config.MetaProperties;
+import io.xhub.smwall.smbackend.exceptions.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import smwall.smbackend.config.MetaProperties;
-import smwall.smbackend.exceptions.BusinessException;
-import smwall.smbackend.holders.ApiClientErrorCodes;
+import io.xhub.smwall.smbackend.holders.ApiClientErrorCodes;
 
 @Service
 @RequiredArgsConstructor
