@@ -4,6 +4,7 @@ import io.xhub.smwall.smbackend.config.MetaProperties;
 import io.xhub.smwall.smbackend.exceptions.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import io.xhub.smwall.smbackend.holders.ApiClientErrorCodes;
 
@@ -15,13 +16,14 @@ public class WebhooksService {
     private final MetaProperties metaProperties;
 
     public void verifyMetaSubscription(String mode, String verifyToken) {
-        if (!mode.equals("subscribe") || !verifyToken.equals(this.metaProperties.getVerifyToken())) {
+        log.info("Start verifying subscription with mode {} and verifyToken {} :", mode, verifyToken);
+        if (!StringUtils.equals(mode, "subscribe") || !verifyToken.equals(this.metaProperties.getVerifyToken())) {
             throw new BusinessException(ApiClientErrorCodes.WEBHOOKS_SUBSCRIPTION_DENIED.getErrorMessage());
         }
     }
 
-    public void handleMetaUpdate(String requestBody) {
-        log.info("Meta request body: " + requestBody);
+    public void handleMetaUpdate(String payload) {
+        log.info("Meta request body: " + payload);
 
         /**
          * TODO: - Business logic for handling meta update

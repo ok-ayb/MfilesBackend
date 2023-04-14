@@ -1,12 +1,14 @@
 package io.xhub.smwall.smbackend.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.xhub.smwall.smbackend.holders.ApiPaths;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.xhub.smwall.smbackend.service.WebhooksService;
 
+@Api(tags = "Webhooks Management Resource")
 @RestController
 @RequestMapping(ApiPaths.V1 + ApiPaths.WEBHOOKS)
 @RequiredArgsConstructor
@@ -14,18 +16,20 @@ public class WebhooksController {
 
     private final WebhooksService webhooksService;
 
+    @ApiOperation(value = "Webhook Subscription handler")
     @GetMapping(ApiPaths.META)
-    public ResponseEntity<String> handleMetaSubscriptionRequest(@RequestParam(name = "hub.mode") String mode,
+    public ResponseEntity<String> handleMetaSubscription(@RequestParam(name = "hub.mode") String mode,
                                                                 @RequestParam(name = "hub.verify_token") String verifyToken,
                                                                 @RequestParam(name = "hub.challenge") String challenge) {
         webhooksService.verifyMetaSubscription(mode, verifyToken);
-        return ResponseEntity.status(HttpStatus.OK).body(challenge);
+        return ResponseEntity.ok().body(challenge);
     }
 
+    @ApiOperation(value = "Handle Meta field update")
     @PostMapping(ApiPaths.META)
-    public ResponseEntity<?> handleMetaUpdate(@RequestBody String requestBody) {
-        webhooksService.handleMetaUpdate(requestBody);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<?> handleMetaUpdate(@RequestBody String payload) {
+        webhooksService.handleMetaUpdate(payload);
+        return ResponseEntity.ok().build();
     }
 
 }

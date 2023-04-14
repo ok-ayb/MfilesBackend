@@ -22,16 +22,19 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(ApiPaths.V1 + ApiPaths.WEBHOOKS + "/**").permitAll()
-                .requestMatchers("/swagger-resources/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/configuration/ui",
-                        "/h2/**",
-                        "/login",
-                        "/config").permitAll()
+                .requestMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
 
+    private final String[] WHITE_LIST = {
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/configuration/ui",
+            "/h2/**",
+            "/login",
+            "/config"
+    };
 }
