@@ -43,13 +43,8 @@ pipeline {
                 }
             }
         }
-        /*stage('Sonar') {
-            tools {
-                jdk 'Java17'
-            }
-        environment {
-            scannerHome = tool 'sonar_scanner'
-        }
+        stage('Sonar') {
+
             when {
                 expression { return (env.GIT_BRANCH =~ '.*develop.*|.*master.*').matches() }
             }
@@ -57,11 +52,11 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'sonar', variable: 'TOKEN')]) {
                     sh 'mvn sonar:sonar -Dsonar.host.url=https://sonar.sdf.x-hub.io ' +
-                            "-Dsonar.login=$TOKEN"
+                            "-Dsonar.login=$TOKEN -Dsonar.java.jdkHome=/usr/lib/jvm/java-8-openjdk-amd64"
                     // archiveArtifacts allowEmptyArchive: true, onlyIfSuccessful: false
                 }
             }
-        }*/
+        }
 
         stage('Snapshot And Deploy') {
             when {
