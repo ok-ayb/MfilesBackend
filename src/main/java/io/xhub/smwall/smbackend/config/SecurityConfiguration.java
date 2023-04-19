@@ -19,6 +19,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(ApiPaths.V1 + ApiPaths.WEBHOOKS + "/**").permitAll()
@@ -35,6 +37,8 @@ public class SecurityConfiguration {
             "/configuration/ui",
             "/h2/**",
             "/login",
-            "/config"
+            "/config",
+            "/posts"
+
     };
 }

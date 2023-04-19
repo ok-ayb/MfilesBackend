@@ -3,10 +3,10 @@ package io.xhub.smwall.smbackend.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.xhub.smwall.smbackend.holders.ApiPaths;
+import io.xhub.smwall.smbackend.service.WebhooksService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.xhub.smwall.smbackend.service.WebhooksService;
 
 @Api(tags = "Webhooks Management Resource")
 @RestController
@@ -19,8 +19,8 @@ public class WebhooksController {
     @ApiOperation(value = "Webhook Subscription handler")
     @GetMapping(ApiPaths.META)
     public ResponseEntity<String> handleMetaSubscription(@RequestParam(name = "hub.mode") String mode,
-                                                                @RequestParam(name = "hub.verify_token") String verifyToken,
-                                                                @RequestParam(name = "hub.challenge") String challenge) {
+                                                         @RequestParam(name = "hub.verify_token") String verifyToken,
+                                                         @RequestParam(name = "hub.challenge") String challenge) {
         webhooksService.verifyMetaSubscription(mode, verifyToken);
         return ResponseEntity.ok().body(challenge);
     }

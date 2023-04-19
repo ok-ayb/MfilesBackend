@@ -15,6 +15,7 @@ spring:
       database: ${DB_NAME:smwall-database}
       username: ${DB_USER_NAME:root}
       password: ${DB_USER_PASSWORD:root}
+
   flyway:
     baseline-on-migrate: true
     enabled: false
@@ -24,9 +25,15 @@ spring:
   h2:
     console:
       enabled: false
+  cloud:
+    openfeign:
+      oauth2:
+        enabled: true
 
 application:
   webhooks:
     meta:
       verify-token:
-      app-secret:
+      schedule:
+        hashtag-delay: 60000 # 1min
+        mention-delay: 60000 # 1min
