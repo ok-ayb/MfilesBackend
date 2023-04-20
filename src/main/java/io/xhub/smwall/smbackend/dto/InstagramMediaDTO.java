@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public class IGMedia {
+public class InstagramMediaDTO {
     @JsonProperty("id")
     private String id;
 

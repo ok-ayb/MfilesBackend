@@ -1,9 +1,9 @@
 package io.xhub.smwall.smbackend.task;
 
 import io.xhub.smwall.smbackend.client.meta.MetaClient;
-import io.xhub.smwall.smbackend.client.meta.response.IGHashtaggedMediaResponse;
+import io.xhub.smwall.smbackend.client.meta.response.InstagramMediaResponse;
 import io.xhub.smwall.smbackend.config.MetaProperties;
-import io.xhub.smwall.smbackend.dto.IGMedia;
+import io.xhub.smwall.smbackend.dto.InstagramMediaDTO;
 import io.xhub.smwall.smbackend.service.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +29,11 @@ public class MetaTask {
     public void getHashtaggedRecentMedia() {
         log.info("Getting recent media for each hashtag");
 
-        List<IGMedia> newMedia = metaProperties.getHashtags()
+        List<InstagramMediaDTO> newMedia = metaProperties.getHashtags()
                 .values()
                 .stream()
                 .map(hashtagId -> metaClient.getRecentHashtaggedMedia(hashtagId,
-                        String.join(",", IGHashtaggedMediaResponse.FIELDS),
+                        String.join(",", InstagramMediaResponse.FIELDS),
                         metaProperties.getUserId()))
                 .flatMap(res -> res.getData().stream())
                 .filter(this::isMediaNewerThanLastFetch)
@@ -52,7 +52,7 @@ public class MetaTask {
      * @param media the media to check
      * @return true if the media is new, false otherwise
      */
-    private boolean isMediaNewerThanLastFetch(IGMedia media) {
+    private boolean isMediaNewerThanLastFetch(InstagramMediaDTO media) {
         if (media.getTimestamp().isAfter(lastHashtaggedMediaTimestamp)) {
             lastHashtaggedMediaTimestamp = media.getTimestamp();
             return true;
