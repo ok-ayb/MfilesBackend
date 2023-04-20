@@ -38,7 +38,7 @@ public class SecurityConfiguration {
             "/h2/**",
             "/login",
             "/config",
-            "/posts"
+            "/posts/**"
 
     };
 }
