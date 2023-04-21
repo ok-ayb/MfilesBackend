@@ -36,4 +36,4 @@ application:
       verify-token:
       schedule:
         hashtag-delay: 60000 # 1min
-        mention-delay: 60000 # 1min
+        tag-delay: 60000 # 1min

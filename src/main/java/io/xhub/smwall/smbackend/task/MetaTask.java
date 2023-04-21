@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -20,7 +21,8 @@ public class MetaTask {
     private final MetaProperties metaProperties;
     private final WebSocketService webSocketService;
     private final MetaClient metaClient;
-    private Instant lastHashtaggedMediaTimestamp  = Instant.now();
+    private Instant lastHashtaggedMediaTimestamp = Instant.now();
+    private Instant lastTaggedMediaTimestamp = Instant.now();
 
     /**
      * Retrieves recent media for each hashtag and sends new media to the WebSocket service.
@@ -29,35 +31,57 @@ public class MetaTask {
     public void getHashtaggedRecentMedia() {
         log.info("Getting recent media for each hashtag");
 
+        String requestFields = String.join(",", InstagramMediaResponse.FIELDS);
         List<InstagramMediaDTO> newMedia = metaProperties.getHashtags()
                 .values()
                 .stream()
                 .map(hashtagId -> metaClient.getRecentHashtaggedMedia(hashtagId,
-                        String.join(",", InstagramMediaResponse.FIELDS),
+                        requestFields,
                         metaProperties.getUserId()))
                 .flatMap(res -> res.getData().stream())
-                .filter(this::isMediaNewerThanLastFetch)
-                .distinct()
-                .toList();
+                .filter(media -> {
+                    if (media.getTimestamp().isAfter(lastHashtaggedMediaTimestamp)) {
+                        lastHashtaggedMediaTimestamp = media.getTimestamp();
+                        return true;
+                    }
 
-        if(!newMedia.isEmpty()) {
+                    return false;
+                })
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (!newMedia.isEmpty()) {
             log.info("Broadcasting {} new fetched hashtagged media to WebSocket", newMedia.size());
             webSocketService.sendIgMedia(newMedia);
         }
     }
 
     /**
-     * Returns true if the media's timestamp is more recent than the last fetch timestamp.
-     *
-     * @param media the media to check
-     * @return true if the media is new, false otherwise
+     * Retrieves media in which an the IG user has been tagged by another Instagram user
+     * and sends new media to the WebSocket service.
      */
-    private boolean isMediaNewerThanLastFetch(InstagramMediaDTO media) {
-        if (media.getTimestamp().isAfter(lastHashtaggedMediaTimestamp)) {
-            lastHashtaggedMediaTimestamp = media.getTimestamp();
-            return true;
-        }
+    @Scheduled(fixedDelayString = "${application.webhooks.meta.schedule.tag-delay}")
+    public void getTaggedMedia() {
+        log.info("Getting tagged media");
 
-        return false;
+        List<InstagramMediaDTO> newMedia = metaClient.getTaggedMedia(
+                        String.join(",", InstagramMediaResponse.FIELDS),
+                        metaProperties.getUserId())
+                .getData()
+                .stream()
+                .filter(media -> {
+                    if (media.getTimestamp().isAfter(lastTaggedMediaTimestamp)) {
+                        lastTaggedMediaTimestamp = media.getTimestamp();
+                        return true;
+                    }
+
+                    return false;
+                })
+                .collect(Collectors.toList());
+
+        if (!newMedia.isEmpty()) {
+            log.info("Broadcasting {} new fetched tagged media to WebSocket", newMedia.size());
+            webSocketService.sendIgMedia(newMedia);
+        }
     }
 }
