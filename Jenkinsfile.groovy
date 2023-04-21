@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    tools {
-        jdk 'Java17'
-    }
     options {
         gitLabConnection('Gitlab')
     }
@@ -20,11 +17,17 @@ pipeline {
     }
     stages {
         stage('Build') {
+            tools {
+                jdk 'Java17'
+            }
             steps {
                 sh 'mvn clean compile test'
             }
         }
         stage('Dependency Check ') {
+            tools {
+                jdk 'Java17'
+            }
             parallel {
 
                 stage("Dependency Check") {
@@ -52,13 +55,16 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'sonar', variable: 'TOKEN')]) {
                     sh 'mvn sonar:sonar -Dsonar.host.url=https://sonar.sdf.x-hub.io ' +
-                            "-Dsonar.login=$TOKEN -Dsonar.java.jdkHome=/usr/lib/jvm/java-8-openjdk-amd64"
+                            "-Dsonar.login=$TOKEN"
                     // archiveArtifacts allowEmptyArchive: true, onlyIfSuccessful: false
                 }
             }
         }
 
         stage('Snapshot And Deploy') {
+            tools {
+                jdk 'Java17'
+            }
             when {
                 expression {
                     return (!(env.GIT_BRANCH =~ '^origin/.*').matches() && !(env.GIT_BRANCH =~ '.*master.*').matches()) || ((env.GIT_BRANCH =~ 'origin/develop').matches())
