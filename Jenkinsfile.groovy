@@ -25,9 +25,6 @@ pipeline {
             }
         }
         stage('Dependency Check ') {
-            tools {
-                jdk 'Java17'
-            }
             parallel {
 
                 stage("Dependency Check") {
