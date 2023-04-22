@@ -23,6 +23,7 @@ public class MetaTask {
     private final MetaClient metaClient;
     private Instant lastHashtaggedMediaTimestamp = Instant.now();
     private Instant lastTaggedMediaTimestamp = Instant.now();
+    private Instant lastUserMediaTimestamp = Instant.now();
 
     /**
      * Retrieves recent media for each hashtag and sends new media to the WebSocket service.
@@ -53,6 +54,29 @@ public class MetaTask {
         if (!newMedia.isEmpty()) {
             log.info("Broadcasting {} new fetched hashtagged media to WebSocket", newMedia.size());
             webSocketService.sendIgMedia(newMedia);
+        }
+    }
+
+    @Scheduled(fixedDelayString = "${application.webhooks.meta.schedule.user-media-delay}")
+    public void getUserRecentMedia() {
+        log.info("Getting user recent media");
+
+        List<InstagramMediaDTO> newUserMedia = metaClient.getRecentUserMedia(metaProperties.getUserId(),
+                        String.join(",", InstagramMediaResponse.FIELDS))
+                .getData()
+                .stream()
+                .filter(media -> {
+                    if (media.getTimestamp().isAfter(lastUserMediaTimestamp)) {
+                        lastUserMediaTimestamp = media.getTimestamp();
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+
+        if (!newUserMedia.isEmpty()) {
+            log.info("Broadcasting {} new fetched user media to WebSocket", newUserMedia.size());
+            webSocketService.sendIgMedia(newUserMedia);
         }
     }
 

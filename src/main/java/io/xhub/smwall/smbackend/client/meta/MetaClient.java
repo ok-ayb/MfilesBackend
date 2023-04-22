@@ -15,4 +15,8 @@ public interface MetaClient {
     @GetMapping(value = "/{userId}/tags?fields={fields}")
     InstagramMediaResponse getTaggedMedia(@PathVariable String fields,
                                           @PathVariable String userId);
+
+    @GetMapping(value = "/{userId}/media?fields={fields}")
+    InstagramMediaResponse getRecentUserMedia(@PathVariable String userId,
+                                              @PathVariable String fields);
 }
