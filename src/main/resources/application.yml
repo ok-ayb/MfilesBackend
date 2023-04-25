@@ -6,8 +6,8 @@ server:
 spring:
   application:
     name: Social media wall
-  profiles:
-    active: local-mongodb
+  #profiles:
+    #active: local-mongodb
   data:
     mongodb:
       host: ${DB_HOST:localhost}
@@ -36,7 +36,6 @@ application:
       verify-token:
       schedule:
         hashtag-delay: 60000 # 1min
-        tag-delay: 60000 # 1min
-        user-media-delay : 5000 #min
-        story-delay : 60000 #1min
-
+        tag-delay: 60000
+        user-media-delay : 5000
+        story-delay : 60000
