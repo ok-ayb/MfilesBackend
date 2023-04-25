@@ -27,23 +27,16 @@ spring:
       enabled: false
   cloud:
     openfeign:
-      client:
-        config:
-          meta:
-            default-request-headers:
-              Authorization: Bearer EAARpf12qyg8BAJieqDp4ZB6GDPZCKAexsVc8ZCIIZBs2T0djhD3F4VFfN3RzzSKmLcjfzMQ0bQsO6OF6CtwP6t4J4reUGNfLFsMFT2iEY1OEXhUN2fQNUaXHEZB4ZC9WxI74ZCE0oz7CWdZBYmGCK3FfLRB1rZAjHTfLA0sOiZBFws36FOQYR02pZBn3vNEqLP7Do4ZD
-
+      oauth2:
+        enabled: true
 
 application:
   webhooks:
     meta:
-      hashtags:
-        - devoxxma_smw1: 18280910683186124
-        - devoxxma_smw1: 17979847571109666
-      userId: 17841458686619394
-      app-secret: d305deab8e8e7c27802c6bb1fb7b3a72
+      verify-token:
       schedule:
-        hashtag-delay: 60000
+        hashtag-delay: 60000 # 1min
         tag-delay: 60000
-        user-media-delay : 5000
+        user-media-delay : 60000
         story-delay : 60000
+
