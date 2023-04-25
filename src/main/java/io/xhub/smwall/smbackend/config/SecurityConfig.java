@@ -39,6 +39,5 @@ public class SecurityConfig {
             "/login",
             "/config",
             "/posts/**"
-
     };
 }

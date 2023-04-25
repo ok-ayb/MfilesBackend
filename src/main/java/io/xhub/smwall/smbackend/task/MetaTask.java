@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +25,8 @@ public class MetaTask {
     private Instant lastHashtaggedMediaTimestamp = Instant.now();
     private Instant lastTaggedMediaTimestamp = Instant.now();
     private Instant lastUserMediaTimestamp = Instant.now();
+    private Instant lastStoriesMediaTimestamp = Instant.now();
+
 
     /**
      * Retrieves recent media for each hashtag and sends new media to the WebSocket service.
@@ -45,7 +48,6 @@ public class MetaTask {
                         lastHashtaggedMediaTimestamp = media.getTimestamp();
                         return true;
                     }
-
                     return false;
                 })
                 .distinct()
@@ -87,7 +89,6 @@ public class MetaTask {
     @Scheduled(fixedDelayString = "${application.webhooks.meta.schedule.tag-delay}")
     public void getTaggedMedia() {
         log.info("Getting tagged media");
-
         List<InstagramMediaDTO> newMedia = metaClient.getTaggedMedia(
                         String.join(",", InstagramMediaResponse.FIELDS),
                         metaProperties.getUserId())
@@ -108,4 +109,29 @@ public class MetaTask {
             webSocketService.sendIgMedia(newMedia);
         }
     }
+    @Scheduled(fixedDelayString = "${application.webhooks.meta.schedule.story-delay}")
+    public void getStoriesRecentMedia() {
+        log.info("Start getting recent media for each story");
+        List<InstagramMediaDTO> newMedia = metaClient.getStories(
+                        String.join(",", InstagramMediaResponse.FIELDS),
+                        metaProperties.getUserId())
+                .getData()
+                .stream()
+                .filter(media -> {
+                    if (media.getTimestamp().isAfter(lastStoriesMediaTimestamp)) {
+                        lastStoriesMediaTimestamp = media.getTimestamp();
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+
+        if (!newMedia.isEmpty()) {
+            log.info("Broadcasting {} new fetched media to WebSocket", newMedia.size());
+            webSocketService.sendIgMedia(newMedia);
+        }
+    }
 }
+
+
+

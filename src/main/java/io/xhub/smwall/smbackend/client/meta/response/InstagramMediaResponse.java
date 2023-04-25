@@ -2,7 +2,6 @@ package io.xhub.smwall.smbackend.client.meta.response;
 
 import io.xhub.smwall.smbackend.dto.InstagramMediaDTO;
 import lombok.Getter;
-
 import java.util.List;
 
 @Getter

@@ -12,6 +12,11 @@ public interface MetaClient {
                                                     @PathVariable String fields,
                                                     @PathVariable String userId);
 
+    @GetMapping("/{userId}/stories?fields={fields}")
+    InstagramMediaResponse getStories(@PathVariable String fields,
+                                      @PathVariable String userId);
+
+
     @GetMapping(value = "/{userId}/tags?fields={fields}")
     InstagramMediaResponse getTaggedMedia(@PathVariable String fields,
                                           @PathVariable String userId);

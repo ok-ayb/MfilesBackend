@@ -38,3 +38,5 @@ application:
         hashtag-delay: 60000 # 1min
         tag-delay: 60000 # 1min
         user-media-delay : 5000 #min
+        story-delay : 60000 #1min
+
