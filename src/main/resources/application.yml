@@ -27,21 +27,12 @@ spring:
       enabled: false
   cloud:
     openfeign:
-      client:
-        config:
-          meta:
-            default-request-headers:
-              Authorization: ${AUTHORIZATION_KEY}
-
+      oauth2:
+        enabled: true
 
 application:
   webhooks:
     meta:
-      hashtags:
-        - devoxxma_smw1: ${HASHTAG1_ID}
-        - devoxxma_smw1: ${HASHTAG2_ID}
-      user-id:  ${USER_ID}
-      app-secret: ${APP_SECRET}
       schedule:
         hashtag-delay: 60000
         tag-delay: 60000
