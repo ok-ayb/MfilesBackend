@@ -45,6 +45,6 @@ application:
       schedule:
         hashtag-delay: 60000
         tag-delay: 60000
-        user-media-delay : 5000
+        user-media-delay : 60000
         story-delay : 60000
 
