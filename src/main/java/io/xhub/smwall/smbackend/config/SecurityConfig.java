@@ -38,6 +38,6 @@ public class SecurityConfig {
             "/h2/**",
             "/login",
             "/config",
-            "/posts/**"
+            "/ws/**"
     };
 }
