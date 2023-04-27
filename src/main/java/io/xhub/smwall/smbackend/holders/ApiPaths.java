@@ -6,5 +6,5 @@ public final class ApiPaths {
     public static final String META = "/meta";
     public static final String MEDIA = "/media";
     public static final String APP = "/app";
-    public static final String POSTS = "/posts";
+    public static final String WS = "/ws";
 }

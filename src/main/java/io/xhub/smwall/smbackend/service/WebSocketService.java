@@ -18,6 +18,6 @@ public class WebSocketService {
 
     public void sendIgMedia(List<InstagramMediaDTO> instagramMediaDTO) {
         log.info("Sending instagram media posts {} to all connected clients", instagramMediaDTO);
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.POSTS, instagramMediaDTO);
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, instagramMediaDTO);
     }
 }
