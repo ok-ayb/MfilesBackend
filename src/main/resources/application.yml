@@ -33,13 +33,12 @@ spring:
             default-request-headers:
               Authorization: ${AUTHORIZATION_KEY}
 
-
 application:
   webhooks:
     meta:
       hashtags:
         - devoxxma_smw1: ${HASHTAG1_ID}
-        - devoxxma_smw1: ${HASHTAG2_ID}
+        - devoxxma_smw2: ${HASHTAG2_ID}
       user-id:  ${USER_ID}
       app-secret: ${APP_SECRET}
       schedule:
@@ -48,3 +47,5 @@ application:
         user-media-delay : 60000
         story-delay : 60000
 
+app:
+  url: ${FRONT_END_URL}
