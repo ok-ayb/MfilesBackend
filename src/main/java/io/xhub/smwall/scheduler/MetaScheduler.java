@@ -1,0 +1,145 @@
+package io.xhub.smwall.scheduler;
+
+import io.xhub.smwall.client.MetaClient;
+import io.xhub.smwall.config.MetaProperties;
+import io.xhub.smwall.dto.meta.InstagramMediaDTO;
+import io.xhub.smwall.holders.CacheNames;
+import io.xhub.smwall.service.WebSocketService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+@Component
+@Slf4j
+@EnableAsync
+public class MetaScheduler {
+    private final static String IG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,owner{id,username,profile_picture_url},children{media_url,media_type}";
+    private final static String IG_HASHTAG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}";
+    private final MetaProperties metaProperties;
+    private final WebSocketService webSocketService;
+    private final MetaClient metaClient;
+    private final Cache processedMediaCache;
+
+    public MetaScheduler(MetaProperties metaProperties, WebSocketService webSocketService, MetaClient metaClient, CacheManager cacheManager) {
+        this.metaProperties = metaProperties;
+        this.webSocketService = webSocketService;
+        this.metaClient = metaClient;
+        this.processedMediaCache = cacheManager.getCache(CacheNames.PROCESSED_IG_MEDIA);
+    }
+
+
+    @Async
+    @Scheduled(
+            fixedDelayString = "${application.webhooks.meta.scheduling.hashtag-media-interval}",
+            timeUnit = TimeUnit.SECONDS
+    )
+    public void getIGHashtagRecentMediaTask() {
+        try {
+            log.info("Getting IG hashtag recent media");
+
+            List<InstagramMediaDTO> newMedia = metaProperties.getHashtags()
+                    .values()
+                    .stream()
+                    .map(igHashtagId -> metaClient.getIGHashtagRecentMedia(igHashtagId,
+                            metaProperties.getUserId(),
+                            IG_HASHTAG_MEDIA_REQUEST_FIELDS))
+                    .flatMap(res -> res.getData().stream())
+                    .filter(this::isNewIGMedia)
+                    .collect(Collectors.toList());
+
+            if (!newMedia.isEmpty()) {
+                log.info("Broadcasting {} new IG hashtag recent media to WebSocket", newMedia.size());
+                webSocketService.sendIgMedia(newMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching IG hashtag recent media: {}", e.getMessage());
+        }
+    }
+
+    @Async
+    @Scheduled(
+            fixedDelayString = "${application.webhooks.meta.scheduling.user-media-interval}",
+            timeUnit = TimeUnit.SECONDS
+    )
+    public void getIGUserMediaTask() {
+        try {
+            log.info("Getting IG user media");
+
+            List<InstagramMediaDTO> newUserMedia = metaClient.getIGUserMedia(metaProperties.getUserId(),
+                            IG_MEDIA_REQUEST_FIELDS)
+                    .getData()
+                    .stream()
+                    .filter(this::isNewIGMedia)
+                    .collect(Collectors.toList());
+
+            if (!newUserMedia.isEmpty()) {
+                log.info("Broadcasting {} new IG user media to WebSocket", newUserMedia.size());
+                webSocketService.sendIgMedia(newUserMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching IG user media: {}", e.getMessage());
+        }
+    }
+
+    @Async
+    @Scheduled(
+            fixedDelayString = "${application.webhooks.meta.scheduling.user-tags-interval}",
+            timeUnit = TimeUnit.SECONDS
+    )
+    public void getIGUserTagsTask() {
+        try {
+            log.info("Getting IG user tags");
+
+            List<InstagramMediaDTO> newMedia = metaClient.getIGUserTags(metaProperties.getUserId(),
+                            IG_MEDIA_REQUEST_FIELDS)
+                    .getData()
+                    .stream()
+                    .filter(this::isNewIGMedia)
+                    .collect(Collectors.toList());
+
+            if (!newMedia.isEmpty()) {
+                log.info("Broadcasting {} new IG user tags to WebSocket", newMedia.size());
+                webSocketService.sendIgMedia(newMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching IG user tags: {}", e.getMessage());
+        }
+    }
+
+    @Async
+    @Scheduled(
+            fixedDelayString = "${application.webhooks.meta.scheduling.user-stories-interval}",
+            timeUnit = TimeUnit.SECONDS
+    )
+    public void getIGUserStoriesTask() {
+        try {
+            log.info("Getting IG user stories");
+
+            List<InstagramMediaDTO> newMedia = metaClient.getIGUserStories(metaProperties.getUserId(),
+                            IG_MEDIA_REQUEST_FIELDS)
+                    .getData()
+                    .stream()
+                    .filter(this::isNewIGMedia)
+                    .collect(Collectors.toList());
+
+            if (!newMedia.isEmpty()) {
+                log.info("Broadcasting {} new IG user stories to WebSocket", newMedia.size());
+                webSocketService.sendIgMedia(newMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching IG user stories: {}", e.getMessage());
+        }
+    }
+
+    private boolean isNewIGMedia(InstagramMediaDTO media) {
+        return processedMediaCache != null && processedMediaCache.putIfAbsent(media.getId(), true) == null;
+    }
+}

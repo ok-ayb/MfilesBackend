@@ -1,8 +1,9 @@
 server:
+  port: ${APPLICATION_PORT:8080}
   compression:
     enabled: true
     mime-types: application/json
-  port: ${APPLICATION_PORT:8080}
+
 spring:
   application:
     name: Social media wall
@@ -15,7 +16,6 @@ spring:
       database: ${DB_NAME:smwall-database}
       username: ${DB_USER_NAME:root}
       password: ${DB_USER_PASSWORD:root}
-
   flyway:
     baseline-on-migrate: true
     enabled: false
@@ -27,25 +27,43 @@ spring:
       enabled: false
   cloud:
     openfeign:
+      oauth2:
+        enabled: true
       client:
         config:
           meta:
             default-request-headers:
               Authorization: ${AUTHORIZATION_KEY}
+  task:
+    execution:
+      thread-name-prefix: smwall-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: smwall-scheduling-
+      pool:
+        size: 2
 
 application:
+  cache:
+    ehcache:
+      time-to-live: 86400
+      max-entries: 1000
   webhooks:
     meta:
       hashtags:
         - devoxxma_smw1: ${HASHTAG1_ID}
         - devoxxma_smw2: ${HASHTAG2_ID}
-      user-id:  ${USER_ID}
+      user-id: ${USER_ID}
       app-secret: ${APP_SECRET}
-      schedule:
-        hashtag-delay: 60000
-        tag-delay: 60000
-        user-media-delay : 60000
-        story-delay : 60000
+      scheduling:
+        # Task scheduling intervals in `seconds`
+        hashtag-media-interval: 100
+        user-tags-interval: 100
+        user-stories-interval: 100
+        user-media-interval: 100
 
 app:
   url: ${FRONT_END_URL}
