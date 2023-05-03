@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.xhub</groupId>
-    <artifactId>smwall</artifactId>
+    <artifactId>sm-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>smwall</name>
+    <name>sm-backend</name>
     <description>A social media content poller that allows to collect and display real-time social media content from popular platforms such as Twitter, Instagram, and YouTube</description>
     <properties>
         <java.version>17</java.version>
