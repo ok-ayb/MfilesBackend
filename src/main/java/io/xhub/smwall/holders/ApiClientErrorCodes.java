@@ -5,7 +5,8 @@ import io.xhub.smwall.exceptions.ErrorMessage;
 import java.util.Map;
 
 public enum ApiClientErrorCodes {
-    WEBHOOKS_SUBSCRIPTION_FAILED(2, "webhooks.subscription.failed");
+    WEBHOOKS_SUBSCRIPTION_FAILED(2, "webhooks.subscription.failed"),
+    PROFILE_PICTURE_EXTRACTION_FAILED(3, "profile.picture.extraction.failed");
 
     private final Integer code;
     private final String messageKey;

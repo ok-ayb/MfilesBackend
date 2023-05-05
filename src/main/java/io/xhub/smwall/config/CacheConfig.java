@@ -28,7 +28,11 @@ public class CacheConfig {
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
-        return cm -> createCache(cm, CacheNames.PROCESSED_IG_MEDIA);
+        return cm -> {
+            createCache(cm, CacheNames.PROCESSED_IG_MEDIA);
+            createCache(cm, CacheNames.PROCESSED_YOUTUBE_MEDIA);
+            createCache(cm, CacheNames.YOUTUBE_CHANNEL_PROFILE_URL);
+        };
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {

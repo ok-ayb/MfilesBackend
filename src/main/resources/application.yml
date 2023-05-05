@@ -7,8 +7,8 @@ server:
 spring:
   application:
     name: Social media wall
-  #profiles:
-    #active: local-mongodb
+  profiles:
+    active: local-mongodb
   data:
     mongodb:
       host: ${DB_HOST:localhost}
@@ -64,6 +64,11 @@ application:
         user-tags-interval: 100
         user-stories-interval: 100
         user-media-interval: 100
+    youtube:
+      scheduling:
+        shorts-delay: 900 #15min
+      api-key:
+      channel-id:
 
 app:
   url: ${FRONT_END_URL}

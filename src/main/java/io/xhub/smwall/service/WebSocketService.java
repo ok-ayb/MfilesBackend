@@ -2,8 +2,11 @@ package io.xhub.smwall.service;
 
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.dto.meta.InstagramMediaDTO;
+import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
 import io.xhub.smwall.holders.ApiPaths;
+import io.xhub.smwall.mappers.MediaMapper;
 import io.xhub.smwall.mappers.meta.InstagramMediaMapper;
+import io.xhub.smwall.mappers.youtube.YoutubeMediaMapper;
 import io.xhub.smwall.repositories.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +25,24 @@ public class WebSocketService {
     private final MediaRepository mediaRepository;
     private final InstagramMediaMapper instagramMediaMapper;
 
+    private final YoutubeMediaMapper youtubeMediaMapper;
+    private final MediaMapper mediaMapper;
+
     public void sendIgMedia(List<InstagramMediaDTO> instagramMediaDTO) {
         log.info("Sending meta media posts {} to all connected clients", instagramMediaDTO);
         List<Media> mediaList = instagramMediaDTO.stream()
                 .map(instagramMediaMapper::toEntity)
                 .collect(Collectors.toList());
         mediaRepository.saveAll(mediaList);
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, instagramMediaDTO);
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, mediaList.stream().map(mediaMapper::toDTO));
+    }
+
+    public void sendYoutubeMedia(List<YoutubeMediaDTO> youtubeMediaDTOS) {
+        log.info("Sending youtube media  {} to all connected clients", youtubeMediaDTOS);
+        List<Media> socialMediaList = youtubeMediaDTOS.stream()
+                .map(youtubeMediaMapper::toEntity)
+                .collect(Collectors.toList());
+        mediaRepository.saveAll(socialMediaList);
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, socialMediaList.stream().map(mediaMapper::toDTO));
     }
 }
