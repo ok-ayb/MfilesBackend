@@ -11,11 +11,10 @@ spring:
     #active: local-mongodb
   data:
     mongodb:
-      host: ${DB_HOST:localhost}
+      authentication-database: admin
       port: ${DB_PORT:27017}
-      database: ${DB_NAME:smwall-database}
-      username: ${DB_USER_NAME:root}
-      password: ${DB_USER_PASSWORD:root}
+      uri: mongodb+srv://root:42SeecaPiOWkXGU0@cluster0.7bkt6ir.mongodb.net/?retryWrites=true&w=majority
+      database: SM_wall
   flyway:
     baseline-on-migrate: true
     enabled: false
@@ -74,4 +73,4 @@ application:
       keyword: ${KEYWORD}
 
 app:
-  url: ${FRONT_END_URL}
+  url: FRONT_END_URL
