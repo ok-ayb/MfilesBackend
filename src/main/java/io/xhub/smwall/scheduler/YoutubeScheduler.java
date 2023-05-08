@@ -30,13 +30,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableAsync
 public class YoutubeScheduler {
-    private static String CHANNEL_PROFILE_KEY = "channelProfileUrl";
     private final WebSocketService webSocketService;
     private final YoutubeClient youtubeClient;
     private final YoutubeProperties youtubeProperties;
     private final Cache processedMediaCache;
     private final Cache channelCache;
-    private WebClient webClient;
+    private final WebClient webClient;
+    public static final String CHANNEL_PROFILE_KEY = "channelProfileUrl";
+
 
     public YoutubeScheduler(YoutubeProperties youtubeProperties, WebSocketService webSocketService, YoutubeClient youtubeClient, CacheManager cacheManager) {
         this.youtubeProperties = youtubeProperties;
@@ -48,7 +49,7 @@ public class YoutubeScheduler {
     }
 
     public String getChannelProfilePictureById(String channelId) {
-        return Optional.ofNullable(channelCache.get(CHANNEL_PROFILE_KEY, String.class))
+        return Optional.ofNullable(channelCache.get(StringUtils.concatWithDelimiter(CHANNEL_PROFILE_KEY, channelId, "-"), String.class))
                 .orElseGet(() -> {
                     String url = StringUtils.generateStringUrl(channelId);
                     log.info("getting channel info");
@@ -65,6 +66,7 @@ public class YoutubeScheduler {
                             .bodyToMono(String.class)
                             .block();
                     Pattern thumbnailPattern = Pattern.compile(RegexPatterns.YOUTUBE_CHANNEL_PROFILE);
+                    assert html != null;
                     Matcher thumbnailMatcher = thumbnailPattern.matcher(html);
                     String profilePicUrl = thumbnailMatcher.find() ? thumbnailMatcher.group(1) : null;
                     if (profilePicUrl == null) {
@@ -90,18 +92,39 @@ public class YoutubeScheduler {
                 .getItems()
                 .stream()
                 .filter(this::isNewYoutubeMedia)
-                .map(youtubeShort -> {
-                    youtubeShort.getSnippet().setAvatar(profilePictureUrl);
-                    return youtubeShort;
-                })
+                .peek(youtubeShort -> youtubeShort.getSnippet().setAvatar(profilePictureUrl))
                 .collect(Collectors.toList());
 
         if (!newMedia.isEmpty()) {
             log.info("Broadcasting {} new fetched youtube shorts to WebSocket", newMedia.size());
             webSocketService.sendYoutubeMedia(newMedia);
         }
+    }
 
+    @Async
+    @Scheduled(
+            fixedDelayString = "${application.webhooks.youtube.scheduling.video-delay}",
+            timeUnit = TimeUnit.SECONDS)
+    public void getYoutubeChannelVideosByKeyword() {
+        log.info("Getting youtube videos by keyword");
 
+        List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByKeyword(
+                        YoutubeSearchParams.getVideoSearchParams(),
+                        youtubeProperties.getApiKey(),
+                        youtubeProperties.getKeyword())
+                .getItems()
+                .stream()
+                .filter(this::isNewYoutubeMedia)
+                .peek(youtubeVideo -> {
+                    String profilePictureUrl = getChannelProfilePictureById(youtubeVideo.getSnippet().getChannelId());
+                    youtubeVideo.getSnippet().setAvatar(profilePictureUrl);
+                })
+                .collect(Collectors.toList());
+
+        if (!newMedia.isEmpty()) {
+            log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
+            webSocketService.sendYoutubeMedia(newMedia);
+        }
     }
 
     private boolean isNewYoutubeMedia(YoutubeMediaDTO media) {

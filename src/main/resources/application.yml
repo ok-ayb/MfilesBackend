@@ -67,8 +67,10 @@ application:
     youtube:
       scheduling:
         shorts-delay: 900 #15min
-      api-key:
-      channel-id:
+        video-delay: 900
+      api-key: ${API_KEY}
+      channel-id: ${CHANNEL_ID}
+      keyword: ${KEYWORD}
 
 app:
   url: ${FRONT_END_URL}

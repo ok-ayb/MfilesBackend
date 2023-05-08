@@ -24,8 +24,8 @@ public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final MediaRepository mediaRepository;
     private final InstagramMediaMapper instagramMediaMapper;
-
     private final YoutubeMediaMapper youtubeMediaMapper;
+
     private final MediaMapper mediaMapper;
 
     public void sendIgMedia(List<InstagramMediaDTO> instagramMediaDTO) {
@@ -45,4 +45,5 @@ public class WebSocketService {
         mediaRepository.saveAll(socialMediaList);
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, socialMediaList.stream().map(mediaMapper::toDTO));
     }
+
 }

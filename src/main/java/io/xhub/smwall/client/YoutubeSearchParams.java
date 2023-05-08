@@ -18,5 +18,13 @@ public class YoutubeSearchParams {
         queryParamsMap.put(YoutubeParams.ORDER.name().toLowerCase(), YoutubeParams.ORDER.getValue());
         return queryParamsMap;
     }
+    public static Map<String, String> getVideoSearchParams() {
+        Map<String, String> queryParamsMap = new HashMap<>();
+        queryParamsMap.put(YoutubeParams.PART.name().toLowerCase(), YoutubeParams.PART.getValue());
+        queryParamsMap.put(YoutubeParams.TYPE.name().toLowerCase(), YoutubeParams.TYPE.getValue());
+        queryParamsMap.put(YoutubeParams.MAX_RESULTS.name().toLowerCase(), YoutubeParams.MAX_RESULTS.getValue());
+        queryParamsMap.put(YoutubeParams.ORDER.name().toLowerCase(), YoutubeParams.ORDER.getValue());
+        return queryParamsMap;
+    }
 }
 
