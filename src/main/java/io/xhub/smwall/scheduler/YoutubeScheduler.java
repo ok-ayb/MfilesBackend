@@ -127,6 +127,32 @@ public class YoutubeScheduler {
         }
     }
 
+    @Async
+    @Scheduled(
+            fixedDelayString = "${application.webhooks.youtube.scheduling.channel-video-delay}",
+            timeUnit = TimeUnit.SECONDS)
+    public void getYoutubeChannelVideosByChannelId() {
+        log.info("Start getting youtube videos by channel id");
+
+        String currentYoutubeChannelProfile = getChannelProfilePictureById(youtubeProperties.getChannelId());
+        List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByChannelId(
+                        YoutubeSearchParams.getVideoSearchParams(),
+                        youtubeProperties.getChannelId(),
+                        youtubeProperties.getApiKey())
+                .getItems()
+                .stream()
+                .filter(this::isNewYoutubeMedia)
+                .peek(youtubeVideo -> youtubeVideo.getSnippet().setAvatar(currentYoutubeChannelProfile))
+                .collect(Collectors.toList());
+
+        if (!newMedia.isEmpty()) {
+            log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
+            webSocketService.sendYoutubeMedia(newMedia);
+        }
+
+
+    }
+
     private boolean isNewYoutubeMedia(YoutubeMediaDTO media) {
         return processedMediaCache != null && processedMediaCache.putIfAbsent(media.getId().getVideoId(), true) == null;
     }

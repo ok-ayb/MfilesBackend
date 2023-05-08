@@ -23,4 +23,10 @@ public interface YoutubeClient {
             @RequestParam(value = "key") String apiKey,
             @RequestParam(value = "q") String keyword);
 
+    @GetMapping(value = "/search")
+    YoutubeMediaResponse getRecentChannelVideosByChannelId(
+            @RequestParam @Validated Map<String, String> searchParams,
+            @RequestParam(value = "channelId") String channelId,
+            @RequestParam(value = "key") String apiKey);
+
 }

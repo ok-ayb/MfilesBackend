@@ -68,6 +68,7 @@ application:
       scheduling:
         shorts-delay: 900 #15min
         video-delay: 900
+        channel-video-delay: 900
       api-key: ${API_KEY}
       channel-id: ${CHANNEL_ID}
       keyword: ${KEYWORD}
