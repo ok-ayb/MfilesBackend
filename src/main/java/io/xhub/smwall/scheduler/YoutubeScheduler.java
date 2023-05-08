@@ -82,7 +82,7 @@ public class YoutubeScheduler {
             fixedDelayString = "${application.webhooks.youtube.scheduling.shorts-delay}",
             timeUnit = TimeUnit.SECONDS)
     public void getYoutubeChannelShorts() {
-        log.info("Getting youtube shorts");
+        log.info("Start getting youtube shorts by channel id");
 
         String profilePictureUrl = getChannelProfilePictureById(youtubeProperties.getChannelId());
         List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelShorts(
@@ -106,7 +106,7 @@ public class YoutubeScheduler {
             fixedDelayString = "${application.webhooks.youtube.scheduling.video-delay}",
             timeUnit = TimeUnit.SECONDS)
     public void getYoutubeChannelVideosByKeyword() {
-        log.info("Getting youtube videos by keyword");
+        log.info("Start getting youtube videos by keyword");
 
         List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByKeyword(
                         YoutubeSearchParams.getVideoSearchParams(),

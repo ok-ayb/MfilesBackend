@@ -29,7 +29,7 @@ public class WebSocketService {
     private final MediaMapper mediaMapper;
 
     public void sendIgMedia(List<InstagramMediaDTO> instagramMediaDTO) {
-        log.info("Sending meta media posts {} to all connected clients", instagramMediaDTO);
+        log.info("Send instagram media posts to all connected clients");
         List<Media> mediaList = instagramMediaDTO.stream()
                 .map(instagramMediaMapper::toEntity)
                 .collect(Collectors.toList());
@@ -37,9 +37,9 @@ public class WebSocketService {
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, mediaList.stream().map(mediaMapper::toDTO));
     }
 
-    public void sendYoutubeMedia(List<YoutubeMediaDTO> youtubeMediaDTOS) {
-        log.info("Sending youtube media  {} to all connected clients", youtubeMediaDTOS);
-        List<Media> socialMediaList = youtubeMediaDTOS.stream()
+    public void sendYoutubeMedia(List<YoutubeMediaDTO> youtubeMediaDTO) {
+        log.info("Send youtube media to all connected clients");
+        List<Media> socialMediaList = youtubeMediaDTO.stream()
                 .map(youtubeMediaMapper::toEntity)
                 .collect(Collectors.toList());
         mediaRepository.saveAll(socialMediaList);
