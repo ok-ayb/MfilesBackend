@@ -13,8 +13,6 @@ import io.xhub.smwall.utlis.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,7 +26,6 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-@EnableAsync
 public class YoutubeScheduler {
     private final WebSocketService webSocketService;
     private final YoutubeClient youtubeClient;
@@ -77,7 +74,6 @@ public class YoutubeScheduler {
                 });
     }
 
-    @Async
     @Scheduled(
             fixedDelayString = "${application.webhooks.youtube.scheduling.shorts-delay}",
             timeUnit = TimeUnit.SECONDS)
@@ -101,7 +97,6 @@ public class YoutubeScheduler {
         }
     }
 
-    @Async
     @Scheduled(
             fixedDelayString = "${application.webhooks.youtube.scheduling.video-delay}",
             timeUnit = TimeUnit.SECONDS)
@@ -127,7 +122,6 @@ public class YoutubeScheduler {
         }
     }
 
-    @Async
     @Scheduled(
             fixedDelayString = "${application.webhooks.youtube.scheduling.channel-video-delay}",
             timeUnit = TimeUnit.SECONDS)
