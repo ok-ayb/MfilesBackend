@@ -7,8 +7,8 @@ server:
 spring:
   application:
     name: Social media wall
-  profiles:
-    active: local-mongodb
+  #profiles:
+    #active: local-mongodb
   data:
     mongodb:
       host: ${DB_HOST:localhost}

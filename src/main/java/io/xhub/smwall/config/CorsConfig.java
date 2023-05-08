@@ -15,7 +15,7 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 @Order(value = HIGHEST_PRECEDENCE)
 public class CorsConfig implements Filter {
 
-    @Value("app.url")
+    @Value("${app.url}")
     private String frontEndURL;
 
     @Override
