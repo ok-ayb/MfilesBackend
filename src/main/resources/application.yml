@@ -8,7 +8,11 @@ spring:
   application:
     name: Social media wall
   profiles:
-    active: yt , meta
+    group:
+      dev:
+        - dev
+        - yt
+        - meta
   data:
     mongodb:
       authentication-database: admin
