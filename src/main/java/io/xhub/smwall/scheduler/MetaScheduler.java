@@ -4,10 +4,12 @@ import io.xhub.smwall.client.MetaClient;
 import io.xhub.smwall.config.MetaProperties;
 import io.xhub.smwall.dto.meta.InstagramMediaDTO;
 import io.xhub.smwall.holders.CacheNames;
+import io.xhub.smwall.holders.ProfileNames;
 import io.xhub.smwall.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @EnableAsync
+@Profile(ProfileNames.META)
 public class MetaScheduler {
     private final static String IG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,owner{id,username,profile_picture_url},children{media_url,media_type}";
     private final static String IG_HASHTAG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}";

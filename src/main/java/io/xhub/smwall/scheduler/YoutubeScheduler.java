@@ -7,12 +7,14 @@ import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.holders.ApiClientErrorCodes;
 import io.xhub.smwall.holders.CacheNames;
+import io.xhub.smwall.holders.ProfileNames;
 import io.xhub.smwall.holders.RegexPatterns;
 import io.xhub.smwall.service.WebSocketService;
 import io.xhub.smwall.utlis.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@Profile(ProfileNames.YT)
 public class YoutubeScheduler {
     private final WebSocketService webSocketService;
     private final YoutubeClient youtubeClient;
