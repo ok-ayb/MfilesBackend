@@ -81,22 +81,26 @@ public class YoutubeScheduler {
             fixedDelayString = "${application.webhooks.youtube.scheduling.shorts-delay}",
             timeUnit = TimeUnit.SECONDS)
     public void getYoutubeChannelShorts() {
-        log.info("Start getting youtube shorts by channel id");
+        try {
+            log.info("Start getting youtube shorts by channel id");
 
-        String profilePictureUrl = getChannelProfilePictureById(youtubeProperties.getChannelId());
-        List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelShorts(
-                        YoutubeSearchParams.getDefaultSearchParams(),
-                        youtubeProperties.getChannelId(),
-                        youtubeProperties.getApiKey())
-                .getItems()
-                .stream()
-                .filter(this::isNewYoutubeMedia)
-                .peek(youtubeShort -> youtubeShort.getSnippet().setAvatar(profilePictureUrl))
-                .collect(Collectors.toList());
+            String profilePictureUrl = getChannelProfilePictureById(youtubeProperties.getChannelId());
+            List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelShorts(
+                            YoutubeSearchParams.getDefaultSearchParams(),
+                            youtubeProperties.getChannelId(),
+                            youtubeProperties.getApiKey())
+                    .getItems()
+                    .stream()
+                    .filter(this::isNewYoutubeMedia)
+                    .peek(youtubeShort -> youtubeShort.getSnippet().setAvatar(profilePictureUrl))
+                    .collect(Collectors.toList());
 
-        if (!newMedia.isEmpty()) {
-            log.info("Broadcasting {} new fetched youtube shorts to WebSocket", newMedia.size());
-            webSocketService.sendYoutubeMedia(newMedia);
+            if (!newMedia.isEmpty()) {
+                log.info("Broadcasting {} new fetched youtube shorts to WebSocket", newMedia.size());
+                webSocketService.sendYoutubeMedia(newMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching youtube shorts: {}", e.getMessage());
         }
     }
 
@@ -104,24 +108,28 @@ public class YoutubeScheduler {
             fixedDelayString = "${application.webhooks.youtube.scheduling.video-delay}",
             timeUnit = TimeUnit.SECONDS)
     public void getYoutubeChannelVideosByKeyword() {
-        log.info("Start getting youtube videos by keyword");
+        try {
+            log.info("Start getting youtube videos by keyword");
 
-        List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByKeyword(
-                        YoutubeSearchParams.getVideoSearchParams(),
-                        youtubeProperties.getApiKey(),
-                        youtubeProperties.getKeyword())
-                .getItems()
-                .stream()
-                .filter(this::isNewYoutubeMedia)
-                .peek(youtubeVideo -> {
-                    String profilePictureUrl = getChannelProfilePictureById(youtubeVideo.getSnippet().getChannelId());
-                    youtubeVideo.getSnippet().setAvatar(profilePictureUrl);
-                })
-                .collect(Collectors.toList());
+            List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByKeyword(
+                            YoutubeSearchParams.getVideoSearchParams(),
+                            youtubeProperties.getApiKey(),
+                            youtubeProperties.getKeyword())
+                    .getItems()
+                    .stream()
+                    .filter(this::isNewYoutubeMedia)
+                    .peek(youtubeVideo -> {
+                        String profilePictureUrl = getChannelProfilePictureById(youtubeVideo.getSnippet().getChannelId());
+                        youtubeVideo.getSnippet().setAvatar(profilePictureUrl);
+                    })
+                    .collect(Collectors.toList());
 
-        if (!newMedia.isEmpty()) {
-            log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
-            webSocketService.sendYoutubeMedia(newMedia);
+            if (!newMedia.isEmpty()) {
+                log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
+                webSocketService.sendYoutubeMedia(newMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching youtube videos by keyword: {}", e.getMessage());
         }
     }
 
@@ -129,25 +137,27 @@ public class YoutubeScheduler {
             fixedDelayString = "${application.webhooks.youtube.scheduling.channel-video-delay}",
             timeUnit = TimeUnit.SECONDS)
     public void getYoutubeChannelVideosByChannelId() {
-        log.info("Start getting youtube videos by channel id");
+        try {
+            log.info("Start getting youtube videos by channel id");
 
-        String currentYoutubeChannelProfile = getChannelProfilePictureById(youtubeProperties.getChannelId());
-        List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByChannelId(
-                        YoutubeSearchParams.getVideoSearchParams(),
-                        youtubeProperties.getChannelId(),
-                        youtubeProperties.getApiKey())
-                .getItems()
-                .stream()
-                .filter(this::isNewYoutubeMedia)
-                .peek(youtubeVideo -> youtubeVideo.getSnippet().setAvatar(currentYoutubeChannelProfile))
-                .collect(Collectors.toList());
+            String currentYoutubeChannelProfile = getChannelProfilePictureById(youtubeProperties.getChannelId());
+            List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByChannelId(
+                            YoutubeSearchParams.getVideoSearchParams(),
+                            youtubeProperties.getChannelId(),
+                            youtubeProperties.getApiKey())
+                    .getItems()
+                    .stream()
+                    .filter(this::isNewYoutubeMedia)
+                    .peek(youtubeVideo -> youtubeVideo.getSnippet().setAvatar(currentYoutubeChannelProfile))
+                    .collect(Collectors.toList());
 
-        if (!newMedia.isEmpty()) {
-            log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
-            webSocketService.sendYoutubeMedia(newMedia);
+            if (!newMedia.isEmpty()) {
+                log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
+                webSocketService.sendYoutubeMedia(newMedia);
+            }
+        } catch (Exception e) {
+            log.error("Error while fetching youtube videos by channel id: {}", e.getMessage());
         }
-
-
     }
 
     private boolean isNewYoutubeMedia(YoutubeMediaDTO media) {
