@@ -63,15 +63,16 @@ application:
       app-secret: ${APP_SECRET}
       scheduling:
         # Task scheduling intervals in `seconds`
-        hashtag-media-interval: 100
-        user-tags-interval: 100
-        user-stories-interval: 100
-        user-media-interval: 100
+        hashtag-media-interval: 36
+        user-tags-interval: 72
+        user-stories-interval: 106
+        user-media-interval: 225
     youtube:
       scheduling:
-        shorts-delay: 900 #15min
-        video-delay: 900
-        channel-video-delay: 900
+        # Task scheduling intervals in `seconds`
+        shorts-delay: 2160
+        video-delay: 2160
+        channel-video-delay: 4320
       api-key: ${API_KEY}
       channel-id: ${CHANNEL_ID}
       keyword: ${KEYWORD}
