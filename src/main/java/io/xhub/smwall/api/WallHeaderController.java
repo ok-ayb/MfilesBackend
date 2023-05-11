@@ -20,7 +20,7 @@ public class WallHeaderController {
 
 
     @GetMapping
-    @ApiOperation(value = "get wall header info")
+    @ApiOperation(value = "Get wall header info")
     public ResponseEntity<WallHeaderDTO> getWallHeaderInfo() {
         return ResponseEntity.ok(wallHeaderMapper.toDTO(wallHeaderService.getWallHeaderInfo()));
     }

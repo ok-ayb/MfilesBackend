@@ -1,6 +1,5 @@
 package io.xhub.smwall.domains;
 
-import io.xhub.smwall.enumeration.MediaSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
-import java.util.List;
 
 @Document(collection = "wall_Header")
 @Getter
@@ -26,8 +24,6 @@ public class WallHeader {
     private String logoUrl;
     @Field("title")
     private String title;
-    @Field("sources")
-    private List<MediaSource> sources;
     @Field("timestamp")
     private Instant timestamp;
 

@@ -11,7 +11,6 @@ public class WallHeaderMapper {
         WallHeaderDTO wallHeaderDTO = new WallHeaderDTO();
         wallHeaderDTO.setLogoUrl(wallHeader.getLogoUrl());
         wallHeaderDTO.setTitle(wallHeader.getTitle());
-        wallHeaderDTO.setSources(wallHeader.getSources());
         return wallHeaderDTO;
     }
 }
