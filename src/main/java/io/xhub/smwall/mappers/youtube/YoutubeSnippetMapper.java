@@ -15,8 +15,6 @@ public class YoutubeSnippetMapper {
         Owner owner = new Owner();
         owner.setId(youtubeVideoSnippetDTO.getChannelId());
         owner.setUsername(youtubeVideoSnippetDTO.getChannelTitle());
-        owner.setAvatar(youtubeVideoSnippetDTO.getAvatar());
-
         return owner;
     }
 }

@@ -31,7 +31,6 @@ public class CacheConfig {
         return cm -> {
             createCache(cm, CacheNames.PROCESSED_IG_MEDIA);
             createCache(cm, CacheNames.PROCESSED_YOUTUBE_MEDIA);
-            createCache(cm, CacheNames.YOUTUBE_CHANNEL_PROFILE_URL);
         };
     }
 

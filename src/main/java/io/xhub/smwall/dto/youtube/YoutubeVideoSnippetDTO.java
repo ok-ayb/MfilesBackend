@@ -12,5 +12,4 @@ public class YoutubeVideoSnippetDTO {
     private String channelId;
     private String title;
     private String channelTitle;
-    private String avatar;
 }
