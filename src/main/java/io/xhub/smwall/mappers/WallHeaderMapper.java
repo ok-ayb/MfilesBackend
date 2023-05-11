@@ -10,9 +10,8 @@ public class WallHeaderMapper {
         if (wallHeader == null) return null;
         WallHeaderDTO wallHeaderDTO = new WallHeaderDTO();
         wallHeaderDTO.setLogoUrl(wallHeader.getLogoUrl());
-        wallHeaderDTO.setMention(wallHeader.getMention());
+        wallHeaderDTO.setTitle(wallHeader.getTitle());
         wallHeaderDTO.setSources(wallHeader.getSources());
-        wallHeaderDTO.setHashtags(wallHeader.getHashtags());
         return wallHeaderDTO;
     }
 }

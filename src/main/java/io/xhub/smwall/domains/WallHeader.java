@@ -24,13 +24,10 @@ public class WallHeader {
     private String id;
     @Field("logoUrl")
     private String logoUrl;
-    @Field("mention")
-    private String mention;
+    @Field("title")
+    private String title;
     @Field("sources")
     private List<MediaSource> sources;
-    @Field("hashtags")
-
-    private List<String> hashtags;
     @Field("timestamp")
     private Instant timestamp;
 

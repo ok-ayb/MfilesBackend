@@ -10,8 +10,7 @@ import java.util.List;
 @Setter
 public class WallHeaderDTO {
     private String logoUrl;
-    private String mention;
+    private String title;
     private List<MediaSource> sources;
-    private List<String> hashtags;
 
 }
