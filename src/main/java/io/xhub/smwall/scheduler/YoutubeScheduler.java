@@ -69,6 +69,7 @@ public class YoutubeScheduler {
                     assert html != null;
                     Matcher thumbnailMatcher = thumbnailPattern.matcher(html);
                     String profilePicUrl = thumbnailMatcher.find() ? thumbnailMatcher.group(1) : null;
+                    log.info("Profile picture url : {}", profilePicUrl);
                     if (profilePicUrl == null) {
                         throw new BusinessException(ApiClientErrorCodes.PROFILE_PICTURE_EXTRACTION_FAILED.getErrorMessage());
                     }
