@@ -1,6 +1,6 @@
 package io.xhub.smwall.config;
 
-import io.xhub.smwall.holders.ApiPaths;
+import io.xhub.smwall.constants.ApiPaths;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

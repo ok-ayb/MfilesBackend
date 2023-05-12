@@ -1,4 +1,4 @@
-package io.xhub.smwall.holders;
+package io.xhub.smwall.constants;
 
 public final class ApiPaths {
     public static final String V1 = "/api/v1";

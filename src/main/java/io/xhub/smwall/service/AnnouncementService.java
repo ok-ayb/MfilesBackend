@@ -1,14 +1,13 @@
 package io.xhub.smwall.service;
 
+import com.querydsl.core.types.Predicate;
 import io.xhub.smwall.domains.Announcement;
-import io.xhub.smwall.exceptions.BusinessException;
-import io.xhub.smwall.holders.ApiClientErrorCodes;
 import io.xhub.smwall.repositories.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -17,11 +16,12 @@ public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
 
-    public Announcement getCurrentAnnouncement() {
-        log.info("Start getting current announcement");
-        return announcementRepository
-                .findFirstByEndDateGreaterThanEqualOrderByStartDateAsc(LocalDateTime.now())
-                .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage()));
+    public Page<Announcement> getAllAnnouncement(Predicate predicate, Pageable pageable) {
+        log.info("Start getting all announcements");
+        if (predicate == null) {
+            return announcementRepository.findAll(pageable);
+        }
+        return announcementRepository.findAll(predicate, pageable);
     }
 
 }

@@ -2,7 +2,7 @@ package io.xhub.smwall.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.xhub.smwall.holders.ApiPaths;
+import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.service.WebhooksService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

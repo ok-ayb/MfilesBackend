@@ -2,13 +2,11 @@ package io.xhub.smwall.service;
 
 import io.xhub.smwall.domains.WallHeader;
 import io.xhub.smwall.exceptions.BusinessException;
-import io.xhub.smwall.holders.ApiClientErrorCodes;
+import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.repositories.WallHeaderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

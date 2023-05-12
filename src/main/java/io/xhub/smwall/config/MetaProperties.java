@@ -13,5 +13,6 @@ public class MetaProperties {
     private String verifyToken;
     private String appSecret;
     private String userId;
+    private String resourceIdPrefix;
     private Map<String, String> hashtags;
 }

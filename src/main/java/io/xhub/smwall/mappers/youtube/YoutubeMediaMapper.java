@@ -1,5 +1,6 @@
 package io.xhub.smwall.mappers.youtube;
 
+import io.xhub.smwall.config.YoutubeProperties;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
 import io.xhub.smwall.dto.youtube.YoutubeVideoIdDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class YoutubeMediaMapper {
+    private final YoutubeProperties youtubeProperties;
     private final YoutubeSnippetMapper youtubeSnippetMapper;
 
     public Media toEntity(YoutubeMediaDTO youtubeMediaDTO) {
@@ -23,7 +25,7 @@ public class YoutubeMediaMapper {
         YoutubeVideoIdDTO videoIdDTO = youtubeMediaDTO.getId();
         YoutubeVideoSnippetDTO videoSnippetDTO = youtubeMediaDTO.getSnippet();
 
-        media.setId(videoIdDTO.getVideoId());
+        media.setId(StringUtils.concat(youtubeProperties.getResourceIdPrefix(), videoIdDTO.getVideoId()));
         media.setText(youtubeMediaDTO.getSnippet().getTitle());
         media.setType(MediaType.VIDEO);
         media.setSource(MediaSource.YOUTUBE);

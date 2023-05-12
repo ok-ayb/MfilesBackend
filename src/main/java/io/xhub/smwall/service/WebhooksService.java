@@ -2,7 +2,7 @@ package io.xhub.smwall.service;
 
 import io.xhub.smwall.config.MetaProperties;
 import io.xhub.smwall.exceptions.BusinessException;
-import io.xhub.smwall.holders.ApiClientErrorCodes;
+import io.xhub.smwall.constants.ApiClientErrorCodes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,6 +1,6 @@
 package io.xhub.smwall.config;
 
-import io.xhub.smwall.holders.CacheNames;
+import io.xhub.smwall.constants.CacheNames;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;

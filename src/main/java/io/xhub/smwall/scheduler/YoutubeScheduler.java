@@ -4,8 +4,8 @@ import io.xhub.smwall.client.YoutubeClient;
 import io.xhub.smwall.client.YoutubeSearchParams;
 import io.xhub.smwall.config.YoutubeProperties;
 import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
-import io.xhub.smwall.holders.CacheNames;
-import io.xhub.smwall.holders.ProfileNames;
+import io.xhub.smwall.constants.CacheNames;
+import io.xhub.smwall.constants.ProfileNames;
 import io.xhub.smwall.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -13,7 +13,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

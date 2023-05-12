@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.xhub.smwall.enumeration.MediaSource;
 import io.xhub.smwall.enumeration.MediaType;
-import io.xhub.smwall.holders.RegexPatterns;
+import io.xhub.smwall.constants.RegexPatterns;
 import lombok.Getter;
 import lombok.Setter;
 

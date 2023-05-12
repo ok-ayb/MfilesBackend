@@ -11,4 +11,5 @@ public class YoutubeProperties {
     private String apiKey;
     private String channelId;
     private String keyword;
+    private String resourceIdPrefix;
 }

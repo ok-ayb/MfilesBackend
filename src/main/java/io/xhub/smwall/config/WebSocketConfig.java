@@ -1,6 +1,6 @@
 package io.xhub.smwall.config;
 
-import io.xhub.smwall.holders.ApiPaths;
+import io.xhub.smwall.constants.ApiPaths;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;

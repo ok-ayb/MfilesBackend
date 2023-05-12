@@ -3,7 +3,7 @@ package io.xhub.smwall.service;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.dto.meta.InstagramMediaDTO;
 import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
-import io.xhub.smwall.holders.ApiPaths;
+import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.mappers.MediaMapper;
 import io.xhub.smwall.mappers.meta.InstagramMediaMapper;
 import io.xhub.smwall.mappers.youtube.YoutubeMediaMapper;

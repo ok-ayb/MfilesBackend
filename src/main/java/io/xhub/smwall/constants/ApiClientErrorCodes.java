@@ -1,4 +1,4 @@
-package io.xhub.smwall.holders;
+package io.xhub.smwall.constants;
 
 import io.xhub.smwall.exceptions.ErrorMessage;
 

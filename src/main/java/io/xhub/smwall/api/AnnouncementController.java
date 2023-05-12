@@ -2,11 +2,15 @@ package io.xhub.smwall.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.AnnouncementDTO;
-import io.xhub.smwall.holders.ApiPaths;
 import io.xhub.smwall.mappers.AnnouncementMapper;
 import io.xhub.smwall.service.AnnouncementService;
+import io.xhub.smwall.service.query.AnnouncementQuery;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +24,12 @@ public class AnnouncementController {
     private final AnnouncementService announcementService;
     private final AnnouncementMapper announcementMapper;
 
-    @ApiOperation(value = "Current announcement")
-    @GetMapping("/current")
-    public ResponseEntity<AnnouncementDTO> getCurrentAnnouncement() {
-        return ResponseEntity.ok(announcementMapper.toDTO(announcementService.getCurrentAnnouncement()));
+    @ApiOperation(value = "List of announcements")
+    @GetMapping
+    public ResponseEntity<Page<AnnouncementDTO>> getAllAnnouncements(AnnouncementQuery announcementQuery, @ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(
+                announcementService.getAllAnnouncement(announcementQuery.buildPredicate(), pageable)
+                        .map(announcementMapper::toDTO)
+        );
     }
 }

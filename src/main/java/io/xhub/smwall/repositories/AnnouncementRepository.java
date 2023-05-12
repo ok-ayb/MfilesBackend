@@ -2,12 +2,9 @@ package io.xhub.smwall.repositories;
 
 import io.xhub.smwall.domains.Announcement;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-public interface AnnouncementRepository extends MongoRepository<Announcement, String> {
-
-    Optional<Announcement> findFirstByEndDateGreaterThanEqualOrderByStartDateAsc(LocalDateTime endDate);
-
+@Repository
+public interface AnnouncementRepository extends MongoRepository<Announcement, String>, QuerydslPredicateExecutor<Announcement> {
 }
