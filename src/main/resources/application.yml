@@ -72,9 +72,9 @@ application:
       resource-id-prefix: YT-
       scheduling:
         # Task scheduling intervals in `seconds`
-        shorts-delay: 2160
-        video-delay: 2160
-        channel-video-delay: 4320
+        shorts-delay: 50
+        video-delay: 50
+        channel-video-delay: 50
       api-key: ${API_KEY}
       channel-id: ${CHANNEL_ID}
       keyword: ${KEYWORD}
