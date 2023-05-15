@@ -8,7 +8,8 @@ public enum ApiClientErrorCodes {
     WEBHOOKS_SUBSCRIPTION_FAILED(1, "webhooks.subscription.failed"),
     ANNOUNCEMENT_NOT_FOUND(2, "announcement.not.found"),
     PROFILE_PICTURE_EXTRACTION_FAILED(3, "profile.picture.extraction.failed"),
-    WALL_HEADER_NOT_FOUND(4, "wall.header.not.found");
+    WALL_HEADER_NOT_FOUND(4, "wall.header.not.found"),
+    WALL_FOOTER_NOT_FOUND(5, "wall.Footer.not.found");
 
     private final Integer code;
     private final String messageKey;
