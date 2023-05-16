@@ -6,9 +6,8 @@ public enum YoutubeParams {
     VIDEO_DURATION("short"),
     MAX_DURATION("60"),
     Q("%23shorts"),
-    MAX_RESULTS("10"),
+    MAX_RESULTS("50"),
     ORDER("date");
-
     private final String value;
 
     YoutubeParams(String value) {
