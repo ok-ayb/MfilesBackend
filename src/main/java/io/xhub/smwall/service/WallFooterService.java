@@ -1,8 +1,8 @@
 package io.xhub.smwall.service;
 
+import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.WallFooter;
 import io.xhub.smwall.exceptions.BusinessException;
-import io.xhub.smwall.holders.ApiClientErrorCodes;
 import io.xhub.smwall.repositories.WallFooterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

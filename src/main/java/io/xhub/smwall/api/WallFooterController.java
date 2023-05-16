@@ -1,8 +1,8 @@
 package io.xhub.smwall.api;
 
 import io.swagger.annotations.ApiOperation;
+import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.WallFooterDTO;
-import io.xhub.smwall.holders.ApiPaths;
 import io.xhub.smwall.mappers.WallFooterMapper;
 import io.xhub.smwall.service.WallFooterService;
 import lombok.RequiredArgsConstructor;
