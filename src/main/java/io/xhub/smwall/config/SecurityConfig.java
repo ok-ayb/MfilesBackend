@@ -44,6 +44,7 @@ public class SecurityConfig  {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, ApiPaths.V1 + ApiPaths.AUTH + ApiPaths.LOGIN).permitAll()
+                .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.MEDIA).permitAll()
                 .requestMatchers(ApiPaths.V1 + ApiPaths.WEBHOOKS + "/**").permitAll()
                 .requestMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()
