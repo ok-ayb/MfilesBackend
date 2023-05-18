@@ -1,6 +1,7 @@
 package io.xhub.smwall;
 
 import io.xhub.smwall.config.EhcacheProperties;
+import io.xhub.smwall.config.JwtProperties;
 import io.xhub.smwall.config.MetaProperties;
 import io.xhub.smwall.config.YoutubeProperties;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +11,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableConfigurationProperties({MetaProperties.class, YoutubeProperties.class, EhcacheProperties.class})
+@EnableConfigurationProperties({
+        MetaProperties.class,
+        YoutubeProperties.class,
+        EhcacheProperties.class,
+        JwtProperties.class
+})
 @EnableFeignClients
 @EnableScheduling
 public class SocialMediaWallApplication {

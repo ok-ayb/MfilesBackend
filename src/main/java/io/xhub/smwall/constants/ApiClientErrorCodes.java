@@ -9,7 +9,12 @@ public enum ApiClientErrorCodes {
     ANNOUNCEMENT_NOT_FOUND(2, "announcement.not.found"),
     PROFILE_PICTURE_EXTRACTION_FAILED(3, "profile.picture.extraction.failed"),
     WALL_HEADER_NOT_FOUND(4, "wall.header.not.found"),
-    WALL_FOOTER_NOT_FOUND(5, "wall.Footer.not.found");
+    USER_NOT_ACTIVATED(5, "user.not.activated"),
+    JWT_NOT_VALID(6, "jwt.not.valid"),
+    USER_NOT_FOUND(7, "user.not.found"),
+    INVALID_COMMAND_ARGS(8, "command.invalid.args"),
+    WALL_FOOTER_NOT_FOUND(9, "wall.Footer.not.found"),
+    WRONG_CREDENTIALS(10, "command.login.wrong.credentials");
 
     private final Integer code;
     private final String messageKey;

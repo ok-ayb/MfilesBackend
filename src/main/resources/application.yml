@@ -54,6 +54,12 @@ application:
     ehcache:
       time-to-live: 86400
       max-entries: 1000
+  security:
+    auth:
+      jwt:
+        base64-secret: N2VlNDE1MThhZjVjM2VlNDZlMDIxMjM4MjM5MTJkOWM4OWI1NjQzNzNhZTZlMWJiY2ZmZjc1OTFmNWVhNjczOTNmNjA4ZjBkOGNkZTI3NWNlODBkYTlkZTVmZWE1ZDc0OGJiNmEwNGI5ODI4OWY0OWFiYTE2MTc4NjEzMjZjMjM=
+        # Token validity in seconds
+        token-validity: 2592000
   webhooks:
     meta:
       resource-id-prefix: MT-

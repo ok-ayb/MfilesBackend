@@ -10,4 +10,7 @@ public final class ApiPaths {
     public static final String WS = "/ws";
     public static final String HEADER = "/header";
     public static final String FOOTER = "/footer";
+    public static final String AUTH = "/auth";
+    public static final String LOGIN = "/login";
+    public static final String CURRENT = "/current";
 }

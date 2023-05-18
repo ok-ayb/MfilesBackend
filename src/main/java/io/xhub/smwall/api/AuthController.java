@@ -1,0 +1,47 @@
+package io.xhub.smwall.api;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.xhub.smwall.commands.LoginCommand;
+import io.xhub.smwall.config.JwtProperties;
+import io.xhub.smwall.constants.ApiPaths;
+import io.xhub.smwall.constants.CookiesNames;
+import io.xhub.smwall.dto.UserDTO;
+import io.xhub.smwall.mappers.UserMapper;
+import io.xhub.smwall.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Api(tags = "Authentication Resource")
+@RestController
+@RequestMapping(ApiPaths.V1 + ApiPaths.AUTH)
+@RequiredArgsConstructor
+public class AuthController {
+    private final JwtProperties jwtProperties;
+    private final AuthService authService;
+    private final UserMapper userMapper;
+
+    @ApiOperation(value = "Authenticate a user")
+    @PostMapping(ApiPaths.LOGIN)
+    public ResponseEntity<Void> authenticate(@Valid @RequestBody LoginCommand loginCommand, HttpServletResponse response) {
+        String jwt = authService.authenticate(loginCommand);
+
+        // Set the JWT as a cookie
+        Cookie cookie = new Cookie(CookiesNames.JWT_KEY, jwt);
+        cookie.setMaxAge((int) jwtProperties.getTokenValidity());
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "Get current user")
+    @GetMapping(ApiPaths.CURRENT)
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        return ResponseEntity.ok()
+                .body(userMapper.toDTO(authService.getCurrentUser()));
+    }
+}
