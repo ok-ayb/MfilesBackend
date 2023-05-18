@@ -38,6 +38,17 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Logout the current user")
+    @PostMapping(ApiPaths.LOGOUT)
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        // Remove the JWT cookie by setting its expiration to 0
+        Cookie cookie = new Cookie(CookiesNames.JWT_KEY, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().build();
+    }
+
     @ApiOperation(value = "Get current user")
     @GetMapping(ApiPaths.CURRENT)
     public ResponseEntity<UserDTO> getCurrentUser() {
