@@ -50,5 +50,11 @@ public class MediaService {
         mediaRepository.save(mediaToToggle);
     }
 
+    public void changeMediaVisibility(String mediaId) {
+        log.info("Start updating media visibility");
+        Media postToToggle = getMediaById(mediaId);
 
+        postToToggle.setShown(!postToToggle.isShown());
+        mediaRepository.save(postToToggle);
+    }
 }

@@ -48,4 +48,8 @@ public class Media {
 
     @Field("pinned")
     private boolean pinned = false;
+
+    @Field("shown")
+    private boolean shown = true;
+
 }

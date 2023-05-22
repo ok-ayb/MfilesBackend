@@ -33,4 +33,11 @@ public class MediaController {
         mediaService.updateMediaPinning(mediaId);
         return ResponseEntity.ok().build();
     }
+
+    @ApiOperation(value = "Toggle media visibility status")
+    @PutMapping("/{mediaId}" + ApiPaths.MEDIA_VISIBILITY)
+    public ResponseEntity<Void> changeMediaVisibility(@PathVariable("mediaId") String mediaId) {
+        mediaService.changeMediaVisibility(mediaId);
+        return ResponseEntity.ok().build();
+    }
 }
