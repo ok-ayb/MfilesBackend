@@ -2,8 +2,8 @@ package io.xhub.smwall.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.xhub.smwall.dto.MediaDTO;
 import io.xhub.smwall.constants.ApiPaths;
+import io.xhub.smwall.dto.MediaDTO;
 import io.xhub.smwall.mappers.MediaMapper;
 import io.xhub.smwall.service.MediaService;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +11,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "Media Management Resource")
 @RestController
@@ -27,5 +25,12 @@ public class MediaController {
     @GetMapping
     public ResponseEntity<Page<MediaDTO>> getAllMedia(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(mediaService.getAllMedia(pageable).map(mediaMapper::toDTO));
+    }
+
+    @ApiOperation(value = "Pin/Unpin media")
+    @PutMapping("/{mediaId}" + ApiPaths.MEDIA_PINNING_STATUS)
+    public ResponseEntity<Void> UpdatePinning(@PathVariable("mediaId") String mediaId) {
+        mediaService.updateMediaPinning(mediaId);
+        return ResponseEntity.ok().build();
     }
 }

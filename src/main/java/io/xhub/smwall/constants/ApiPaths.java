@@ -14,4 +14,5 @@ public final class ApiPaths {
     public static final String LOGIN = "/login";
     public static final String CURRENT = "/current";
     public static final String LOGOUT = "/logout";
+    public static final String MEDIA_PINNING_STATUS = "/toggle-pin";
 }

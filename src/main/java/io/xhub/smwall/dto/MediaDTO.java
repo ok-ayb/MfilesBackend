@@ -2,9 +2,9 @@ package io.xhub.smwall.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.xhub.smwall.constants.RegexPatterns;
 import io.xhub.smwall.enumeration.MediaSource;
 import io.xhub.smwall.enumeration.MediaType;
-import io.xhub.smwall.constants.RegexPatterns;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,6 +34,8 @@ public class MediaDTO {
 
     private OwnerDTO owner;
 
+    private boolean pinned;
+
     @JsonProperty("textContainsOnlyHashtags")
     private boolean textContainsOnlyHashtags() {
         return this.hasText() && this.getText()
@@ -44,4 +46,5 @@ public class MediaDTO {
     private boolean hasText() {
         return this.getText() != null && !this.getText().isBlank();
     }
+
 }

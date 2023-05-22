@@ -45,4 +45,7 @@ public class Media {
 
     @Field("owner")
     private Owner owner;
+
+    @Field("pinned")
+    private boolean pinned = false;
 }

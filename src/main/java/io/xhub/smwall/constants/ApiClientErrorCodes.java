@@ -14,7 +14,8 @@ public enum ApiClientErrorCodes {
     USER_NOT_FOUND(7, "user.not.found"),
     INVALID_COMMAND_ARGS(8, "command.invalid.args"),
     WALL_FOOTER_NOT_FOUND(9, "wall.Footer.not.found"),
-    WRONG_CREDENTIALS(10, "command.login.wrong.credentials");
+    WRONG_CREDENTIALS(10, "command.login.wrong.credentials"),
+    MEDIA_NOT_FOUND(11, "media.not.found");
 
     private final Integer code;
     private final String messageKey;
