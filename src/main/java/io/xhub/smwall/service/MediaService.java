@@ -54,7 +54,7 @@ public class MediaService {
         log.info("Start updating media visibility");
         Media postToToggle = getMediaById(mediaId);
 
-        postToToggle.setShown(!postToToggle.isShown());
+        postToToggle.setHidden(!postToToggle.isHidden());
         mediaRepository.save(postToToggle);
     }
 }

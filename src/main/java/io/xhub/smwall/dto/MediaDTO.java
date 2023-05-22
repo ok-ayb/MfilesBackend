@@ -36,7 +36,7 @@ public class MediaDTO {
 
     private boolean pinned;
 
-    private boolean shown;
+    private boolean hidden;
 
     @JsonProperty("textContainsOnlyHashtags")
     private boolean textContainsOnlyHashtags() {
