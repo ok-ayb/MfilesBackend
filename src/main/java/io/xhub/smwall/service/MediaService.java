@@ -1,5 +1,6 @@
 package io.xhub.smwall.service;
 
+import com.querydsl.core.types.Predicate;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.exceptions.BusinessException;
@@ -16,9 +17,12 @@ import org.springframework.stereotype.Service;
 public class MediaService {
     private final MediaRepository mediaRepository;
 
-    public Page<Media> getAllMedia(Pageable pageable) {
+    public Page<Media> getAllMedia(Predicate predicate, Pageable pageable) {
         log.info("Start getting all media");
-        return mediaRepository.findAll(pageable);
+        if (predicate == null) {
+            return mediaRepository.findAll(pageable);
+        }
+        return mediaRepository.findAll(predicate, pageable);
     }
 
     public Media getMediaById(String id) {
@@ -33,7 +37,7 @@ public class MediaService {
         log.info("Start updating media pinning ");
         Media mediaToToggle = getMediaById(mediaId);
 
-        if (mediaToToggle.isPinned()) {
+        if (mediaToToggle.getPinned()) {
             mediaToToggle.setPinned(false);
         } else {
             Media currentlyPinnedMedia = mediaRepository.findByPinned(true)
@@ -54,7 +58,7 @@ public class MediaService {
         log.info("Start updating media visibility");
         Media postToToggle = getMediaById(mediaId);
 
-        postToToggle.setHidden(!postToToggle.isHidden());
+        postToToggle.setHidden(!postToToggle.getHidden());
         mediaRepository.save(postToToggle);
     }
 }

@@ -26,8 +26,8 @@ public class MediaMapper {
         mediaDTO.setSource(media.getSource());
         mediaDTO.setUrl(media.getUrl());
         mediaDTO.setPermalink(media.getPermalink());
-        mediaDTO.setPinned(media.isPinned());
-        mediaDTO.setHidden(media.isHidden());
+        mediaDTO.setPinned(media.getHidden());
+        mediaDTO.setHidden(media.getPinned());
 
         List<MediaChild> children = media.getChildren();
         if (children != null) {

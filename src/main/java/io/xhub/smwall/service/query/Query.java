@@ -1,9 +1,11 @@
 package io.xhub.smwall.service.query;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.LiteralExpression;
 import com.querydsl.core.types.dsl.StringPath;
+import io.xhub.smwall.service.filter.BooleanFilter;
 import io.xhub.smwall.service.filter.DateTimeFilter;
 import io.xhub.smwall.service.filter.Filter;
 import io.xhub.smwall.service.filter.StringFilter;
@@ -85,6 +87,11 @@ public abstract class Query implements Predictable {
         }
 
         return predicates;
+    }
+
+    protected List<Predicate> buildBooleanPredicates(BooleanFilter booleanFilter, BooleanExpression expression) {
+
+        return buildCommonPredicates(booleanFilter, expression);
     }
 
     public abstract Predicate buildPredicate();
