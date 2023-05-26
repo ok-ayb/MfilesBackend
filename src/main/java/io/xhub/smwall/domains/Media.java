@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "media")
@@ -51,4 +52,8 @@ public class Media {
 
     @Field("pinned")
     private Boolean pinned = false;
+
+    @Field("sourceTypes")
+    private List<String> sourceTypes ;
+
 }

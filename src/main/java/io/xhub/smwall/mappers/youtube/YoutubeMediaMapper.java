@@ -32,6 +32,8 @@ public class YoutubeMediaMapper {
         media.setUrl(StringUtils.generateStringEmbedUrl(videoIdDTO.getVideoId()));
         media.setTimestamp(videoSnippetDTO.getPublishedAt());
         media.setOwner(this.youtubeSnippetMapper.toOwnerEntity(videoSnippetDTO));
+        media.setSourceTypes(youtubeMediaDTO.getSourceTypes());
+
 
         return media;
     }

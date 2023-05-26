@@ -3,9 +3,9 @@ package io.xhub.smwall.scheduler;
 import io.xhub.smwall.client.YoutubeClient;
 import io.xhub.smwall.client.YoutubeSearchParams;
 import io.xhub.smwall.config.YoutubeProperties;
-import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
 import io.xhub.smwall.constants.CacheNames;
 import io.xhub.smwall.constants.ProfileNames;
+import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
 import io.xhub.smwall.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -72,6 +73,11 @@ public class YoutubeScheduler {
                     .getItems()
                     .stream()
                     .filter(this::isNewYoutubeMedia)
+                    .map(youtubeMediaDTO -> {
+                        youtubeMediaDTO.getSourceTypes()
+                                .addAll(Collections.singletonList(youtubeProperties.getKeyword()));
+                        return youtubeMediaDTO;
+                    })
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {

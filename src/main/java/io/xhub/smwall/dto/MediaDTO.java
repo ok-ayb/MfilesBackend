@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,6 +38,8 @@ public class MediaDTO {
     private Boolean hidden = false;
 
     private Boolean pinned = false;
+
+    private List<String> sourceTypes  = new ArrayList<>();
 
     @JsonProperty("textContainsOnlyHashtags")
     private boolean textContainsOnlyHashtags() {

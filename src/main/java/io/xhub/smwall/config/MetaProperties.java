@@ -15,4 +15,5 @@ public class MetaProperties {
     private String userId;
     private String resourceIdPrefix;
     private Map<String, String> hashtags;
+    private String username;
 }

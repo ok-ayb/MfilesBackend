@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,4 +34,7 @@ public class InstagramMediaDTO {
 
     @JsonProperty("children")
     private InstagramMediaChildrenDTO children;
+
+    @JsonProperty("sourceTypes")
+    private List<String> sourceTypes = new ArrayList<>();
 }

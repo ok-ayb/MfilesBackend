@@ -44,6 +44,7 @@ public class InstagramMediaMapper {
 
         media.setTimestamp(instagramMediaDTO.getTimestamp());
         media.setSource(MediaSource.INSTAGRAM);
+        media.setSourceTypes(instagramMediaDTO.getSourceTypes());
         return media;
     }
 }

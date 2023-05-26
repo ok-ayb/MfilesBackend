@@ -2,10 +2,13 @@ package io.xhub.smwall.scheduler;
 
 import io.xhub.smwall.client.MetaClient;
 import io.xhub.smwall.config.MetaProperties;
-import io.xhub.smwall.dto.meta.InstagramMediaDTO;
 import io.xhub.smwall.constants.CacheNames;
 import io.xhub.smwall.constants.ProfileNames;
+import io.xhub.smwall.constants.RegexPatterns;
+import io.xhub.smwall.dto.meta.InstagramMediaDTO;
 import io.xhub.smwall.service.WebSocketService;
+import io.xhub.smwall.utlis.RegexUtils;
+import io.xhub.smwall.utlis.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -15,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -30,14 +34,27 @@ public class MetaScheduler {
     private final WebSocketService webSocketService;
     private final MetaClient metaClient;
     private final Cache processedMediaCache;
+    private final List<String> allowedMatches;
 
     public MetaScheduler(MetaProperties metaProperties, WebSocketService webSocketService, MetaClient metaClient, CacheManager cacheManager) {
         this.metaProperties = metaProperties;
         this.webSocketService = webSocketService;
         this.metaClient = metaClient;
         this.processedMediaCache = cacheManager.getCache(CacheNames.PROCESSED_IG_MEDIA);
+        this.allowedMatches = createAllowedMatchesList();
     }
 
+
+    private List<String> createAllowedMatchesList() {
+        List<String> hashtags = metaProperties.getHashtags().keySet().stream()
+                .map(key -> StringUtils.prependHashtag(key))
+                .collect(Collectors.toList());
+        String mention = StringUtils.prependAtSign(metaProperties.getUsername());
+        List<String> allowedMatches = new ArrayList<>();
+        allowedMatches.addAll(hashtags);
+        allowedMatches.add(mention);
+        return allowedMatches;
+    }
 
     @Async
     @Scheduled(
@@ -56,8 +73,14 @@ public class MetaScheduler {
                             IG_HASHTAG_MEDIA_REQUEST_FIELDS))
                     .flatMap(res -> res.getData().stream())
                     .filter(this::isNewIGMedia)
+                    .map(instagramMediaDTO -> {
+                        if (instagramMediaDTO.getCaption() != null) {
+                            instagramMediaDTO.getSourceTypes()
+                                    .addAll(RegexUtils.findAllowedMatches(instagramMediaDTO.getCaption(), RegexPatterns.SOURCE_TYPES, allowedMatches));
+                        }
+                        return instagramMediaDTO;
+                    })
                     .collect(Collectors.toList());
-
             if (!newMedia.isEmpty()) {
                 log.info("Broadcasting {} new IG hashtag recent media to WebSocket", newMedia.size());
                 webSocketService.sendIgMedia(newMedia);
@@ -106,6 +129,13 @@ public class MetaScheduler {
                     .getData()
                     .stream()
                     .filter(this::isNewIGMedia)
+                    .map(instagramMediaDTO -> {
+                        if (instagramMediaDTO.getCaption() != null) {
+                            instagramMediaDTO.getSourceTypes()
+                                    .addAll(RegexUtils.findAllowedMatches(instagramMediaDTO.getCaption(), RegexPatterns.SOURCE_TYPES, allowedMatches));
+                        }
+                        return instagramMediaDTO;
+                    })
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {

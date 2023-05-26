@@ -67,6 +67,7 @@ application:
         - devoxxma_smw1: ${HASHTAG1_ID}
         - devoxxma_smw2: ${HASHTAG2_ID}
       user-id: ${USER_ID}
+      username: ${USERNAME}
       app-secret: ${APP_SECRET}
       scheduling:
         # Task scheduling intervals in `seconds`
@@ -78,9 +79,9 @@ application:
       resource-id-prefix: YT-
       scheduling:
         # Task scheduling intervals in `seconds`
-        shorts-delay: 50
-        video-delay: 50
-        channel-video-delay: 50
+        shorts-delay: 2160
+        video-delay: 2160
+        channel-video-delay: 4320
       api-key: ${API_KEY}
       channel-id: ${CHANNEL_ID}
       keyword: ${KEYWORD}
