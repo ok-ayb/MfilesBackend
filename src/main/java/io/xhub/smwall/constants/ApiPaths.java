@@ -8,6 +8,7 @@ public final class ApiPaths {
     public static final String ANNOUNCEMENTS = "/announcements";
     public static final String APP = "/app";
     public static final String WS = "/ws";
+    public static final String PINNED_POST = "/posts/pinned";
     public static final String HEADER = "/header";
     public static final String FOOTER = "/footer";
     public static final String AUTH = "/auth";

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MediaService {
     private final MediaRepository mediaRepository;
+    private final WebSocketService webSocketService;
 
     public Page<Media> getAllMedia(Predicate predicate, Pageable pageable) {
         log.info("Start getting all media");
@@ -52,6 +53,7 @@ public class MediaService {
         }
 
         mediaRepository.save(mediaToToggle);
+        webSocketService.sendPinnedMedia(mediaToToggle);
     }
 
     public void changeMediaVisibility(String mediaId) {

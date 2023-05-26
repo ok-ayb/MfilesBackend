@@ -15,8 +15,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker(ApiPaths.MEDIA);
         config.setApplicationDestinationPrefixes(ApiPaths.APP);
     }
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(ApiPaths.WS).setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint(ApiPaths.WS + ApiPaths.PINNED_POST).setAllowedOriginPatterns("*").withSockJS();
     }
 }

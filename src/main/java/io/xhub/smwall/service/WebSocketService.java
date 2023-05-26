@@ -1,9 +1,9 @@
 package io.xhub.smwall.service;
 
+import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.dto.meta.InstagramMediaDTO;
 import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
-import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.mappers.MediaMapper;
 import io.xhub.smwall.mappers.meta.InstagramMediaMapper;
 import io.xhub.smwall.mappers.youtube.YoutubeMediaMapper;
@@ -44,6 +44,11 @@ public class WebSocketService {
                 .collect(Collectors.toList());
         mediaRepository.saveAll(socialMediaList);
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, socialMediaList.stream().map(mediaMapper::toDTO));
+    }
+
+    public void sendPinnedMedia(Media pinnedMedia) {
+        log.info("Send the pinned Media to all connected clients");
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
     }
 
 }
