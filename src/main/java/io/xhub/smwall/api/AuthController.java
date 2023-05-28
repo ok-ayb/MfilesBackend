@@ -33,6 +33,7 @@ public class AuthController {
         // Set the JWT as a cookie
         Cookie cookie = new Cookie(CookiesNames.JWT_KEY, jwt);
         cookie.setMaxAge((int) jwtProperties.getTokenValidity());
+        cookie.setPath("/api/v1");
         response.addCookie(cookie);
 
         return ResponseEntity.ok().build();

@@ -48,7 +48,7 @@ public class WebSocketService {
 
     public void sendPinnedMedia(Media pinnedMedia) {
         log.info("Send the pinned Media to all connected clients");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
     }
 
 }
