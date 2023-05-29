@@ -16,20 +16,34 @@ public class WebhooksController {
 
     private final WebhooksService webhooksService;
 
-    @ApiOperation(value = "Webhook Subscription handler")
+    @ApiOperation(value = "Handle Meta Subscription")
     @GetMapping(ApiPaths.META)
     public ResponseEntity<String> handleMetaSubscription(@RequestParam(name = "hub.mode") String mode,
                                                          @RequestParam(name = "hub.verify_token") String verifyToken,
                                                          @RequestParam(name = "hub.challenge") String challenge) {
-        webhooksService.verifyMetaSubscription(mode, verifyToken);
+        webhooksService.verifyMetaNotification(mode, verifyToken);
         return ResponseEntity.ok().body(challenge);
     }
 
-    @ApiOperation(value = "Handle Meta field update")
+    @ApiOperation(value = "Handle Meta notification")
     @PostMapping(ApiPaths.META)
-    public ResponseEntity<?> handleMetaUpdate(@RequestBody String payload) {
-        webhooksService.handleMetaUpdate(payload);
-        return ResponseEntity.ok().build();
+    public void handleMetaNotification(@RequestBody String payload) {
+        webhooksService.handleMetaNotification(payload);
+    }
+
+    @ApiOperation(value = "Handle YouTube Subscription")
+    @GetMapping(ApiPaths.YOUTUBE)
+    public ResponseEntity<String> handleYouTubeSubscription(@RequestParam(name = "hub.mode") String mode,
+                                                            @RequestParam(name = "hub.verify_token") String verifyToken,
+                                                            @RequestParam(name = "hub.challenge") String challenge) {
+        webhooksService.verifyYouTubeSubscription(mode, verifyToken);
+        return ResponseEntity.ok().body(challenge);
+    }
+
+    @ApiOperation(value = "Handle YouTube notification")
+    @PostMapping(ApiPaths.YOUTUBE)
+    public void handleYouTubeUpdate(@RequestBody String payload) {
+        webhooksService.handleYouTubeNotification(payload);
     }
 
 }

@@ -32,6 +32,7 @@ public class InstagramMediaMapper {
         }
 
         media.setUrl(instagramMediaDTO.getUrl());
+        media.setThumbnail(instagramMediaDTO.getThumbnailUrl());
         media.setPermalink(instagramMediaDTO.getPermalink());
 
         if (instagramMediaDTO.getChildren() != null) {

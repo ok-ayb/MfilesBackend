@@ -1,6 +1,5 @@
 package io.xhub.smwall.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.xhub.smwall.constants.RegexPatterns;
 import io.xhub.smwall.enumeration.MediaSource;
@@ -17,7 +16,6 @@ import java.util.List;
 public class MediaDTO {
     private String id;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String text;
 
     private MediaType type;
@@ -26,9 +24,10 @@ public class MediaDTO {
 
     private String url;
 
+    private String thumbnail;
+
     private String permalink;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<MediaChildDTO> children;
 
     private Instant timestamp;

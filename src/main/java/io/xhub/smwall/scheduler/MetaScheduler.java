@@ -28,8 +28,9 @@ import java.util.stream.Collectors;
 @EnableAsync
 @Profile(ProfileNames.META)
 public class MetaScheduler {
-    private final static String IG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,owner{id,username,profile_picture_url},children{media_url,media_type}";
+    private final static String IG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,owner{id,username,profile_picture_url},children{media_url,media_type}";
     private final static String IG_HASHTAG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}";
+    private final static String IG_MENTION_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}";
     private final MetaProperties metaProperties;
     private final WebSocketService webSocketService;
     private final MetaClient metaClient;
@@ -125,7 +126,7 @@ public class MetaScheduler {
             log.info("Getting IG user tags");
 
             List<InstagramMediaDTO> newMedia = metaClient.getIGUserTags(metaProperties.getUserId(),
-                            IG_MEDIA_REQUEST_FIELDS)
+                            IG_MENTION_MEDIA_REQUEST_FIELDS)
                     .getData()
                     .stream()
                     .filter(this::isNewIGMedia)

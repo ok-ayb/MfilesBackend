@@ -62,6 +62,7 @@ application:
         token-validity: 2592000
   webhooks:
     meta:
+      verify-token: ${META_SUBSCRIPTION_VERIFY_TOKEN}
       resource-id-prefix: MT-
       hashtags:
         - devoxxma_smw1: ${HASHTAG1_ID}
@@ -76,6 +77,7 @@ application:
         user-stories-interval: 106
         user-media-interval: 225
     youtube:
+      verify-token: ${YOUTUBE_SUBSCRIPTION_VERIFY_TOKEN}
       resource-id-prefix: YT-
       scheduling:
         # Task scheduling intervals in `seconds`

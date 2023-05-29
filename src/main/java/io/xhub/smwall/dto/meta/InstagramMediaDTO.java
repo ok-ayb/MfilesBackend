@@ -23,6 +23,9 @@ public class InstagramMediaDTO {
     @JsonProperty("media_url")
     private String url;
 
+    @JsonProperty("thumbnail_url")
+    private String thumbnailUrl;
+
     @JsonProperty("permalink")
     private String permalink;
 

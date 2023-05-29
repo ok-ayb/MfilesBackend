@@ -1,6 +1,7 @@
 package io.xhub.smwall.service;
 
 import io.xhub.smwall.config.MetaProperties;
+import io.xhub.smwall.config.YoutubeProperties;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import lombok.RequiredArgsConstructor;
@@ -13,22 +14,30 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class WebhooksService {
     private final MetaProperties metaProperties;
+    private final YoutubeProperties youtubeProperties;
 
-    public void verifyMetaSubscription(String mode, String verifyToken) {
-        log.info("Start verifying subscription with mode {} and verifyToken {} :", mode, verifyToken);
-        if (!StringUtils.equals(mode, "subscribe") || !verifyToken.equals(this.metaProperties.getVerifyToken())) {
-            throw new BusinessException(ApiClientErrorCodes.WEBHOOKS_SUBSCRIPTION_FAILED.getErrorMessage());
-        }
+    public void verifyMetaNotification(String mode, String verifyToken) {
+        log.info("Start verifying Meta subscription with mode {} and verifyToken {} :", mode, verifyToken);
+        verifySubscription(mode, verifyToken, metaProperties.getVerifyToken());
     }
 
-    public void handleMetaUpdate(String payload) {
-        log.info("Meta request body: " + payload);
+    public void handleMetaNotification(String payload) {
+        log.info("Handling Meta notification: " + payload);
+    }
 
-        /**
-         * TODO: - Business logic for handling meta update
-         *       - Analyse the content and save them to database if necessary
-         *       - This can be sentiment analysis, storing to database, etc.
-         */
+    public void verifyYouTubeSubscription(String mode, String verifyToken) {
+        log.info("Start verifying subscription with mode {} and verifyToken {} :", mode, verifyToken);
+        verifySubscription(mode, verifyToken, youtubeProperties.getVerifyToken());
+    }
+
+    public void handleYouTubeNotification(String payload) {
+        log.info("Handling YouTube notification: " + payload);
+    }
+
+    private void verifySubscription(String mode, String verifyToken, String tokenToVerifyWith) {
+        if (!StringUtils.equals(mode, "subscribe") || !verifyToken.equals(tokenToVerifyWith)) {
+            throw new BusinessException(ApiClientErrorCodes.WEBHOOKS_SUBSCRIPTION_FAILED.getErrorMessage());
+        }
     }
 
 }

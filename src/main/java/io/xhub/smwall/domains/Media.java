@@ -35,6 +35,9 @@ public class Media {
     @Field("url")
     private String url;
 
+    @Field("thumbnail")
+    private String thumbnail;
+
     @Field("permalink")
     private String permalink;
 

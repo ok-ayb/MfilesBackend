@@ -25,6 +25,7 @@ public class MediaMapper {
         mediaDTO.setType(media.getType());
         mediaDTO.setSource(media.getSource());
         mediaDTO.setUrl(media.getUrl());
+        mediaDTO.setThumbnail(media.getThumbnail());
         mediaDTO.setPermalink(media.getPermalink());
         mediaDTO.setPinned(media.getPinned());
         mediaDTO.setHidden(media.getHidden());
