@@ -56,11 +56,11 @@ public class MediaService {
         webSocketService.sendPinnedMedia(mediaToToggle);
     }
 
-    public void changeMediaVisibility(String mediaId) {
+    public void updateMediaVisibility(String mediaId) {
         log.info("Start updating media visibility");
-        Media postToToggle = getMediaById(mediaId);
-
-        postToToggle.setHidden(!postToToggle.getHidden());
-        mediaRepository.save(postToToggle);
+        Media mediaToToggle = getMediaById(mediaId);
+        mediaToToggle.setHidden(!mediaToToggle.getHidden());
+        mediaRepository.save(mediaToToggle);
+        webSocketService.sendNewMediaVisibilityStatus(mediaToToggle);
     }
 }

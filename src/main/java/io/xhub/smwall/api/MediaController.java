@@ -42,9 +42,9 @@ public class MediaController {
     }
 
     @ApiOperation(value = "Toggle media visibility status")
-    @PutMapping("/{mediaId}" + ApiPaths.MEDIA_VISIBILITY)
-    public ResponseEntity<Void> changeMediaVisibility(@PathVariable("mediaId") String mediaId) {
-        mediaService.changeMediaVisibility(mediaId);
+    @PutMapping("/{mediaId}" + ApiPaths.MEDIA_VISIBILITY_STATUS)
+    public ResponseEntity<Void> updateMediaVisibility(@PathVariable("mediaId") String mediaId) {
+        mediaService.updateMediaVisibility(mediaId);
         return ResponseEntity.ok().build();
     }
 }

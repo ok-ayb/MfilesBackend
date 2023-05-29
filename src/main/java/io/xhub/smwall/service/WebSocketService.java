@@ -51,4 +51,9 @@ public class WebSocketService {
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
     }
 
+    public void sendNewMediaVisibilityStatus(Media hiddenMedia) {
+        log.info("Send new Media visibility status");
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.HIDDEN_POSTS, mediaMapper.toDTO(hiddenMedia));
+    }
+
 }
