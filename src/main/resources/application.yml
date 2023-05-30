@@ -48,6 +48,10 @@ spring:
       thread-name-prefix: smwall-scheduling-
       pool:
         size: 2
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      enabled: true
 
 application:
   cache:

@@ -23,4 +23,13 @@ public class StringUtils {
     public static String getYouTubeVideoUrlFromId(String videoId) {
         return YOUTUBE_WATCH_URL.concat("?v=" + videoId);
     }
+
+    public static String getBase64Data(String contentType, String data) {
+        return new StringBuilder()
+                .append("data:")
+                .append(contentType)
+                .append(";base64,")
+                .append(data)
+                .toString();
+    }
 }

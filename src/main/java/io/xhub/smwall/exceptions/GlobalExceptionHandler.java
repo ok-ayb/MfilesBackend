@@ -4,6 +4,7 @@ import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.mappers.http.FieldErrorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage handleBusinessException(MethodArgumentNotValidException e) {
+        return getErrorMessage(e);
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleMultipartException(BindException e) {
+        return getErrorMessage(e);
+    }
+
+    private ErrorMessage getErrorMessage(BindException e) {
         return ApiClientErrorCodes
                 .INVALID_COMMAND_ARGS
                 .getErrorMessage(e
