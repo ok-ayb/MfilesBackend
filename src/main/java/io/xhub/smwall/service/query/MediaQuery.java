@@ -11,10 +11,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springdoc.core.annotations.ParameterObject;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ParameterObject
 public class MediaQuery extends Query {
+    private String q;
     private StringFilter text;
     private StringFilter userName;
     private Filter<MediaSource> source;
@@ -23,6 +26,11 @@ public class MediaQuery extends Query {
     @Override
     public Predicate buildPredicate() {
         BooleanBuilder builder = new BooleanBuilder();
+
+        if (this.getQ() != null) {
+            QMedia qMedia = QMedia.media;
+            buildQueryExpressions(this.getQ(), List.of(qMedia.text, qMedia.owner.username)).forEach(builder::or);
+        }
 
         if (this.getText() != null) {
             buildStringPredicates(this.getText(), QMedia.media.text).forEach(builder::and);

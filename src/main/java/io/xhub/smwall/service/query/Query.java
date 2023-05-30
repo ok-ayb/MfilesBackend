@@ -13,6 +13,7 @@ import io.xhub.smwall.service.filter.StringFilter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Query implements Predictable {
     protected <T extends Comparable<?>> List<Predicate> buildCommonPredicates(Filter<T> filter, LiteralExpression<T> expression) {
@@ -69,6 +70,12 @@ public abstract class Query implements Predictable {
         }
 
         return predicates;
+    }
+
+    protected List<BooleanExpression> buildQueryExpressions(String term, List<StringPath> paths) {
+        return paths.stream()
+                .map(path -> path.containsIgnoreCase(term))
+                .collect(Collectors.toList());
     }
 
     protected List<Predicate> buildDateTimePredicates(DateTimeFilter filter, DateTimePath<LocalDateTime> path) {
