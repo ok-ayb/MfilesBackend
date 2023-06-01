@@ -1,6 +1,7 @@
 package io.xhub.smwall.domains;
 
-import io.xhub.smwall.commands.AddWallSettingCommand;
+import io.xhub.smwall.commands.WallSettingAddCommand;
+import io.xhub.smwall.commands.WallSettingUpdateCommand;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,11 +39,20 @@ public class WallSetting {
         setLogo(logo);
     }
 
-    public static WallSetting create(AddWallSettingCommand command) throws IOException {
+    public static WallSetting create(WallSettingAddCommand command) throws IOException {
         WallSetting wallSetting = new WallSetting();
         wallSetting.setTitle(command.getTitle());
         wallSetting.initLogo(command.getLogo());
 
         return wallSetting;
+    }
+
+    public void update(WallSettingUpdateCommand command) throws IOException {
+        if (command.getTitle() != null) {
+            this.setTitle(command.getTitle());
+        }
+        if (command.getLogo() != null) {
+            this.initLogo(command.getLogo());
+        }
     }
 }

@@ -17,6 +17,10 @@ public class MediaTypeValidator implements ConstraintValidator<MediaType, Multip
 
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
+        if (multipartFile == null) {
+            return true;
+        }
+
         String contentType = multipartFile.getContentType();
         return contentType != null && isValidContentType(contentType);
     }

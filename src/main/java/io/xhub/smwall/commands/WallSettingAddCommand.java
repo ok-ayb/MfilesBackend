@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-public class AddWallSettingCommand {
+public class WallSettingAddCommand {
     @NotBlank
     @Pattern(regexp = RegexPatterns.WALL_TITLE)
     private String title;
