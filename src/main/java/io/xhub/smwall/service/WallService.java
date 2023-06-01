@@ -1,7 +1,7 @@
 package io.xhub.smwall.service;
 
-import io.xhub.smwall.commands.WallSettingUpdateCommand;
 import io.xhub.smwall.commands.WallSettingAddCommand;
+import io.xhub.smwall.commands.WallSettingUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.WallSetting;
 import io.xhub.smwall.exceptions.BusinessException;
@@ -39,6 +39,13 @@ public class WallService {
         } catch (IOException e) {
             throw new BusinessException(ApiClientErrorCodes.INVALID_COMMAND_ARGS.getErrorMessage());
         }
+    }
+
+    public WallSetting getLatestWallSetting() {
+        log.info("Start getting latest wall setting");
+
+        return wallSettingRepository.findFirstByOrderByCreatedAtDesc()
+                .orElse(null);
     }
 
     private WallSetting getWallSettingById(String id) {

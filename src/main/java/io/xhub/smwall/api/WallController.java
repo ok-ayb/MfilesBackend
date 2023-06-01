@@ -22,6 +22,13 @@ public class WallController {
     private final WallService wallService;
     private final WallSettingMapper wallSettingMapper;
 
+    @ApiOperation(value = "Get latest wall setting")
+    @GetMapping(ApiPaths.SETTINGS + ApiPaths.LATEST)
+    public ResponseEntity<WallSettingDTO> getLatestWallSetting() {
+        return ResponseEntity.ok()
+                .body(wallSettingMapper.toDTO(wallService.getLatestWallSetting()));
+    }
+
     @ApiOperation(value = "Add a wall setting")
     @PostMapping(ApiPaths.SETTINGS)
     public ResponseEntity<WallSettingDTO> addWallSetting(@Valid @ModelAttribute WallSettingAddCommand wallSettingAddCommand) {

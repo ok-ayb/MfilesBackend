@@ -20,7 +20,7 @@ import java.io.IOException;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WallSetting {
+public class WallSetting extends AbstractAuditingDocument {
     @Id
     private String id;
 
