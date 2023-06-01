@@ -30,4 +30,11 @@ public class Announcement {
 
     @Field("endDate")
     private LocalDateTime endDate;
+
+    @Field("deleted")
+    private boolean deleted = false;
+
+    public void delete() {
+        setDeleted(true);
+    }
 }

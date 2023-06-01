@@ -18,6 +18,7 @@ public class AnnouncementMapper {
         announcementDTO.setDescription(announcement.getDescription());
         announcementDTO.setStartDate(announcement.getStartDate());
         announcementDTO.setEndDate(announcement.getEndDate());
+        announcementDTO.setDeleted(announcement.isDeleted());
 
         return announcementDTO;
     }

@@ -12,9 +12,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "Announcement Management Resource")
 @RestController
@@ -32,4 +30,11 @@ public class AnnouncementController {
                         .map(announcementMapper::toDTO)
         );
     }
+    @ApiOperation(value = "Delete an announcement by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAnnouncement(@PathVariable String id) {
+            announcementService.deleteAnnouncementById(id);
+            return ResponseEntity.noContent().build();
+    }
+
 }

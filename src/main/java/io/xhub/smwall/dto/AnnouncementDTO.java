@@ -8,9 +8,17 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AnnouncementDTO {
+
     private String id;
+
     private String title;
+
     private String description;
+
     private LocalDateTime startDate;
+
     private LocalDateTime endDate;
+
+    private boolean deleted;
+
 }
