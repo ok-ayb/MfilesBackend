@@ -16,7 +16,10 @@ public enum ApiClientErrorCodes {
     WALL_FOOTER_NOT_FOUND(9, "wall.Footer.not.found"),
     WRONG_CREDENTIALS(10, "command.login.wrong.credentials"),
     MEDIA_NOT_FOUND(11, "media.not.found"),
-    WALL_SETTING_NOT_FOUND(12, "wall.setting.not.found");
+
+    WALL_SETTING_NOT_FOUND(12, "wall.setting.not.found"),
+    INVALID_PAYLOAD(13, "invalid.request.payload");
+
 
     private final Integer code;
     private final String messageKey;

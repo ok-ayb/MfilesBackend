@@ -2,6 +2,7 @@ package io.xhub.smwall.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.xhub.smwall.commands.AnnouncementCommand;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.AnnouncementDTO;
 import io.xhub.smwall.mappers.AnnouncementMapper;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +32,17 @@ public class AnnouncementController {
                         .map(announcementMapper::toDTO)
         );
     }
+
     @ApiOperation(value = "Delete an announcement by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAnnouncement(@PathVariable String id) {
-            announcementService.deleteAnnouncementById(id);
-            return ResponseEntity.noContent().build();
+        announcementService.deleteAnnouncementById(id);
+        return ResponseEntity.noContent().build();
     }
 
+    @ApiOperation(value = "Create a new announcement")
+    @PostMapping()
+    public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody AnnouncementCommand announcementCommand) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementCommand)));
+    }
 }

@@ -2,6 +2,7 @@ package io.xhub.smwall.service;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
+import io.xhub.smwall.commands.AnnouncementCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.QAnnouncement;
@@ -12,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.function.BiPredicate;
 
 @Service
 @RequiredArgsConstructor
@@ -48,4 +52,15 @@ public class AnnouncementService {
         }
     }
 
+    public Announcement addAnnouncement(final AnnouncementCommand announcementCommand) {
+        announcementCommand.validate();
+        BiPredicate<Instant, Instant> ThereAnyAnnouncement = (startDate, endDate) -> {
+            if (announcementRepository.existsByStartDateBetweenAndDeletedFalse(startDate, endDate) || announcementRepository.existsByEndDateBetweenAndDeletedFalse(startDate, endDate) || announcementRepository.existsByStartDateBeforeAndEndDateAfterAndDeletedFalse(startDate, endDate))
+                return true;
+            return false;
+        };
+
+        return announcementRepository.save(Announcement.create(ThereAnyAnnouncement, announcementCommand));
+    }
 }
+
