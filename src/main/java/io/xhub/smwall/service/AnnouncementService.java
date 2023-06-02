@@ -1,8 +1,10 @@
 package io.xhub.smwall.service;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Announcement;
+import io.xhub.smwall.domains.QAnnouncement;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,13 @@ public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
 
-    public Page<Announcement> getAllAnnouncement(Predicate predicate, Pageable pageable) {
+    public Page<Announcement> getAllAnnouncement(Predicate basePredicate, Pageable pageable) {
         log.info("Start getting all announcements");
-        if (predicate == null) {
-            return announcementRepository.findAll(pageable);
-        }
-        return announcementRepository.findAll(predicate, pageable);
+        Predicate deletedFilter = QAnnouncement.announcement.deleted.eq(false);
+        Predicate finalPredicate = basePredicate != null ? ExpressionUtils
+                .allOf(basePredicate, deletedFilter) : deletedFilter;
+        assert finalPredicate != null;
+        return announcementRepository.findAll(finalPredicate, pageable);
     }
 
     public Announcement getAnnouncementById(String id) {
