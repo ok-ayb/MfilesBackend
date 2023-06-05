@@ -10,7 +10,7 @@ import io.xhub.smwall.service.filter.DateTimeFilter;
 import io.xhub.smwall.service.filter.Filter;
 import io.xhub.smwall.service.filter.StringFilter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,7 +78,7 @@ public abstract class Query implements Predictable {
                 .collect(Collectors.toList());
     }
 
-    protected List<Predicate> buildDateTimePredicates(DateTimeFilter filter, DateTimePath<LocalDateTime> path) {
+    protected List<Predicate> buildDateTimePredicates(DateTimeFilter filter, DateTimePath<Instant> path) {
         List<Predicate> predicates = buildCommonPredicates(filter, path);
 
         if (filter.getBefore() != null) {

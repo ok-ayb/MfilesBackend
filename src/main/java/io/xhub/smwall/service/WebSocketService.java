@@ -1,9 +1,11 @@
 package io.xhub.smwall.service;
 
 import io.xhub.smwall.constants.ApiPaths;
+import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.dto.meta.InstagramMediaDTO;
 import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
+import io.xhub.smwall.mappers.AnnouncementMapper;
 import io.xhub.smwall.mappers.MediaMapper;
 import io.xhub.smwall.mappers.meta.InstagramMediaMapper;
 import io.xhub.smwall.mappers.youtube.YoutubeMediaMapper;
@@ -25,8 +27,8 @@ public class WebSocketService {
     private final MediaRepository mediaRepository;
     private final InstagramMediaMapper instagramMediaMapper;
     private final YoutubeMediaMapper youtubeMediaMapper;
-
     private final MediaMapper mediaMapper;
+    private final AnnouncementMapper announcementMapper;
 
     public void sendIgMedia(List<InstagramMediaDTO> instagramMediaDTO) {
         log.info("Send instagram media posts to all connected clients");
@@ -56,4 +58,8 @@ public class WebSocketService {
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.HIDDEN_POSTS, mediaMapper.toDTO(hiddenMedia));
     }
 
+    public void sendNewAnnouncement(Announcement announcement) {
+        log.info("Send a new announcement");
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
+    }
 }

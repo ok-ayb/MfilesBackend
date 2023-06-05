@@ -3,7 +3,7 @@ package io.xhub.smwall.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -15,9 +15,9 @@ public class AnnouncementDTO {
 
     private String description;
 
-    private LocalDateTime startDate;
+    private Instant startDate;
 
-    private LocalDateTime endDate;
+    private Instant endDate;
 
     private boolean deleted;
 

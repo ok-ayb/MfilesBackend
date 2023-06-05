@@ -2,6 +2,7 @@ package io.xhub.smwall.service;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
+import io.xhub.smwall.commands.AnnouncementCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.QAnnouncement;
@@ -13,12 +14,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.function.BiPredicate;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
+    private final WebSocketService webSocketService;
 
     public Page<Announcement> getAllAnnouncement(Predicate basePredicate, Pageable pageable) {
         log.info("Start getting all announcements");
@@ -46,6 +51,23 @@ public class AnnouncementService {
         } catch (Exception e) {
             throw new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage());
         }
+    }
+
+    public Announcement addAnnouncement(final AnnouncementCommand announcementCommand) {
+        announcementCommand.validate();
+        log.info("Start creating an announcement");
+        Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementCommand));
+        log.info("Announcement created: {}", announcement);
+        webSocketService.sendNewAnnouncement(announcement);
+        return announcement;
+    }
+
+    private BiPredicate<Instant, Instant> thereAnyAnnouncement() {
+        BiPredicate<Instant, Instant> biPredicate = (startDate, endDate) -> {
+            log.info("Existence check for announcements");
+            return announcementRepository.existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndDeletedFalse(endDate, startDate);
+        };
+        return biPredicate;
     }
 
 }
