@@ -45,6 +45,7 @@ public class AuthController {
         // Remove the JWT cookie by setting its expiration to 0
         Cookie cookie = new Cookie(CookiesNames.JWT_KEY, null);
         cookie.setMaxAge(0);
+        cookie.setPath("/api/v1");
         response.addCookie(cookie);
 
         return ResponseEntity.ok().build();
