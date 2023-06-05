@@ -28,7 +28,7 @@ public class AnnouncementCommand implements Validatable {
         assertNotNull(endDate);
         assertIsAfterToday(startDate);
         assertIsAfterToday(endDate);
-        assertIsAfterStartDate(startDate, endDate);
+        assertIsAfterDate(startDate, endDate);
         assertPattern(title, RegexPatterns.ANNOUNCEMENT_TITLE);
         assertPattern(description, RegexPatterns.ANNOUNCEMENT_DESCRIPTION);
 

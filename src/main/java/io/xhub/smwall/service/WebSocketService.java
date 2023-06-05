@@ -62,4 +62,9 @@ public class WebSocketService {
         log.info("Send a new announcement");
         this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
     }
+
+    public void sendUpdatedAnnouncement(Announcement announcement) {
+        log.info("send updated announcement");
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
+    }
 }

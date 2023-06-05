@@ -70,4 +70,23 @@ public class AnnouncementService {
         return biPredicate;
     }
 
+    public Announcement updateAnnouncement(String id, AnnouncementCommand announcementCommand) {
+        log.info("Start updating announcement ");
+        announcementCommand.validate();
+
+        Announcement announcement = getAnnouncementById(id);
+
+        announcement.update(this::existInBetween, announcementCommand);
+        announcementRepository.save(announcement);
+        webSocketService.sendUpdatedAnnouncement(announcement);
+
+        return announcement;
+    }
+
+    private void existInBetween(Instant endDate, Instant startDate, String id) {
+        if (announcementRepository.existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndIdIsNotAndDeletedFalse(endDate, startDate, id)) {
+            throw new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_ALREADY_EXISTS.getErrorMessage());
+        }
+    }
+
 }

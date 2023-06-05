@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.TriConsumer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -18,6 +20,7 @@ import java.util.function.BiPredicate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 @Document(collection = "announcements")
 public class Announcement {
     @Id
@@ -54,5 +57,22 @@ public class Announcement {
         announcement.setEndDate(command.getEndDate());
 
         return announcement;
+    }
+
+    public void update(final TriConsumer<Instant, Instant, String> alreadyExist, final AnnouncementCommand command) {
+        alreadyExist.accept(command.getEndDate(), command.getStartDate(), this.id);
+
+        if (command.getTitle() != null) {
+            this.setTitle(command.getTitle());
+        }
+        if (command.getDescription() != null) {
+            this.setDescription(command.getDescription());
+        }
+        if (command.getStartDate() != null) {
+            this.setStartDate(command.getStartDate());
+        }
+        if (command.getEndDate() != null) {
+            this.setEndDate(command.getEndDate());
+        }
     }
 }

@@ -45,4 +45,12 @@ public class AnnouncementController {
     public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody AnnouncementCommand announcementCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementCommand)));
     }
+
+
+    @ApiOperation(value = "Update an announcement")
+    @PatchMapping("/{id}")
+    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody AnnouncementCommand announcementCommand) {
+        return ResponseEntity.ok()
+                .body(announcementMapper.toDTO(announcementService.updateAnnouncement(id, announcementCommand)));
+    }
 }

@@ -13,7 +13,7 @@ public interface AssertUtils {
         }
     }
 
-    static void assertIsAfterStartDate(Instant startDate, Instant endDate) {
+    static void assertIsAfterDate(Instant startDate, Instant endDate) {
         if (!endDate.isAfter(startDate)) {
             throw new BusinessException(ApiClientErrorCodes.INVALID_COMMAND_ARGS.getErrorMessage());
         }

@@ -10,4 +10,7 @@ import java.time.Instant;
 @Repository
 public interface AnnouncementRepository extends MongoRepository<Announcement, String>, QuerydslPredicateExecutor<Announcement> {
     boolean existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndDeletedFalse(Instant endDate, Instant startDate);
+
+    boolean existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndIdIsNotAndDeletedFalse(Instant endDate, Instant startDate, String id);
+
 }
