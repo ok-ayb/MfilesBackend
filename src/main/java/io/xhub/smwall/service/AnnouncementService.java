@@ -37,7 +37,7 @@ public class AnnouncementService {
     public Announcement getAnnouncementById(String id) {
         log.info("Start getting announcement by id '{}'", id);
         return announcementRepository
-                .findById(id)
+                .findByIdAndDeletedFalse(id)
                 .orElseThrow(() ->
                         new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage()));
     }
