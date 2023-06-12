@@ -37,28 +37,35 @@ public class MediaService {
     public void updateMediaPinning(String mediaId) {
         log.info("Start updating media pinning ");
         Media mediaToToggle = getMediaById(mediaId);
-
-        if (mediaToToggle.getPinned()) {
-            mediaToToggle.setPinned(false);
+        if (mediaToToggle.getHidden()) {
+            log.info("Cannot pin a media with hidden status");
+            throw new BusinessException(ApiClientErrorCodes.MEDIA_HIDDEN.getErrorMessage());
         } else {
-            Media currentlyPinnedMedia = mediaRepository.findByPinned(true)
-                    .orElse(null);
+            if (mediaToToggle.getPinned()) {
+                mediaToToggle.setPinned(false);
+            } else {
+                Media currentlyPinnedMedia = mediaRepository.findByPinned(true)
+                        .orElse(null);
 
-            if (currentlyPinnedMedia != null) {
-                currentlyPinnedMedia.setPinned(false);
-                mediaRepository.save(currentlyPinnedMedia);
+                if (currentlyPinnedMedia != null) {
+                    currentlyPinnedMedia.setPinned(false);
+                    mediaRepository.save(currentlyPinnedMedia);
+                }
+
+                mediaToToggle.setPinned(true);
             }
 
-            mediaToToggle.setPinned(true);
+            mediaRepository.save(mediaToToggle);
+            webSocketService.sendPinnedMedia(mediaToToggle);
         }
-
-        mediaRepository.save(mediaToToggle);
-        webSocketService.sendPinnedMedia(mediaToToggle);
     }
 
     public void updateMediaVisibility(String mediaId) {
         log.info("Start updating media visibility");
         Media mediaToToggle = getMediaById(mediaId);
+        if(!mediaToToggle.getHidden() && mediaToToggle.getPinned()){
+            mediaToToggle.setPinned(false);
+        }
         mediaToToggle.setHidden(!mediaToToggle.getHidden());
         mediaRepository.save(mediaToToggle);
         webSocketService.sendNewMediaVisibilityStatus(mediaToToggle);

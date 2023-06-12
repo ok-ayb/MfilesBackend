@@ -17,7 +17,9 @@ public enum ApiClientErrorCodes {
     WRONG_CREDENTIALS(10, "command.login.wrong.credentials"),
     MEDIA_NOT_FOUND(11, "media.not.found"),
     WALL_SETTING_NOT_FOUND(12, "wall.setting.not.found"),
-    ANNOUNCEMENT_ALREADY_EXISTS(13, "announcement.already.exists");
+    ANNOUNCEMENT_ALREADY_EXISTS(13, "announcement.already.exists"),
+    MEDIA_HIDDEN(14, "media.hidden");
+
 
     private final Integer code;
     private final String messageKey;
