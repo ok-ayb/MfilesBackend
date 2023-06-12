@@ -31,7 +31,7 @@ public class AnnouncementService {
         Predicate finalPredicate = basePredicate != null ? ExpressionUtils
                 .allOf(basePredicate, deletedFilter) : deletedFilter;
         assert finalPredicate != null;
-        return announcementRepository.findAll(finalPredicate, pageable);
+        return announcementRepository.findAllByDeletedFalseOrderByCreatedAtDesc(finalPredicate, pageable);
     }
 
     public Announcement getAnnouncementById(String id) {

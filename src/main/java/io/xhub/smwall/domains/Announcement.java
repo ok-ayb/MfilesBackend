@@ -22,7 +22,7 @@ import java.util.function.BiPredicate;
 @AllArgsConstructor
 @Slf4j
 @Document(collection = "announcements")
-public class Announcement {
+public class Announcement extends AbstractAuditingDocument {
     @Id
     private String id;
 
@@ -40,6 +40,7 @@ public class Announcement {
 
     @Field("deleted")
     private boolean deleted = false;
+
 
     public void delete() {
         setDeleted(true);
