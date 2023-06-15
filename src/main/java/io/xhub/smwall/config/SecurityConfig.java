@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.ANNOUNCEMENTS).permitAll()
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.MEDIA).permitAll()
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.WALL + ApiPaths.SETTINGS + ApiPaths.LATEST).permitAll()
+                .requestMatchers(HttpMethod.GET, ApiPaths.ANNOUNCEMENTS + ApiPaths.WS).permitAll()
                 .requestMatchers(ApiPaths.V1 + ApiPaths.WEBHOOKS + "/**").permitAll()
                 .requestMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()
