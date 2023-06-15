@@ -67,4 +67,9 @@ public class WebSocketService {
         log.info("send updated announcement");
         this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
     }
+
+    public void sendDeletedAnnouncement(Announcement announcement) {
+        log.info("send deleted announcement");
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
+    }
 }

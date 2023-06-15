@@ -51,6 +51,7 @@ public class AnnouncementService {
             Announcement announcement = getAnnouncementById(id);
             announcement.delete();
             announcementRepository.save(announcement);
+            webSocketService.sendDeletedAnnouncement(announcement);
         } catch (Exception e) {
             throw new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage());
         }
