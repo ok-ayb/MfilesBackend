@@ -2,7 +2,8 @@ package io.xhub.smwall.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.xhub.smwall.commands.AnnouncementCommand;
+import io.xhub.smwall.commands.AnnouncementAddCommand;
+import io.xhub.smwall.commands.AnnouncementUpdateCommand;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.AnnouncementDTO;
 import io.xhub.smwall.mappers.AnnouncementMapper;
@@ -42,15 +43,15 @@ public class AnnouncementController {
 
     @ApiOperation(value = "Create a new announcement")
     @PostMapping()
-    public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody AnnouncementCommand announcementCommand) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementCommand)));
+    public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody AnnouncementAddCommand announcementAddCommand) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementAddCommand)));
     }
 
 
     @ApiOperation(value = "Update an announcement")
     @PatchMapping("/{id}")
-    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody AnnouncementCommand announcementCommand) {
+    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody AnnouncementUpdateCommand announcementUpdateCommand) {
         return ResponseEntity.ok()
-                .body(announcementMapper.toDTO(announcementService.updateAnnouncement(id, announcementCommand)));
+                .body(announcementMapper.toDTO(announcementService.updateAnnouncement(id, announcementUpdateCommand)));
     }
 }

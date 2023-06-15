@@ -2,7 +2,8 @@ package io.xhub.smwall.service;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
-import io.xhub.smwall.commands.AnnouncementCommand;
+import io.xhub.smwall.commands.AnnouncementAddCommand;
+import io.xhub.smwall.commands.AnnouncementUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.QAnnouncement;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.function.BiPredicate;
+
+import static io.xhub.smwall.utlis.AssertUtils.assertIsAfterDate;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +56,10 @@ public class AnnouncementService {
         }
     }
 
-    public Announcement addAnnouncement(final AnnouncementCommand announcementCommand) {
-        announcementCommand.validate();
+    public Announcement addAnnouncement(final AnnouncementAddCommand announcementAddCommand) {
+        announcementAddCommand.validate();
         log.info("Start creating an announcement");
-        Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementCommand));
+        Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementAddCommand));
         log.info("Announcement created: {}", announcement);
         webSocketService.sendNewAnnouncement(announcement);
         return announcement;
@@ -70,13 +73,15 @@ public class AnnouncementService {
         return biPredicate;
     }
 
-    public Announcement updateAnnouncement(String id, AnnouncementCommand announcementCommand) {
+    public Announcement updateAnnouncement(String id, AnnouncementUpdateCommand announcementUpdateCommand) {
         log.info("Start updating announcement ");
-        announcementCommand.validate();
 
+        announcementUpdateCommand.validate();
         Announcement announcement = getAnnouncementById(id);
 
-        announcement.update(this::existInBetween, announcementCommand);
+        assertIsAfterDate(announcement.getStartDate(), announcementUpdateCommand.getEndDate());
+
+        announcement.update(this::existInBetween, announcementUpdateCommand);
         announcementRepository.save(announcement);
         webSocketService.sendUpdatedAnnouncement(announcement);
 

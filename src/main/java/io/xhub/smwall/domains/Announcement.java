@@ -1,6 +1,7 @@
 package io.xhub.smwall.domains;
 
-import io.xhub.smwall.commands.AnnouncementCommand;
+import io.xhub.smwall.commands.AnnouncementAddCommand;
+import io.xhub.smwall.commands.AnnouncementUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
@@ -46,7 +47,7 @@ public class Announcement extends AbstractAuditingDocument {
         setDeleted(true);
     }
 
-    public static Announcement create(final BiPredicate<Instant, Instant> thereAnyAnnouncement, final AnnouncementCommand command) {
+    public static Announcement create(final BiPredicate<Instant, Instant> thereAnyAnnouncement, final AnnouncementAddCommand command) {
 
         if (thereAnyAnnouncement.test(command.getStartDate(), command.getEndDate()))
             throw new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_ALREADY_EXISTS.getErrorMessage());
@@ -60,17 +61,14 @@ public class Announcement extends AbstractAuditingDocument {
         return announcement;
     }
 
-    public void update(final TriConsumer<Instant, Instant, String> alreadyExist, final AnnouncementCommand command) {
-        alreadyExist.accept(command.getEndDate(), command.getStartDate(), this.id);
+    public void update(final TriConsumer<Instant, Instant, String> alreadyExist, final AnnouncementUpdateCommand command) {
+        alreadyExist.accept(command.getEndDate(), this.startDate, this.id);
 
         if (command.getTitle() != null) {
             this.setTitle(command.getTitle());
         }
         if (command.getDescription() != null) {
             this.setDescription(command.getDescription());
-        }
-        if (command.getStartDate() != null) {
-            this.setStartDate(command.getStartDate());
         }
         if (command.getEndDate() != null) {
             this.setEndDate(command.getEndDate());

@@ -11,7 +11,7 @@ import static io.xhub.smwall.utlis.AssertUtils.*;
 
 @Getter
 @RequiredArgsConstructor
-public class AnnouncementCommand implements Validatable {
+public class AnnouncementAddCommand implements Validatable {
     private final String title;
 
     private final String description;
