@@ -54,4 +54,14 @@ public class AnnouncementController {
         return ResponseEntity.ok()
                 .body(announcementMapper.toDTO(announcementService.updateAnnouncement(id, announcementUpdateCommand)));
     }
+
+    @ApiOperation(value = "Current Announcement")
+    @GetMapping("/CurrentAnnouncement")
+    public ResponseEntity<AnnouncementDTO> getCurrentAnnouncement() {
+        return ResponseEntity.ok(
+                announcementMapper.toDTO(announcementService.getCurrentAnnouncement())
+        );
+    }
+
+
 }

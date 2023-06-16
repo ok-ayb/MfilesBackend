@@ -16,7 +16,7 @@ public interface AnnouncementRepository extends MongoRepository<Announcement, St
     Optional<Announcement> findByIdAndDeletedFalse(String id);
     boolean existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndDeletedFalse(Instant endDate, Instant startDate);
     boolean existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndIdIsNotAndDeletedFalse(Instant endDate, Instant startDate, String id);
-
     Page<Announcement> findAllByDeletedFalseOrderByCreatedAtDesc(Predicate predicate, Pageable pageable);
+    Optional<Announcement> findFirstByEndDateAfterAndDeletedFalseOrderByStartDateAsc(Instant date);
 
 }

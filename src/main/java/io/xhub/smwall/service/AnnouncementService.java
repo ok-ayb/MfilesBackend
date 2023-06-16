@@ -37,6 +37,14 @@ public class AnnouncementService {
         return announcementRepository.findAllByDeletedFalseOrderByCreatedAtDesc(finalPredicate, pageable);
     }
 
+    public Announcement getCurrentAnnouncement(){
+        log.info("Start getting Current announcement ");
+        return announcementRepository.findFirstByEndDateAfterAndDeletedFalseOrderByStartDateAsc(Instant.now())
+                .orElseThrow(()->
+                        new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage()));
+    }
+
+
     public Announcement getAnnouncementById(String id) {
         log.info("Start getting announcement by id '{}'", id);
         return announcementRepository
@@ -47,14 +55,10 @@ public class AnnouncementService {
 
     public void deleteAnnouncementById(String id) {
         log.info("Start deleting announcement with ID: {}", id);
-        try {
             Announcement announcement = getAnnouncementById(id);
             announcement.delete();
             announcementRepository.save(announcement);
-            webSocketService.sendDeletedAnnouncement(announcement);
-        } catch (Exception e) {
-            throw new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage());
-        }
+            webSocketService.sendDeletedAnnouncement(getCurrentAnnouncement());
     }
 
     public Announcement addAnnouncement(final AnnouncementAddCommand announcementAddCommand) {
@@ -62,7 +66,7 @@ public class AnnouncementService {
         log.info("Start creating an announcement");
         Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementAddCommand));
         log.info("Announcement created: {}", announcement);
-        webSocketService.sendNewAnnouncement(announcement);
+        webSocketService.sendNewAnnouncement(getCurrentAnnouncement());
         return announcement;
     }
 
@@ -84,7 +88,7 @@ public class AnnouncementService {
 
         announcement.update(this::existInBetween, announcementUpdateCommand);
         announcementRepository.save(announcement);
-        webSocketService.sendUpdatedAnnouncement(announcement);
+        webSocketService.sendUpdatedAnnouncement(getCurrentAnnouncement());
 
         return announcement;
     }
