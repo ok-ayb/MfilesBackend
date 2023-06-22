@@ -7,10 +7,12 @@ import io.xhub.smwall.commands.AnnouncementUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.QAnnouncement;
+import io.xhub.smwall.events.announcement.AnnouncementEvent;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,9 +26,9 @@ import static io.xhub.smwall.utlis.AssertUtils.assertIsAfterDate;
 @RequiredArgsConstructor
 @Slf4j
 public class AnnouncementService {
+    private final ApplicationEventPublisher eventPublisher;
 
     private final AnnouncementRepository announcementRepository;
-    private final WebSocketService webSocketService;
 
     public Page<Announcement> getAllAnnouncement(Predicate basePredicate, Pageable pageable) {
         log.info("Start getting all announcements");
@@ -37,10 +39,10 @@ public class AnnouncementService {
         return announcementRepository.findAllByDeletedFalseOrderByCreatedAtDesc(finalPredicate, pageable);
     }
 
-    public Announcement getCurrentAnnouncement(){
+    public Announcement getCurrentAnnouncement() {
         log.info("Start getting Current announcement ");
         return announcementRepository.findFirstByEndDateAfterAndDeletedFalseOrderByStartDateAsc(Instant.now())
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage()));
     }
 
@@ -55,10 +57,10 @@ public class AnnouncementService {
 
     public void deleteAnnouncementById(String id) {
         log.info("Start deleting announcement with ID: {}", id);
-            Announcement announcement = getAnnouncementById(id);
-            announcement.delete();
-            announcementRepository.save(announcement);
-            webSocketService.sendDeletedAnnouncement(getCurrentAnnouncement());
+        Announcement announcement = getAnnouncementById(id);
+        announcement.delete();
+        announcementRepository.save(announcement);
+        publishCurrentAnnouncementEvent();
     }
 
     public Announcement addAnnouncement(final AnnouncementAddCommand announcementAddCommand) {
@@ -66,16 +68,15 @@ public class AnnouncementService {
         log.info("Start creating an announcement");
         Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementAddCommand));
         log.info("Announcement created: {}", announcement);
-        webSocketService.sendNewAnnouncement(getCurrentAnnouncement());
+        publishCurrentAnnouncementEvent();
         return announcement;
     }
 
     private BiPredicate<Instant, Instant> thereAnyAnnouncement() {
-        BiPredicate<Instant, Instant> biPredicate = (startDate, endDate) -> {
+        return (startDate, endDate) -> {
             log.info("Existence check for announcements");
             return announcementRepository.existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndDeletedFalse(endDate, startDate);
         };
-        return biPredicate;
     }
 
     public Announcement updateAnnouncement(String id, AnnouncementUpdateCommand announcementUpdateCommand) {
@@ -88,7 +89,7 @@ public class AnnouncementService {
 
         announcement.update(this::existInBetween, announcementUpdateCommand);
         announcementRepository.save(announcement);
-        webSocketService.sendUpdatedAnnouncement(getCurrentAnnouncement());
+        publishCurrentAnnouncementEvent();
 
         return announcement;
     }
@@ -99,4 +100,7 @@ public class AnnouncementService {
         }
     }
 
+    private void publishCurrentAnnouncementEvent() {
+        eventPublisher.publishEvent(new AnnouncementEvent(getCurrentAnnouncement()));
+    }
 }

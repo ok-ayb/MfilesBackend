@@ -12,6 +12,9 @@ import io.xhub.smwall.utlis.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class YoutubeMediaMapper {
@@ -47,5 +50,11 @@ public class YoutubeMediaMapper {
         );
 
         return media;
+    }
+
+    public List<Media> toEntity(List<YoutubeMediaDTO> mediaDTOS) {
+        return mediaDTOS.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

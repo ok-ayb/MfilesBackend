@@ -6,7 +6,8 @@ import io.xhub.smwall.config.YoutubeProperties;
 import io.xhub.smwall.constants.CacheNames;
 import io.xhub.smwall.constants.ProfileNames;
 import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
-import io.xhub.smwall.service.WebSocketService;
+import io.xhub.smwall.mappers.youtube.YoutubeMediaMapper;
+import io.xhub.smwall.service.MediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -23,16 +24,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @Profile(ProfileNames.YT)
 public class YoutubeScheduler {
-    private final WebSocketService webSocketService;
+    private final MediaService mediaService;
     private final YoutubeClient youtubeClient;
     private final YoutubeProperties youtubeProperties;
     private final Cache processedMediaCache;
+    private final YoutubeMediaMapper youtubeMediaMapper;
 
-    public YoutubeScheduler(YoutubeProperties youtubeProperties, WebSocketService webSocketService, YoutubeClient youtubeClient, CacheManager cacheManager) {
+    public YoutubeScheduler(YoutubeProperties youtubeProperties, MediaService mediaService, YoutubeClient youtubeClient, CacheManager cacheManager, YoutubeMediaMapper youtubeMediaMapper) {
         this.youtubeProperties = youtubeProperties;
-        this.webSocketService = webSocketService;
+        this.mediaService = mediaService;
         this.youtubeClient = youtubeClient;
         this.processedMediaCache = cacheManager.getCache(CacheNames.PROCESSED_YOUTUBE_MEDIA);
+        this.youtubeMediaMapper = youtubeMediaMapper;
     }
 
     @Scheduled(
@@ -51,8 +54,8 @@ public class YoutubeScheduler {
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {
-                log.info("Broadcasting {} new fetched youtube shorts to WebSocket", newMedia.size());
-                webSocketService.sendYoutubeMedia(newMedia);
+                log.info("Persisting {} new fetched YouTube shorts", newMedia.size());
+                mediaService.addAllMedia(youtubeMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching youtube shorts: {}", e.getMessage());
@@ -81,8 +84,8 @@ public class YoutubeScheduler {
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {
-                log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
-                webSocketService.sendYoutubeMedia(newMedia);
+                log.info("Persisting {} new fetched YouTube videos", newMedia.size());
+                mediaService.addAllMedia(youtubeMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching youtube videos by keyword: {}", e.getMessage());
@@ -106,8 +109,8 @@ public class YoutubeScheduler {
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {
-                log.info("Broadcasting {} new fetched youtube videos to WebSocket", newMedia.size());
-                webSocketService.sendYoutubeMedia(newMedia);
+                log.info("Persisting {} new fetched YouTube videos", newMedia.size());
+                mediaService.addAllMedia(youtubeMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching youtube videos by channel id: {}", e.getMessage());

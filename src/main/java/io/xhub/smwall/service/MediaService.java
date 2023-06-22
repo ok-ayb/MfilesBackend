@@ -3,18 +3,23 @@ package io.xhub.smwall.service;
 import com.querydsl.core.types.Predicate;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Media;
+import io.xhub.smwall.events.media.MediaCreatedEvent;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class MediaService {
+    private final ApplicationEventPublisher eventPublisher;
     private final MediaRepository mediaRepository;
     private final WebSocketService webSocketService;
 
@@ -69,5 +74,10 @@ public class MediaService {
         mediaToToggle.setHidden(!mediaToToggle.getHidden());
         mediaRepository.save(mediaToToggle);
         webSocketService.sendNewMediaVisibilityStatus(mediaToToggle);
+    }
+
+    public void addAllMedia(List<Media> media) {
+        log.info("Start creating all media");
+        eventPublisher.publishEvent(new MediaCreatedEvent(mediaRepository.saveAll(media)));
     }
 }

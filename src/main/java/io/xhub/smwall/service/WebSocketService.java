@@ -3,20 +3,14 @@ package io.xhub.smwall.service;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.Media;
-import io.xhub.smwall.dto.meta.InstagramMediaDTO;
-import io.xhub.smwall.dto.youtube.YoutubeMediaDTO;
 import io.xhub.smwall.mappers.AnnouncementMapper;
 import io.xhub.smwall.mappers.MediaMapper;
-import io.xhub.smwall.mappers.meta.InstagramMediaMapper;
-import io.xhub.smwall.mappers.youtube.YoutubeMediaMapper;
-import io.xhub.smwall.repositories.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -24,28 +18,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final MediaRepository mediaRepository;
-    private final InstagramMediaMapper instagramMediaMapper;
-    private final YoutubeMediaMapper youtubeMediaMapper;
     private final MediaMapper mediaMapper;
     private final AnnouncementMapper announcementMapper;
 
-    public void sendIgMedia(List<InstagramMediaDTO> instagramMediaDTO) {
-        log.info("Send instagram media posts to all connected clients");
-        List<Media> mediaList = instagramMediaDTO.stream()
-                .map(instagramMediaMapper::toEntity)
-                .collect(Collectors.toList());
-        mediaRepository.saveAll(mediaList);
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, mediaList.stream().map(mediaMapper::toDTO));
-    }
-
-    public void sendYoutubeMedia(List<YoutubeMediaDTO> youtubeMediaDTO) {
-        log.info("Send youtube media to all connected clients");
-        List<Media> socialMediaList = youtubeMediaDTO.stream()
-                .map(youtubeMediaMapper::toEntity)
-                .collect(Collectors.toList());
-        mediaRepository.saveAll(socialMediaList);
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, socialMediaList.stream().map(mediaMapper::toDTO));
+    public void sendMedia(List<Media> media) {
+        log.info("Sending media to all connected clients");
+        simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, media.stream().map(mediaMapper::toDTO));
     }
 
     public void sendPinnedMedia(Media pinnedMedia) {
@@ -58,18 +36,8 @@ public class WebSocketService {
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.HIDDEN_POSTS, mediaMapper.toDTO(hiddenMedia));
     }
 
-    public void sendNewAnnouncement(Announcement announcement) {
-        log.info("Send a new announcement");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
-    }
-
-    public void sendUpdatedAnnouncement(Announcement announcement) {
-        log.info("send updated announcement");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
-    }
-
-    public void sendDeletedAnnouncement(Announcement announcement) {
-        log.info("send deleted announcement");
+    public void sendAnnouncement(Announcement announcement) {
+        log.info("Sending announcement to all connected clients");
         this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
     }
 }

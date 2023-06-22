@@ -9,6 +9,7 @@ import io.xhub.smwall.utlis.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -47,5 +48,11 @@ public class InstagramMediaMapper {
         media.setSource(MediaSource.INSTAGRAM);
         media.setSourceTypes(instagramMediaDTO.getSourceTypes());
         return media;
+    }
+
+    public List<Media> toEntity(List<InstagramMediaDTO> mediaDTOS) {
+        return mediaDTOS.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

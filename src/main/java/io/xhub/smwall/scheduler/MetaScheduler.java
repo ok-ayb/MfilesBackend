@@ -6,7 +6,8 @@ import io.xhub.smwall.constants.CacheNames;
 import io.xhub.smwall.constants.ProfileNames;
 import io.xhub.smwall.constants.RegexPatterns;
 import io.xhub.smwall.dto.meta.InstagramMediaDTO;
-import io.xhub.smwall.service.WebSocketService;
+import io.xhub.smwall.mappers.meta.InstagramMediaMapper;
+import io.xhub.smwall.service.MediaService;
 import io.xhub.smwall.utlis.RegexUtils;
 import io.xhub.smwall.utlis.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +33,18 @@ public class MetaScheduler {
     private final static String IG_HASHTAG_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}";
     private final static String IG_MENTION_MEDIA_REQUEST_FIELDS = "id,caption,media_type,media_url,permalink,timestamp,children{media_url,media_type}";
     private final MetaProperties metaProperties;
-    private final WebSocketService webSocketService;
+    private final MediaService mediaService;
     private final MetaClient metaClient;
     private final Cache processedMediaCache;
     private final List<String> allowedMatches;
+    private final InstagramMediaMapper instagramMediaMapper;
 
-    public MetaScheduler(MetaProperties metaProperties, WebSocketService webSocketService, MetaClient metaClient, CacheManager cacheManager) {
+    public MetaScheduler(MetaProperties metaProperties, MediaService mediaService, MetaClient metaClient, CacheManager cacheManager, InstagramMediaMapper instagramMediaMapper) {
         this.metaProperties = metaProperties;
-        this.webSocketService = webSocketService;
+        this.mediaService = mediaService;
         this.metaClient = metaClient;
         this.processedMediaCache = cacheManager.getCache(CacheNames.PROCESSED_IG_MEDIA);
+        this.instagramMediaMapper = instagramMediaMapper;
         this.allowedMatches = createAllowedMatchesList();
     }
 
@@ -83,8 +86,8 @@ public class MetaScheduler {
                     })
                     .collect(Collectors.toList());
             if (!newMedia.isEmpty()) {
-                log.info("Broadcasting {} new IG hashtag recent media to WebSocket", newMedia.size());
-                webSocketService.sendIgMedia(newMedia);
+                log.info("Persisting {} new IG hashtag recent media", newMedia.size());
+                mediaService.addAllMedia(instagramMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching IG hashtag recent media: {}", e.getMessage());
@@ -100,16 +103,16 @@ public class MetaScheduler {
         try {
             log.info("Getting IG user media");
 
-            List<InstagramMediaDTO> newUserMedia = metaClient.getIGUserMedia(metaProperties.getUserId(),
+            List<InstagramMediaDTO> newMedia = metaClient.getIGUserMedia(metaProperties.getUserId(),
                             IG_MEDIA_REQUEST_FIELDS)
                     .getData()
                     .stream()
                     .filter(this::isNewIGMedia)
                     .collect(Collectors.toList());
 
-            if (!newUserMedia.isEmpty()) {
-                log.info("Broadcasting {} new IG user media to WebSocket", newUserMedia.size());
-                webSocketService.sendIgMedia(newUserMedia);
+            if (!newMedia.isEmpty()) {
+                log.info("Persisting {} new IG user media", newMedia.size());
+                mediaService.addAllMedia(instagramMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching IG user media: {}", e.getMessage());
@@ -140,8 +143,8 @@ public class MetaScheduler {
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {
-                log.info("Broadcasting {} new IG user tags to WebSocket", newMedia.size());
-                webSocketService.sendIgMedia(newMedia);
+                log.info("Persisting {} new IG user tags", newMedia.size());
+                mediaService.addAllMedia(instagramMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching IG user tags: {}", e.getMessage());
@@ -165,8 +168,8 @@ public class MetaScheduler {
                     .collect(Collectors.toList());
 
             if (!newMedia.isEmpty()) {
-                log.info("Broadcasting {} new IG user stories to WebSocket", newMedia.size());
-                webSocketService.sendIgMedia(newMedia);
+                log.info("Persisting {} new IG user stories", newMedia.size());
+                mediaService.addAllMedia(instagramMediaMapper.toEntity(newMedia));
             }
         } catch (Exception e) {
             log.error("Error while fetching IG user stories: {}", e.getMessage());
