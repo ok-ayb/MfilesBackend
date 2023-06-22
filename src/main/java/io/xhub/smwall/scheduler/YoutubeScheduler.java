@@ -47,7 +47,8 @@ public class YoutubeScheduler {
             List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelShorts(
                             YoutubeSearchParams.getDefaultSearchParams(),
                             youtubeProperties.getChannelId(),
-                            youtubeProperties.getApiKey())
+                            youtubeProperties.getApiKey(),
+                            youtubeProperties.getSafeSearch())
                     .getItems()
                     .stream()
                     .filter(this::isNewYoutubeMedia)
@@ -72,7 +73,8 @@ public class YoutubeScheduler {
             List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByKeyword(
                             YoutubeSearchParams.getVideoSearchParams(),
                             youtubeProperties.getApiKey(),
-                            youtubeProperties.getKeyword())
+                            youtubeProperties.getKeyword(),
+                            youtubeProperties.getSafeSearch())
                     .getItems()
                     .stream()
                     .filter(this::isNewYoutubeMedia)
@@ -102,7 +104,8 @@ public class YoutubeScheduler {
             List<YoutubeMediaDTO> newMedia = youtubeClient.getRecentChannelVideosByChannelId(
                             YoutubeSearchParams.getVideoSearchParams(),
                             youtubeProperties.getChannelId(),
-                            youtubeProperties.getApiKey())
+                            youtubeProperties.getApiKey(),
+                            youtubeProperties.getSafeSearch())
                     .getItems()
                     .stream()
                     .filter(this::isNewYoutubeMedia)

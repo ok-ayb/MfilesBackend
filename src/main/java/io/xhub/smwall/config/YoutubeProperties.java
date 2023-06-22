@@ -13,4 +13,6 @@ public class YoutubeProperties {
     private String verifyToken;
     private String keyword;
     private String resourceIdPrefix;
+    private  String safeSearch;
+
 }

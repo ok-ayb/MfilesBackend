@@ -15,18 +15,21 @@ public interface YoutubeClient {
     YoutubeMediaResponse getRecentChannelShorts(
             @RequestParam @Validated Map<String, String> searchParams,
             @RequestParam(value = "channelId") String channelId,
-            @RequestParam(value = "key") String apiKey);
+            @RequestParam(value = "key") String apiKey,
+            @RequestParam(value = "safeSearch") String safeSearch);
 
     @GetMapping(value = "/search")
     YoutubeMediaResponse getRecentChannelVideosByKeyword(
             @RequestParam @Validated Map<String, String> searchParams,
             @RequestParam(value = "key") String apiKey,
-            @RequestParam(value = "q") String keyword);
+            @RequestParam(value = "q") String keyword,
+            @RequestParam(value = "safeSearch") String safeSearch);
 
     @GetMapping(value = "/search")
     YoutubeMediaResponse getRecentChannelVideosByChannelId(
             @RequestParam @Validated Map<String, String> searchParams,
             @RequestParam(value = "channelId") String channelId,
-            @RequestParam(value = "key") String apiKey);
+            @RequestParam(value = "key") String apiKey,
+            @RequestParam(value = "safeSearch") String safeSearch);
 
 }

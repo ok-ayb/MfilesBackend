@@ -91,6 +91,7 @@ application:
       api-key: ${API_KEY}
       channel-id: ${CHANNEL_ID}
       keyword: ${KEYWORD}
+      safeSearch: strict
 
 app:
   url: FRONT_END_URL
