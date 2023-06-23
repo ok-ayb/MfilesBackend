@@ -40,4 +40,12 @@ public class WebSocketService {
         log.info("Sending announcement to all connected clients");
         this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
     }
+
+    /**
+     * TODO: This is just for demo purpose and needs to be changed ASAP!
+     */
+    public void sendLastAnnouncementDeletedIntent() {
+        log.info("Sending last announcement deleted to all connected clients");
+        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, "NO_CURRENT_ANNOUNCEMENT_FOUND");
+    }
 }

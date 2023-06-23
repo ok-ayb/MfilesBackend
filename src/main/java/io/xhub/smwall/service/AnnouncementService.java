@@ -8,6 +8,7 @@ import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.domains.QAnnouncement;
 import io.xhub.smwall.events.announcement.AnnouncementEvent;
+import io.xhub.smwall.events.announcement.NoCurrentAnnouncementFoundEvent;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.AnnouncementRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,7 @@ public class AnnouncementService {
     public Announcement getCurrentAnnouncement() {
         log.info("Start getting Current announcement ");
         return announcementRepository.findFirstByEndDateAfterAndDeletedFalseOrderByStartDateAsc(Instant.now())
-                .orElseThrow(() ->
-                        new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage()));
+                .orElse(null);
     }
 
 
@@ -101,6 +101,11 @@ public class AnnouncementService {
     }
 
     private void publishCurrentAnnouncementEvent() {
-        eventPublisher.publishEvent(new AnnouncementEvent(getCurrentAnnouncement()));
+        Announcement currentAnnouncement = getCurrentAnnouncement();
+        if(currentAnnouncement != null) {
+            eventPublisher.publishEvent(new AnnouncementEvent(currentAnnouncement));
+        } else {
+            eventPublisher.publishEvent(new NoCurrentAnnouncementFoundEvent(this));
+        }
     }
 }
