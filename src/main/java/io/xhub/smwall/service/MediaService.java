@@ -5,6 +5,7 @@ import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.events.media.MediaCreatedEvent;
 import io.xhub.smwall.exceptions.BusinessException;
+import io.xhub.smwall.filter.ContentTextFiltering;
 import io.xhub.smwall.repositories.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class MediaService {
     private final ApplicationEventPublisher eventPublisher;
     private final MediaRepository mediaRepository;
     private final WebSocketService webSocketService;
+    private final ContentTextFiltering contentTextFiltering;
+
 
     public Page<Media> getAllMedia(Predicate predicate, Pageable pageable) {
         log.info("Start getting all media");
@@ -68,7 +71,7 @@ public class MediaService {
     public void updateMediaVisibility(String mediaId) {
         log.info("Start updating media visibility");
         Media mediaToToggle = getMediaById(mediaId);
-        if(!mediaToToggle.getHidden() && mediaToToggle.getPinned()){
+        if (!mediaToToggle.getHidden() && mediaToToggle.getPinned()) {
             mediaToToggle.setPinned(false);
         }
         mediaToToggle.setHidden(!mediaToToggle.getHidden());
@@ -78,6 +81,9 @@ public class MediaService {
 
     public void addAllMedia(List<Media> media) {
         log.info("Start creating all media");
+        for (Media media2 : media) {
+            contentTextFiltering.textFiltering(media2);
+        }
         eventPublisher.publishEvent(new MediaCreatedEvent(mediaRepository.saveAll(media)));
     }
 }

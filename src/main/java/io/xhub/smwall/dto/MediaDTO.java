@@ -38,7 +38,9 @@ public class MediaDTO {
 
     private Boolean pinned = false;
 
-    private List<String> sourceTypes  = new ArrayList<>();
+    private List<String> sourceTypes = new ArrayList<>();
+
+    private Boolean clean = false;
 
     @JsonProperty("textContainsOnlyHashtags")
     private boolean textContainsOnlyHashtags() {

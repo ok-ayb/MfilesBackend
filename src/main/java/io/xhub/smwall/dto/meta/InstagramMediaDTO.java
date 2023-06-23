@@ -40,4 +40,7 @@ public class InstagramMediaDTO {
 
     @JsonProperty("sourceTypes")
     private List<String> sourceTypes = new ArrayList<>();
+
+    @JsonProperty("clean")
+    private Boolean clean = false;
 }

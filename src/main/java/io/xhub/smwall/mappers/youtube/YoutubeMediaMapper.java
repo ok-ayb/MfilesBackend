@@ -42,6 +42,7 @@ public class YoutubeMediaMapper {
         media.setTimestamp(videoSnippetDTO.getPublishedAt());
         media.setOwner(this.youtubeSnippetMapper.toOwnerEntity(videoSnippetDTO));
         media.setSourceTypes(youtubeMediaDTO.getSourceTypes());
+        media.setClean(youtubeMediaDTO.getClean());
 
         media.setThumbnail(
                 thumbnailsDTO.getHigh() != null ? thumbnailsDTO.getHigh().getUrl() :

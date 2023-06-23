@@ -30,6 +30,7 @@ public class MediaMapper {
         mediaDTO.setPinned(media.getPinned());
         mediaDTO.setHidden(media.getHidden());
         mediaDTO.setSourceTypes(media.getSourceTypes());
+        mediaDTO.setClean(media.getClean());
 
         List<MediaChild> children = media.getChildren();
         if (children != null) {

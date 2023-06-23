@@ -16,4 +16,7 @@ public class YoutubeMediaDTO {
 
     private List<String> sourceTypes = new ArrayList<>();
 
+    @JsonProperty("clean")
+    private Boolean clean = false;
+
 }
