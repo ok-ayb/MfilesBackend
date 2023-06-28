@@ -25,4 +25,5 @@ public class SocialMediaWallApplication {
         SpringApplication.run(SocialMediaWallApplication.class, args);
     }
 
+
 }

@@ -64,7 +64,6 @@ public class AnnouncementService {
     }
 
     public Announcement addAnnouncement(final AnnouncementAddCommand announcementAddCommand) {
-        announcementAddCommand.validate();
         log.info("Start creating an announcement");
         Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementAddCommand));
         log.info("Announcement created: {}", announcement);
@@ -81,11 +80,13 @@ public class AnnouncementService {
 
     public Announcement updateAnnouncement(String id, AnnouncementUpdateCommand announcementUpdateCommand) {
         log.info("Start updating announcement ");
-
-        announcementUpdateCommand.validate();
         Announcement announcement = getAnnouncementById(id);
 
-        assertIsAfterDate(announcement.getStartDate(), announcementUpdateCommand.getEndDate());
+        if (announcementUpdateCommand.getStartDate() != null) {
+            assertIsAfterDate(announcementUpdateCommand.getStartDate(), announcementUpdateCommand.getEndDate());
+        } else {
+            assertIsAfterDate(announcement.getStartDate(), announcementUpdateCommand.getEndDate());
+        }
 
         announcement.update(this::existInBetween, announcementUpdateCommand);
         announcementRepository.save(announcement);
@@ -102,7 +103,7 @@ public class AnnouncementService {
 
     private void publishCurrentAnnouncementEvent() {
         Announcement currentAnnouncement = getCurrentAnnouncement();
-        if(currentAnnouncement != null) {
+        if (currentAnnouncement != null) {
             eventPublisher.publishEvent(new AnnouncementEvent(currentAnnouncement));
         } else {
             eventPublisher.publishEvent(new NoCurrentAnnouncementFoundEvent(this));

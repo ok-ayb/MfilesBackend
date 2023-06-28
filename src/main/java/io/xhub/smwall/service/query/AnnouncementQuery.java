@@ -25,7 +25,6 @@ public class AnnouncementQuery extends Query {
         if (this.getTitle() != null) {
             buildStringPredicates(this.getTitle(), QAnnouncement.announcement.title).forEach(builder::and);
         }
-
         if (this.getDescription() != null) {
             buildStringPredicates(this.getDescription(), QAnnouncement.announcement.description).forEach(builder::and);
         }

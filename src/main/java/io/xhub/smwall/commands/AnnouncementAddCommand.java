@@ -1,37 +1,34 @@
 package io.xhub.smwall.commands;
 
+import io.xhub.smwall.constants.FormValidationCodes;
 import io.xhub.smwall.constants.RegexPatterns;
-import io.xhub.smwall.validation.validators.Validatable;
+import io.xhub.smwall.validation.constrainsts.isAfterToday;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Instant;
 
-import static io.xhub.smwall.utlis.AssertUtils.*;
 
 @Getter
 @RequiredArgsConstructor
-public class AnnouncementAddCommand implements Validatable {
+public class AnnouncementAddCommand {
+
+    @NotNull
+    @Pattern(regexp = RegexPatterns.ANNOUNCEMENT_TITLE, message = FormValidationCodes.INVALID_TITLE_PATTERN)
     private final String title;
 
+    @NotNull
+    @Pattern(regexp = RegexPatterns.ANNOUNCEMENT_DESCRIPTION, message = FormValidationCodes.INVALID_DESCRIPTION_PATTERN)
     private final String description;
 
-    private final Instant startDate;
-
+    @NotNull
+    @isAfterToday(message = FormValidationCodes.START_DATE_AFTER_TODAY)
     private final Instant endDate;
 
-    @Override
-    public void validate() {
-        assertNotNull(title);
-        assertNotNull(description);
-        assertNotNull(startDate);
-        assertNotNull(endDate);
-        assertIsAfterToday(startDate);
-        assertIsAfterToday(endDate);
-        assertIsAfterDate(startDate, endDate);
-        assertPattern(title, RegexPatterns.ANNOUNCEMENT_TITLE);
-        assertPattern(description, RegexPatterns.ANNOUNCEMENT_DESCRIPTION);
-
-    }
+    @NotNull
+    @isAfterToday(message = FormValidationCodes.END_DATE_AFTER_TODAY)
+    private final Instant startDate;
 }
 

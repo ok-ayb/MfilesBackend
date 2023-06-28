@@ -9,6 +9,7 @@ import io.xhub.smwall.dto.AnnouncementDTO;
 import io.xhub.smwall.mappers.AnnouncementMapper;
 import io.xhub.smwall.service.AnnouncementService;
 import io.xhub.smwall.service.query.AnnouncementQuery;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -43,14 +44,14 @@ public class AnnouncementController {
 
     @ApiOperation(value = "Create a new announcement")
     @PostMapping()
-    public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody AnnouncementAddCommand announcementAddCommand) {
+    public ResponseEntity<AnnouncementDTO> addAnnouncement(@RequestBody @Valid AnnouncementAddCommand announcementAddCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementAddCommand)));
     }
 
 
     @ApiOperation(value = "Update an announcement")
     @PatchMapping("/{id}")
-    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody AnnouncementUpdateCommand announcementUpdateCommand) {
+    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody @Valid AnnouncementUpdateCommand announcementUpdateCommand) {
         return ResponseEntity.ok()
                 .body(announcementMapper.toDTO(announcementService.updateAnnouncement(id, announcementUpdateCommand)));
     }

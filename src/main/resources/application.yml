@@ -93,7 +93,7 @@ application:
       keyword: ${KEYWORD}
       safeSearch: strict
 
-  text-filter :
+  text-filter:
     perspective-api:
       apiKey: ${API_KEY}
 app:
