@@ -1,16 +1,14 @@
 package io.xhub.smwall.service;
 
 import io.xhub.smwall.constants.ApiPaths;
-import io.xhub.smwall.domains.Announcement;
+import io.xhub.smwall.constants.WebSocketPaths;
 import io.xhub.smwall.domains.Media;
-import io.xhub.smwall.mappers.AnnouncementMapper;
 import io.xhub.smwall.mappers.MediaMapper;
+import io.xhub.smwall.websocket.Payload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
@@ -19,12 +17,6 @@ import java.util.List;
 public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final MediaMapper mediaMapper;
-    private final AnnouncementMapper announcementMapper;
-
-    public void sendMedia(List<Media> media) {
-        log.info("Sending media to all connected clients");
-        simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS, media.stream().map(mediaMapper::toDTO));
-    }
 
     public void sendPinnedMedia(Media pinnedMedia) {
         log.info("Send the pinned Media to all connected clients");
@@ -36,16 +28,13 @@ public class WebSocketService {
         this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.HIDDEN_POSTS, mediaMapper.toDTO(hiddenMedia));
     }
 
-    public void sendAnnouncement(Announcement announcement) {
-        log.info("Sending announcement to all connected clients");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, announcementMapper.toDTO(announcement));
+    public void broadcastClosestAnnouncement(Payload payload) {
+        log.info("Broadcasting closest announcement: {}", payload);
+        simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.CLOSEST_ANNOUNCEMENT, payload);
     }
 
-    /**
-     * TODO: This is just for demo purpose and needs to be changed ASAP!
-     */
-    public void sendLastAnnouncementDeletedIntent() {
-        log.info("Sending last announcement deleted to all connected clients");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.ANNOUNCEMENTS + ApiPaths.WS, "NO_CURRENT_ANNOUNCEMENT_FOUND");
+    public void broadcastMedia(Payload payload) {
+        log.info("Broadcasting media: {}", payload);
+        simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.MEDIA, payload);
     }
 }

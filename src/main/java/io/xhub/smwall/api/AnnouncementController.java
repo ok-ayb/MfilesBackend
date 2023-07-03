@@ -48,21 +48,10 @@ public class AnnouncementController {
         return ResponseEntity.status(HttpStatus.CREATED).body(announcementMapper.toDTO(announcementService.addAnnouncement(announcementAddCommand)));
     }
 
-
     @ApiOperation(value = "Update an announcement")
     @PatchMapping("/{id}")
     public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable String id, @RequestBody @Valid AnnouncementUpdateCommand announcementUpdateCommand) {
         return ResponseEntity.ok()
                 .body(announcementMapper.toDTO(announcementService.updateAnnouncement(id, announcementUpdateCommand)));
     }
-
-    @ApiOperation(value = "Current Announcement")
-    @GetMapping("/CurrentAnnouncement")
-    public ResponseEntity<AnnouncementDTO> getCurrentAnnouncement() {
-        return ResponseEntity.ok(
-                announcementMapper.toDTO(announcementService.getCurrentAnnouncement())
-        );
-    }
-
-
 }

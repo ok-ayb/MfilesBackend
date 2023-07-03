@@ -25,7 +25,6 @@ public class MediaService {
     private final WebSocketService webSocketService;
     private final ContentTextFiltering contentTextFiltering;
 
-
     public Page<Media> getAllMedia(Predicate predicate, Pageable pageable) {
         log.info("Start getting all media");
         if (predicate == null) {
@@ -84,6 +83,6 @@ public class MediaService {
         for (Media media2 : media) {
             contentTextFiltering.textFiltering(media2);
         }
-        eventPublisher.publishEvent(new MediaCreatedEvent(mediaRepository.saveAll(media)));
+        eventPublisher.publishEvent(new MediaCreatedEvent(this, mediaRepository.saveAll(media)));
     }
 }

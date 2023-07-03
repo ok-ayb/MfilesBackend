@@ -10,8 +10,8 @@ import java.util.List;
 public class MediaCreatedEvent extends ApplicationEvent {
     private final List<Media> media;
 
-    public MediaCreatedEvent(List<Media> media) {
-        super(media);
+    public MediaCreatedEvent(Object source, List<Media> media) {
+        super(source);
         this.media = media;
     }
 }

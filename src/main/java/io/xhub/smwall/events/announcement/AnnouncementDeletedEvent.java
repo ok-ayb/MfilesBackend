@@ -5,11 +5,11 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class AnnouncementEvent extends ApplicationEvent {
+public class AnnouncementDeletedEvent extends ApplicationEvent {
     private final Announcement announcement;
 
-    public AnnouncementEvent(Announcement announcement) {
-        super(announcement);
+    public AnnouncementDeletedEvent(Object source, Announcement announcement) {
+        super(source);
         this.announcement = announcement;
     }
 }

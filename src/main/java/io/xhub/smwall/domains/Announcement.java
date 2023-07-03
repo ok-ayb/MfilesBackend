@@ -39,9 +39,6 @@ public class Announcement extends AbstractAuditingDocument {
     @Field("endDate")
     private Instant endDate;
 
-    @Field("deleted")
-    private boolean deleted = false;
-
     public static Announcement create(final BiPredicate<Instant, Instant> thereAnyAnnouncement, final AnnouncementAddCommand command) {
 
         if (thereAnyAnnouncement.test(command.getStartDate(), command.getEndDate()))
@@ -54,10 +51,6 @@ public class Announcement extends AbstractAuditingDocument {
         announcement.setEndDate(command.getEndDate());
 
         return announcement;
-    }
-
-    public void delete() {
-        setDeleted(true);
     }
 
     public void update(final TriConsumer<Instant, Instant, String> alreadyExist, final AnnouncementUpdateCommand command) {

@@ -18,7 +18,4 @@ public class AnnouncementDTO {
     private Instant startDate;
 
     private Instant endDate;
-
-    private boolean deleted;
-
 }
