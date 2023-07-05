@@ -84,9 +84,14 @@ public class MediaService {
     public void addAllMedia(List<Media> mediaList) {
         log.info("Start creating all media");
         for (Media media : mediaList) {
-            Boolean textFilter = contentTextFiltering.textFiltering(media);
-            if (Boolean.TRUE.equals(textFilter))
-                filterMedia.filterContent(media);
+            if (Boolean.TRUE.equals(mediaRepository.findByIdAndAnalyzedTrue(media.getId()))) {
+                log.info("this media {} already analyzed !", media.getId());
+            } else {
+                Boolean textFilter = contentTextFiltering.textFiltering(media);
+                if (Boolean.TRUE.equals(textFilter))
+                    filterMedia.filterContent(media);
+                media.setAnalyzed(Boolean.TRUE);
+            }
         }
         eventPublisher.publishEvent(new MediaCreatedEvent(this, mediaRepository.saveAll(mediaList)));
     }

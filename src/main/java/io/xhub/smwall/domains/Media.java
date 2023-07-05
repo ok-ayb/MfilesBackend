@@ -59,6 +59,10 @@ public class Media {
     private List<String> sourceTypes;
 
     @Field("clean")
-    private Boolean clean ;
+    private Boolean clean;
+
+    @Field("analyzed")
+    private Boolean analyzed;
+
 
 }

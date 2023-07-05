@@ -42,6 +42,8 @@ public class MediaDTO {
 
     private Boolean clean = false;
 
+    private Boolean analyzed = false;
+
     @JsonProperty("textContainsOnlyHashtags")
     private boolean textContainsOnlyHashtags() {
         return this.hasText() && this.getText()

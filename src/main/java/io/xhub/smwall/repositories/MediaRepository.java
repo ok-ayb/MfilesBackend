@@ -10,4 +10,7 @@ import java.util.Optional;
 @Repository
 public interface MediaRepository extends MongoRepository<Media, String>, QuerydslPredicateExecutor<Media> {
     Optional<Media> findByPinned(boolean pinned);
+
+    Boolean findByIdAndAnalyzedTrue(String id);
+
 }
