@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class ContentTextFiltering {
     private final PerspectiveApiUtils perspectiveApiUtils;
 
-    public void textFiltering(Media media) {
+    public Boolean textFiltering(Media media) {
 
 
         if (media.getText() != null && !media.getText().isEmpty()) {
@@ -61,6 +61,7 @@ public class ContentTextFiltering {
             log.info("media Text is empty ");
             media.setClean(Boolean.TRUE);
         }
+        return media.getClean();
     }
 
 

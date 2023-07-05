@@ -6,6 +6,7 @@ import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.events.media.MediaCreatedEvent;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.filter.ContentTextFiltering;
+import io.xhub.smwall.filter.filterMedia.FilterMedia;
 import io.xhub.smwall.repositories.MediaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ public class MediaService {
     private final MediaRepository mediaRepository;
     private final WebSocketService webSocketService;
     private final ContentTextFiltering contentTextFiltering;
+
+    private final FilterMedia filterMedia;
 
     public Page<Media> getAllMedia(Predicate predicate, Pageable pageable) {
         log.info("Start getting all media");
@@ -78,11 +81,13 @@ public class MediaService {
         webSocketService.sendNewMediaVisibilityStatus(mediaToToggle);
     }
 
-    public void addAllMedia(List<Media> media) {
+    public void addAllMedia(List<Media> mediaList) {
         log.info("Start creating all media");
-        for (Media media2 : media) {
-            contentTextFiltering.textFiltering(media2);
+        for (Media media : mediaList) {
+            Boolean textFilter = contentTextFiltering.textFiltering(media);
+            if (Boolean.TRUE.equals(textFilter))
+                filterMedia.filterContent(media);
         }
-        eventPublisher.publishEvent(new MediaCreatedEvent(this, mediaRepository.saveAll(media)));
+        eventPublisher.publishEvent(new MediaCreatedEvent(this, mediaRepository.saveAll(mediaList)));
     }
 }

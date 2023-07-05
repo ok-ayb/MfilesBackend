@@ -96,5 +96,9 @@ application:
   text-filter:
     perspective-api:
       apiKey: ${API_KEY}
+  media-filter:
+    urlScriptImage: src/main/resources/filterImages.py
+    urlScriptVideo: src/main/resources/filterVideos.py
+
 app:
   url: FRONT_END_URL
