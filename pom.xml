@@ -255,7 +255,8 @@
                         </goals>
                         <configuration>
                             <outputDirectory>target/generated-sources/java</outputDirectory>
-                            <processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor</processor>
+                            <processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor
+                            </processor>
                         </configuration>
                     </execution>
                 </executions>
