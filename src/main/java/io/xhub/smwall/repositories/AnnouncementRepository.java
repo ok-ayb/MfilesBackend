@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface AnnouncementRepository extends MongoRepository<Announcement, String>, QuerydslPredicateExecutor<Announcement> {
     boolean existsByStartDateLessThanEqualAndEndDateGreaterThanEqual(Instant endDate, Instant startDate);
-
     boolean existsByStartDateLessThanEqualAndEndDateGreaterThanEqualAndIdIsNot(Instant endDate, Instant startDate, String id);
-
     Optional<Announcement> findFirstByEndDateAfterOrderByStartDateAsc(Instant date);
 }

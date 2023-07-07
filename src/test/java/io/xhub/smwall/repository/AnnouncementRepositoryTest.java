@@ -10,11 +10,12 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.TestPropertySource;
-
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 @AutoConfigureTestEntityManager
@@ -28,16 +29,21 @@ public class AnnouncementRepositoryTest {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+    private Announcement announcement;
 
     // Test methods and other code here
-
     @BeforeEach
     public void setup() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .withZone(ZoneId.of("UTC"));
+
         Announcement announcement = new Announcement();
         announcement.setId("123");
-        announcement.setStartDate(Instant.now().plusSeconds(3600));
-        announcement.setEndDate(Instant.now().plusSeconds(7200));
-        announcementRepository.save(announcement);
+        announcement.setTitle("this is the title");
+        announcement.setDescription("This is a description that contains some text, thank you!");
+        announcement.setStartDate(Instant.parse(formatter.format(Instant.now().plusSeconds(3600))));
+        announcement.setEndDate(Instant.parse(formatter.format(Instant.now().plusSeconds(7200))));
+        this.announcement = announcementRepository.save(announcement);
     }
 
     @AfterEach
@@ -66,6 +72,32 @@ public class AnnouncementRepositoryTest {
         announcementRepository.deleteById("announcementId");
         boolean result = announcementRepository.existsById("announcementId");
         assertFalse(result);
+    }
+
+    @Test
+    public void should_returnAnnouncementById_when_Exists() {
+        // given
+        String id = announcement.getId();
+
+        // when
+        Optional<Announcement> announcementOptional = announcementRepository.findById(id);
+
+        // then
+        assertTrue(announcementOptional.isPresent());
+        Announcement announcement = announcementOptional.get();
+        assertEquals(this.announcement.getDescription(), announcement.getDescription());
+        assertEquals(this.announcement.getStartDate(), announcement.getStartDate());
+        assertEquals(this.announcement.getEndDate(), announcement.getEndDate());
+        assertEquals(this.announcement.getTitle(), announcement.getTitle());
+    }
+
+    @Test
+    public void should_returnFalse_when_announcementDoesNotExist() {
+        String nonExistingId = "nonExistingId";
+
+        Optional<Announcement> announcementOptional = announcementRepository.findById(nonExistingId);
+
+        assertFalse(announcementOptional.isPresent());
     }
 
 }
