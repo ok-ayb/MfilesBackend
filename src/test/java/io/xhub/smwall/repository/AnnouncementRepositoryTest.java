@@ -61,5 +61,11 @@ public class AnnouncementRepositoryTest {
         assertTrue(result);
     }
 
+    @Test
+    public void should_deleteAnnouncement_when_validId() {
+        announcementRepository.deleteById("announcementId");
+        boolean result = announcementRepository.existsById("announcementId");
+        assertFalse(result);
+    }
 
 }

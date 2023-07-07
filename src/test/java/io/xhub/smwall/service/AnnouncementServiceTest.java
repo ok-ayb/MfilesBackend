@@ -104,4 +104,28 @@ class AnnouncementServiceTest {
         verify(announcementRepository, times(1)).findById(announcement.getId());
     }
 
+    @Test
+    void should_deleteAnnouncement_when_validId() {
+
+        Announcement announcement = new Announcement();
+        announcement.setId("announcementId" );
+
+        when(announcementRepository.findById(announcement.getId())).thenReturn(Optional.of(announcement));
+
+        announcementService.deleteAnnouncementById(announcement.getId());
+
+        verify(announcementRepository, times(1)).findById(announcement.getId());
+    }
+
+    @Test
+    void should_throwBusinessException_when_invalidId() {
+
+        when(announcementRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(BusinessException.class, () -> {
+            announcementService.deleteAnnouncementById(anyString());
+        });
+
+        verify(announcementRepository, never()).deleteById(anyString());
+    }
 }
