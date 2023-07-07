@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,8 +44,8 @@ class AnnouncementServiceTest {
         updateCommand = new AnnouncementUpdateCommand(
                 "New Title",
                 "New Description",
-                Instant.now().plusSeconds(3800),
-                Instant.now().plusSeconds(3900));
+                Instant.now().plus(2, ChronoUnit.DAYS),
+                Instant.now().plus(1, ChronoUnit.DAYS));
     }
 
 
@@ -82,17 +83,20 @@ class AnnouncementServiceTest {
             announcementService.addAnnouncement(addCommand);
         });
     }
+
     @Test
     void should_updateAnnouncement_when_AnnouncementIsValid() {
         Announcement announcement = new Announcement();
         announcement.setId("announcementId");
         announcement.setTitle("Old Title");
         announcement.setDescription("Old Description");
-        announcement.setStartDate(Instant.now().plusSeconds(3600));
-        announcement.setEndDate(Instant.now().plusSeconds(3700));
+        announcement.setEndDate(Instant.now().plusSeconds(3800));
+        announcement.setStartDate(Instant.now());
+
 
         when(announcementRepository.findById(announcement.getId())).thenReturn(Optional.of(announcement));
-        Announcement updatedAnnouncement = announcementService.updateAnnouncement(announcement.getId(),updateCommand);
+
+        Announcement updatedAnnouncement = announcementService.updateAnnouncement(announcement.getId(), updateCommand);
 
         assertNotNull(updatedAnnouncement);
         assertEquals(announcement.getId(), updatedAnnouncement.getId());
@@ -108,7 +112,7 @@ class AnnouncementServiceTest {
     void should_deleteAnnouncement_when_validId() {
 
         Announcement announcement = new Announcement();
-        announcement.setId("announcementId" );
+        announcement.setId("announcementId");
 
         when(announcementRepository.findById(announcement.getId())).thenReturn(Optional.of(announcement));
 
