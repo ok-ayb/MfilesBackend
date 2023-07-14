@@ -4,6 +4,7 @@ import io.xhub.smwall.commands.WallSettingAddCommand;
 import io.xhub.smwall.commands.WallSettingUpdateCommand;
 import io.xhub.smwall.domains.BinaryImage;
 import io.xhub.smwall.domains.WallSetting;
+import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.repositories.WallSettingRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -23,10 +24,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
-import static io.xhub.smwall.utlis.AssertUtils.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WallSettingServiceTest {
@@ -86,7 +87,7 @@ public class WallSettingServiceTest {
         wallSetting.setTitle("Old Title");
 
         Mockito.when(wallSettingRepository.findById(wallSetting.getId())).thenReturn(Optional.of(wallSetting));
-        Mockito.when(wallSettingRepository.save(Mockito.any(WallSetting.class))).thenReturn(wallSetting);
+        Mockito.when(wallSettingRepository.save(any(WallSetting.class))).thenReturn(wallSetting);
 
         WallSetting updateWallSetting = wallService.updateWallSetting(wallSetting.getId(), updateCommand);
         Set<ConstraintViolation<WallSettingUpdateCommand>> violations = validator.validate(updateCommand);
@@ -103,6 +104,18 @@ public class WallSettingServiceTest {
         assertTrue(violations.isEmpty());
 
         Mockito.verify(wallSettingRepository, times(1)).findById(wallSetting.getId());
+    }
+
+    @Test
+    void should_addWallSetting_when_WallSettingIsValid() throws IOException {
+        WallSetting expectedWallSetting = WallSetting.create(addCommand);
+        when(wallSettingRepository.save(any())).thenReturn(expectedWallSetting);
+
+        WallSetting result = wallService.addWallSetting(addCommand);
+
+        assertNotNull(result);
+        assertEquals(expectedWallSetting, result);
+        verify(wallSettingRepository, times(1)).save(any());
     }
 
 }
