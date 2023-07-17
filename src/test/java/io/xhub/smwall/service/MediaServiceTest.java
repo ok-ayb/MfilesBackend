@@ -5,6 +5,7 @@ import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.filter.ContentTextFiltering;
 import io.xhub.smwall.filter.filterMedia.FilterMedia;
 import io.xhub.smwall.repositories.MediaRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,14 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 
 
@@ -37,14 +37,12 @@ public class MediaServiceTest {
     private ContentTextFiltering contentTextFiltering;
     @Mock
     private FilterMedia filterMedia;
-
-
     @InjectMocks
     private MediaService mediaService;
 
-
     @BeforeEach
     public void setup() {
+
         mediaService = new MediaService(
                 applicationEventPublisher,
                 mediaRepository,
@@ -57,12 +55,12 @@ public class MediaServiceTest {
     @Test
     public void should_throwBusinessException_when_mediaIsHidden() {
         Media media = new Media();
-        media.setId("test");
+        media.setId("id");
         media.setText("text");
         media.setHidden(true);
 
         doReturn(Optional.of(media))
-                .when(mediaRepository).findById(anyString());
+                .when(mediaRepository).findById(media.getId());
 
         assertThrows(BusinessException.class, () -> {
             mediaService.updateMediaPinning(media.getId());
@@ -70,11 +68,10 @@ public class MediaServiceTest {
     }
 
     @Test
-    public void should_updateMediaPinning() {
+    public void should_updateMediaPinning_when_mediaExists() {
         Media media = new Media();
-        media.setId("mediaId");
+        media.setId("id");
         media.setText("text");
-        media.setHidden(false);
 
         when(mediaRepository.findById(media.getId())).thenReturn(Optional.of(media));
         mediaService.updateMediaPinning(media.getId());
@@ -83,6 +80,65 @@ public class MediaServiceTest {
 
         verify(mediaRepository).save(media);
         verify(webSocketService).sendPinnedMedia(media);
+    }
+
+    @Test
+    void should_updateVisibility_when_mediaExists() {
+
+        Media media = new Media();
+        media.setId("id");
+        media.setText("text");
+
+        when(mediaRepository.findById(media.getId())).thenReturn(Optional.of(media));
+
+        mediaService.updateMediaVisibility(media.getId());
+
+        Assertions.assertEquals(true, media.getHidden());
+
+        verify(mediaRepository).save(any(Media.class));
+        verify(webSocketService).sendNewMediaVisibilityStatus(any(Media.class));
+    }
+
+    @Test
+    void should_throwBusinessException_when_mediaIsNotFound() {
+
+        when(mediaRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> mediaService.updateMediaVisibility(anyString()))
+                .isInstanceOf(BusinessException.class);
+    }
+
+    @Test
+    void should_unpinAndHideMedia_when_mediaIsPinnedAndShown() {
+
+        Media media = new Media();
+        media.setId("id");
+        media.setPinned(true);
+
+        when(mediaRepository.findById("id")).thenReturn(Optional.of(media));
+
+        mediaService.updateMediaVisibility("id");
+
+        Assertions.assertEquals(false, media.getPinned());
+        Assertions.assertEquals(true, media.getHidden());
+
+        verify(mediaRepository).save(media);
+        verify(webSocketService).sendNewMediaVisibilityStatus(media);
+    }
+
+    @Test
+    void should_throwBusinessException_when_pinningHiddenMedia() {
+
+        Media hiddenMedia = new Media();
+        hiddenMedia.setId("id");
+        hiddenMedia.setHidden(true);
+        hiddenMedia.setPinned(true);
+
+        when(mediaRepository.findById(hiddenMedia.getId())).thenReturn(Optional.of(hiddenMedia));
+
+        assertThatThrownBy(() -> mediaService.updateMediaPinning(hiddenMedia.getId()))
+                .isInstanceOf(BusinessException.class);
+
     }
 
 }
