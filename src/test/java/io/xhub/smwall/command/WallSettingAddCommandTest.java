@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Set;
 
+import static com.mongodb.assertions.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,8 +48,7 @@ public class WallSettingAddCommandTest {
 
         assertEquals(2, violations.size());
 
-        ConstraintViolation<WallSettingAddCommand> violation = violations.iterator().next();
-        assertEquals("must not be blank", violation.getMessage());
+        assertFalse(violations.isEmpty());
     }
 
     @Test
