@@ -3,6 +3,7 @@ package io.xhub.smwall.repository;
 
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.repositories.MediaRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,5 +87,29 @@ public class MediaRepositoryTest {
         assertFalse(optionalMedia.isPresent());
     }
 
+    @Test
+    void should_returnTrue_when_mediaExists() {
+
+        Media media = new Media();
+        media.setId("mediaId");
+        media.setText("text");
+
+        when(mediaRepository.findByIdAndAnalyzedTrue(media.getId())).thenReturn(true);
+
+        Boolean result = mediaRepository.findByIdAndAnalyzedTrue(media.getId());
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    void should_throwException_when_mediaIsNotFound() {
+
+        when(mediaRepository.findByIdAndAnalyzedTrue(anyString())).thenReturn(false);
+
+        Boolean result = mediaRepository.findByIdAndAnalyzedTrue(anyString());
+
+        assertFalse(result);
+
+    }
 
 }

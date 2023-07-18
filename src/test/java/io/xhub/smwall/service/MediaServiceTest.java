@@ -1,6 +1,7 @@
 package io.xhub.smwall.service;
 
 import io.xhub.smwall.domains.Media;
+import io.xhub.smwall.events.media.MediaCreatedEvent;
 import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.filter.ContentTextFiltering;
 import io.xhub.smwall.filter.filterMedia.FilterMedia;
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -50,6 +53,7 @@ public class MediaServiceTest {
                 contentTextFiltering,
                 filterMedia
         );
+
     }
 
     @Test
@@ -140,5 +144,34 @@ public class MediaServiceTest {
                 .isInstanceOf(BusinessException.class);
 
     }
+
+
+    @Test
+    void should_addAllMediaSuccessfully() {
+
+        Media firstMedia = new Media();
+        firstMedia.setId("firstId");
+        firstMedia.setText("someText");
+
+        Media secondMedia = new Media();
+        secondMedia.setId("secondId");
+        secondMedia.setText("anotherText");
+
+        List<Media> mediaList = Arrays.asList(firstMedia, secondMedia);
+
+        doReturn(false).when(mediaRepository).findByIdAndAnalyzedTrue(anyString());
+        doReturn(true).when(contentTextFiltering).textFiltering(any(Media.class));
+
+        when(mediaRepository.saveAll(mediaList)).thenReturn(mediaList);
+
+        mediaService.addAllMedia(mediaList);
+
+        verify(mediaRepository).saveAll(mediaList);
+        verify(applicationEventPublisher).publishEvent(any(MediaCreatedEvent.class));
+        Assertions.assertEquals(2, mediaList.size());
+        Assertions.assertEquals("firstId", mediaList.get(0).getId());
+        Assertions.assertEquals("secondId", mediaList.get(1).getId());
+    }
+
 
 }
