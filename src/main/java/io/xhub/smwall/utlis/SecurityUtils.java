@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public final class SecurityUtils {
+public class SecurityUtils {
     public static Optional<String> getCurrentUserLogin() {
         return Optional.ofNullable(extractPrincipal(
                 SecurityContextHolder.getContext().getAuthentication()
