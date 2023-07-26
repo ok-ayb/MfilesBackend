@@ -8,8 +8,6 @@ public final class ApiPaths {
     public static final String MEDIA = "/media";
     public static final String ANNOUNCEMENTS = "/announcements";
     public static final String APP = "/app";
-    public static final String WS = "/ws";
-    public static final String PINNED_POST = "/posts/pinned";
     public static final String HEADER = "/header";
     public static final String FOOTER = "/footer";
     public static final String AUTH = "/auth";
@@ -21,5 +19,4 @@ public final class ApiPaths {
     public static final String SETTINGS = "/settings";
     public static final String LATEST = "/latest";
     public static final String MEDIA_VISIBILITY_STATUS = "/hide-show-media";
-    public static final String HIDDEN_POSTS = "/posts/hidden";
 }

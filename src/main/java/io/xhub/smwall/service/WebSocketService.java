@@ -1,6 +1,5 @@
 package io.xhub.smwall.service;
 
-import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.constants.WebSocketPaths;
 import io.xhub.smwall.domains.Media;
 import io.xhub.smwall.mappers.MediaMapper;
@@ -20,12 +19,12 @@ public class WebSocketService {
 
     public void sendPinnedMedia(Media pinnedMedia) {
         log.info("Send the pinned Media to all connected clients");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
+        simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.WS + WebSocketPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
     }
 
     public void sendNewMediaVisibilityStatus(Media hiddenMedia) {
         log.info("Send new Media visibility status");
-        this.simpMessagingTemplate.convertAndSend(ApiPaths.MEDIA + ApiPaths.WS + ApiPaths.HIDDEN_POSTS, mediaMapper.toDTO(hiddenMedia));
+        simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.WS + WebSocketPaths.HIDDEN_POSTS, mediaMapper.toDTO(hiddenMedia));
     }
 
     public void broadcastClosestAnnouncement(Payload payload) {
@@ -35,6 +34,6 @@ public class WebSocketService {
 
     public void broadcastMedia(Payload payload) {
         log.info("Broadcasting media: {}", payload);
-        simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.MEDIA, payload);
+        simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.WS + WebSocketPaths.MEDIA, payload);
     }
 }

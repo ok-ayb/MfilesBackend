@@ -1,6 +1,5 @@
 package io.xhub.smwall.config;
 
-import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.constants.WebSocketPaths;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -19,8 +18,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(ApiPaths.WS + ApiPaths.PINNED_POST).setAllowedOriginPatterns("*").withSockJS();
-        registry.addEndpoint(ApiPaths.WS + ApiPaths.HIDDEN_POSTS).setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint(WebSocketPaths.WS + WebSocketPaths.PINNED_POST).setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint(WebSocketPaths.WS + WebSocketPaths.HIDDEN_POSTS).setAllowedOriginPatterns("*").withSockJS();
         registry.addEndpoint(WebSocketPaths.WS)
                 .setAllowedOriginPatterns("*")
                 .withSockJS();

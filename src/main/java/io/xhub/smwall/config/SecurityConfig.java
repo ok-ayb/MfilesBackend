@@ -1,6 +1,7 @@
 package io.xhub.smwall.config;
 
 import io.xhub.smwall.constants.ApiPaths;
+import io.xhub.smwall.constants.WebSocketPaths;
 import io.xhub.smwall.security.jwt.JwtFilter;
 import io.xhub.smwall.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.ANNOUNCEMENTS).permitAll()
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.MEDIA).permitAll()
                 .requestMatchers(HttpMethod.GET, ApiPaths.V1 + ApiPaths.WALL + ApiPaths.SETTINGS + ApiPaths.LATEST).permitAll()
-                .requestMatchers(HttpMethod.GET, ApiPaths.ANNOUNCEMENTS + ApiPaths.WS).permitAll()
+                .requestMatchers(HttpMethod.GET, ApiPaths.ANNOUNCEMENTS + WebSocketPaths.WS).permitAll()
                 .requestMatchers(ApiPaths.V1 + ApiPaths.WEBHOOKS + "/**").permitAll()
                 .requestMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()
