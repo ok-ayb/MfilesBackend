@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
+@WithMockUser(username = "testUser")
 public class MediaControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -36,7 +37,6 @@ public class MediaControllerTest {
     private MediaService mediaService;
 
     @Test
-    @WithMockUser(username = "testUser")
     public void should_get_all_media() throws Exception {
         Media media1 = new Media();
         media1.setId("id1");
@@ -61,7 +61,6 @@ public class MediaControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser")
     public void should_get_empty_media_list() throws Exception {
         List<Media> emptyMediaList = Collections.emptyList();
         Page<Media> emptyMediaPage = new PageImpl<>(emptyMediaList);

@@ -6,10 +6,12 @@ import io.xhub.smwall.validation.constrainsts.isAfterToday;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class AnnouncementUpdateCommand {
 

@@ -2,6 +2,7 @@ package io.xhub.smwall.api;
 
 
 import io.xhub.smwall.commands.AnnouncementAddCommand;
+import io.xhub.smwall.commands.AnnouncementUpdateCommand;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.domains.Announcement;
 import io.xhub.smwall.service.AnnouncementService;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.Instant;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
+@WithMockUser(username = "testuser")
 public class AnnouncementControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -37,9 +40,7 @@ public class AnnouncementControllerTest {
     AnnouncementAddCommand command;
 
 
-
     @Test
-    @WithMockUser(username = "testuser")
     public void should_Create_NewAnnouncement() throws Exception {
         command = new AnnouncementAddCommand(
                 "Valid Title",
@@ -55,6 +56,45 @@ public class AnnouncementControllerTest {
                 .andExpect(status().isCreated());
 
         verify(announcementService, times(1)).addAnnouncement(any(AnnouncementAddCommand.class));
+    }
+
+    @Test
+    public void should_Update_Announcement_When_Valid_Id() throws Exception {
+        AnnouncementUpdateCommand updateCommand = new AnnouncementUpdateCommand(
+                "Updated Title",
+                "Updated announcement description ",
+                Instant.parse("2024-11-20T12:00:00Z"),
+                Instant.parse("2024-10-21T12:00:00Z")
+        );
+        Announcement updatedAnnouncement = new Announcement(
+                "announcementId",
+                "Updated Title",
+                "Updated announcement description",
+                Instant.parse("2024-09-20T12:00:00Z"),
+                Instant.parse("2024-08-21T12:00:00Z")
+        );
+        when(announcementService.updateAnnouncement(anyString(), any(AnnouncementUpdateCommand.class)))
+                .thenReturn(updatedAnnouncement);
+
+        mockMvc.perform(patch(ApiPaths.V1 + ApiPaths.ANNOUNCEMENTS + "/announcementId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.toJsonString(updateCommand)))
+                .andExpect(status().isOk());
+        verify(announcementService, times(1))
+                .updateAnnouncement(anyString(), any(AnnouncementUpdateCommand.class));
+    }
+
+    @Test
+    public void should_throwBusinessException_when_update_announcement_with_invalidId() throws Exception {
+        String nonExistingAnnouncementId = "nonExistingId";
+
+        when(announcementService.updateAnnouncement(anyString(), any(AnnouncementUpdateCommand.class))).thenReturn(null);
+
+        mockMvc.perform(patch(ApiPaths.V1 + ApiPaths.ANNOUNCEMENTS + nonExistingAnnouncementId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(announcementService, times(0)).updateAnnouncement(anyString(), any(AnnouncementUpdateCommand.class));
     }
 
 }
