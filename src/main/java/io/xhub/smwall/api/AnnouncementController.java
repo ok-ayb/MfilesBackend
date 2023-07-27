@@ -6,6 +6,7 @@ import io.xhub.smwall.commands.AnnouncementAddCommand;
 import io.xhub.smwall.commands.AnnouncementUpdateCommand;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.AnnouncementDTO;
+import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.mappers.AnnouncementMapper;
 import io.xhub.smwall.service.AnnouncementService;
 import io.xhub.smwall.service.query.AnnouncementQuery;
@@ -41,6 +42,7 @@ public class AnnouncementController {
         announcementService.deleteAnnouncementById(id);
         return ResponseEntity.noContent().build();
     }
+
 
     @ApiOperation(value = "Create a new announcement")
     @PostMapping()

@@ -3,8 +3,10 @@ package io.xhub.smwall.api;
 
 import io.xhub.smwall.commands.AnnouncementAddCommand;
 import io.xhub.smwall.commands.AnnouncementUpdateCommand;
+import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.domains.Announcement;
+import io.xhub.smwall.exceptions.BusinessException;
 import io.xhub.smwall.service.AnnouncementService;
 import io.xhub.smwall.utlis.JsonUtils;
 import org.junit.Test;
@@ -21,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.Instant;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WithMockUser(username = "testuser")
 public class AnnouncementControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -95,6 +97,33 @@ public class AnnouncementControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(announcementService, times(0)).updateAnnouncement(anyString(), any(AnnouncementUpdateCommand.class));
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void should_deleteAnnouncement_when_validId() throws Exception {
+        Announcement announcement = new Announcement();
+        announcement.setId("announcementId");
+
+        when(announcementService.getAnnouncementById(announcement.getId())).thenReturn(announcement);
+
+        mockMvc.perform(delete("/api/v1/announcements/{id}", announcement.getId()))
+                .andExpect(status().isNoContent());
+
+        verify(announcementService, times(1)).deleteAnnouncementById(announcement.getId());
+
+    }
+
+    @Test
+    @WithMockUser(username = "testUser")
+    public void should_throwBusinessException_when_delete_Announcement_with_invalidId() throws Exception {
+        doThrow(new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_NOT_FOUND.getErrorMessage()))
+                .when(announcementService).deleteAnnouncementById("invalidId");
+
+        mockMvc.perform(delete("/api/v1/announcements/{id}", "invalidId"))
+                .andExpect(status().isBadRequest());
+
+        verify(announcementService).deleteAnnouncementById("invalidId");
     }
 
 }
