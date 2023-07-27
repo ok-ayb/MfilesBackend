@@ -41,7 +41,6 @@ public class WallFooterServiceTest {
         );
         wallFooter.setLogoUrl("http://example.com/logo");
         wallFooter.setTimestamp(Instant.now());
-
     }
 
     @Test
