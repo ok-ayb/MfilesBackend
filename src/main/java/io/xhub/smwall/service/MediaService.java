@@ -14,10 +14,12 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class MediaService {
@@ -28,6 +30,7 @@ public class MediaService {
 
     private final FilterMedia filterMedia;
 
+    @Transactional(readOnly = true)
     public Page<Media> getAllMedia(Predicate predicate, Pageable pageable) {
         log.info("Start getting all media");
         if (predicate == null) {
@@ -36,6 +39,7 @@ public class MediaService {
         return mediaRepository.findAll(predicate, pageable);
     }
 
+    @Transactional(readOnly = true)
     public Media getMediaById(String id) {
         log.info("Start getting media of id '{}'", id);
         return mediaRepository.findById(id).orElseThrow(() -> {

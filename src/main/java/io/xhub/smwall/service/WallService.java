@@ -9,10 +9,12 @@ import io.xhub.smwall.repositories.WallSettingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class WallService {
@@ -41,6 +43,7 @@ public class WallService {
         }
     }
 
+    @Transactional(readOnly = true)
     public WallSetting getLatestWallSetting() {
         log.info("Start getting latest wall setting");
 
@@ -48,6 +51,7 @@ public class WallService {
                 .orElse(null);
     }
 
+    @Transactional(readOnly = true)
     private WallSetting getWallSettingById(String id) {
         log.info("Start getting wall setting by ID");
 

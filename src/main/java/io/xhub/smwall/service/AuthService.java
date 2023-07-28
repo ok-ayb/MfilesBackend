@@ -13,9 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
@@ -30,6 +32,7 @@ public class AuthService {
 
         return this.jwtTokenProvider.generateToken(authentication);
     }
+
 
     public User getCurrentUser() {
         return SecurityUtils.getCurrentUserLogin()

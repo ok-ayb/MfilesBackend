@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.function.BiPredicate;
@@ -23,6 +24,7 @@ import java.util.function.BiPredicate;
 import static io.xhub.smwall.utlis.AssertUtils.assertIsAfterDate;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class AnnouncementService {
@@ -30,6 +32,7 @@ public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
 
+    @Transactional(readOnly = true)
     public Page<Announcement> getAllAnnouncement(Predicate predicate, Pageable pageable) {
         log.info("Start getting all announcements");
         if (predicate == null) {
@@ -38,6 +41,7 @@ public class AnnouncementService {
         return announcementRepository.findAll(predicate, pageable);
     }
 
+    @Transactional(readOnly = true)
     public Announcement getAnnouncementById(String id) {
         log.info("Start getting announcement by id");
         return announcementRepository
@@ -88,7 +92,8 @@ public class AnnouncementService {
             throw new BusinessException(ApiClientErrorCodes.ANNOUNCEMENT_ALREADY_EXISTS.getErrorMessage());
         }
     }
-
+    
+    @Transactional(readOnly = true)
     public Announcement getClosestAnnouncement() {
         return announcementRepository.findFirstByEndDateAfterOrderByStartDateAsc(Instant.now())
                 .orElse(null);

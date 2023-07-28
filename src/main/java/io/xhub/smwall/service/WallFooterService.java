@@ -7,12 +7,15 @@ import io.xhub.smwall.repositories.WallFooterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class WallFooterService {
     private final WallFooterRepository wallFooterRepository;
+
 
     public WallFooter getWallFooterInfo() throws BusinessException {
         log.info("Begin fetching wall footer information");
