@@ -1,5 +1,6 @@
 package io.xhub.smwall.api;
 
+import io.xhub.smwall.commands.WallSettingAddCommand;
 import io.xhub.smwall.commands.WallSettingUpdateCommand;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.domains.WallSetting;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +35,28 @@ public class WallSettingControllerTest {
     private WallService wallService;
     @MockBean
     private WallSettingMapper wallSettingMapper;
+    private WallSettingAddCommand wallSettingAddCommand;
+
+    @Test
+    @WithMockUser(username = "testuser")
+    public void should_Create_WallSetting() throws Exception {
+        MockMultipartFile logoFile = new MockMultipartFile(
+                "logo",
+                "logo.png",
+                "image/png",
+                new byte[]{0x50, 0x4E, 0x47}
+        );
+        wallSettingAddCommand = new WallSettingAddCommand("titleTest", logoFile);
+        when(wallService.addWallSetting(wallSettingAddCommand)).thenReturn(any(WallSetting.class));
+        this.mockMvc.perform(
+                        multipart(ApiPaths.V1 + ApiPaths.WALL + ApiPaths.SETTINGS)
+                                .file(logoFile)
+                                .param("title", "titleTest")
+                                .accept(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isCreated());
+        verify(wallService, times(1)).addWallSetting(any(WallSettingAddCommand.class));
+
+    }
 
     @Test
     public void should_Update_WallSetting_When_Valid_Id() throws Exception {
