@@ -58,12 +58,12 @@ public class AnnouncementService {
 
     public Announcement addAnnouncement(final AnnouncementAddCommand announcementAddCommand) {
         log.info("Start creating an announcement");
-        Announcement announcement = announcementRepository.save(Announcement.create(thereAnyAnnouncement(), announcementAddCommand));
+        Announcement announcement = announcementRepository.save(Announcement.create(isThereAnyAnnouncement(), announcementAddCommand));
         eventPublisher.publishEvent(new AnnouncementCreatedEvent(this, announcement));
         return announcement;
     }
 
-    private BiPredicate<Instant, Instant> thereAnyAnnouncement() {
+    private BiPredicate<Instant, Instant> isThereAnyAnnouncement() {
         return (startDate, endDate) -> {
             log.info("Existence check for announcements");
             return announcementRepository.existsByStartDateLessThanEqualAndEndDateGreaterThanEqual(endDate, startDate);

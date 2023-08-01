@@ -21,7 +21,7 @@ public class WallService {
     private final WallSettingRepository wallSettingRepository;
 
     public WallSetting addWallSetting(WallSettingAddCommand command) {
-        log.info("Start creating a wall setting");
+        log.info("Start creating wall setting");
 
         try {
             return wallSettingRepository.save(WallSetting.create(command));
@@ -31,7 +31,7 @@ public class WallService {
     }
 
     public WallSetting updateWallSetting(String id, WallSettingUpdateCommand command) {
-        log.info("Start partially updating a wall setting");
+        log.info("Start partially updating wall setting");
 
         try {
             WallSetting wallSetting = getWallSettingById(id);
@@ -52,7 +52,7 @@ public class WallService {
     }
 
     @Transactional(readOnly = true)
-    private WallSetting getWallSettingById(String id) {
+    public WallSetting getWallSettingById(String id) {
         log.info("Start getting wall setting by ID");
 
         return wallSettingRepository

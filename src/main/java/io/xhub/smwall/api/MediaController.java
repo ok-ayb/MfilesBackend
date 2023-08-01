@@ -36,14 +36,14 @@ public class MediaController {
 
     @ApiOperation(value = "Pin/Unpin media")
     @PutMapping("/{mediaId}" + ApiPaths.MEDIA_PINNING_STATUS)
-    public ResponseEntity<Void> UpdatePinning(@PathVariable("mediaId") String mediaId) {
+    public ResponseEntity<Void> updateMediaPinningStatus(@PathVariable("mediaId") String mediaId) {
         mediaService.updateMediaPinning(mediaId);
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "Toggle media visibility status")
     @PutMapping("/{mediaId}" + ApiPaths.MEDIA_VISIBILITY_STATUS)
-    public ResponseEntity<Void> updateMediaVisibility(@PathVariable("mediaId") String mediaId) {
+    public ResponseEntity<Void> updateMediaVisibilityStatus(@PathVariable("mediaId") String mediaId) {
         mediaService.updateMediaVisibility(mediaId);
         return ResponseEntity.ok().build();
     }

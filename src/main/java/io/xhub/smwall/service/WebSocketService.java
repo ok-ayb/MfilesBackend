@@ -17,7 +17,7 @@ public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final MediaMapper mediaMapper;
 
-    public void sendPinnedMedia(Media pinnedMedia) {
+    public void sendMediaPinningStatus(Media pinnedMedia) {
         log.info("Send the pinned Media to all connected clients");
         simpMessagingTemplate.convertAndSend(WebSocketPaths.TOPIC + WebSocketPaths.WS + WebSocketPaths.PINNED_POST, mediaMapper.toDTO(pinnedMedia));
     }

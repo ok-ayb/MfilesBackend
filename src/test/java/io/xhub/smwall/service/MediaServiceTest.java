@@ -83,7 +83,7 @@ public class MediaServiceTest {
         assertEquals(true, media.getPinned());
 
         verify(mediaRepository).save(media);
-        verify(webSocketService).sendPinnedMedia(media);
+        verify(webSocketService).sendMediaPinningStatus(media);
     }
 
     @Test

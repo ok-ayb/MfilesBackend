@@ -18,7 +18,7 @@ public class WallHeaderService {
     private final WallHeaderRepository wallHeaderRepository;
 
     public WallHeader getWallHeaderInfo() throws BusinessException {
-        log.info("Begin fetching wall header information");
+        log.info("Start fetching wall header information");
         return wallHeaderRepository.findFirstByIdIsNotNullOrderByTimestampDesc().orElseThrow(() -> new BusinessException(ApiClientErrorCodes.WALL_HEADER_NOT_FOUND.getErrorMessage()));
     }
 }

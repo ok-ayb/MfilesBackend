@@ -70,7 +70,7 @@ public class MediaService {
             }
 
             mediaRepository.save(mediaToToggle);
-            webSocketService.sendPinnedMedia(mediaToToggle);
+            webSocketService.sendMediaPinningStatus(mediaToToggle);
         }
     }
 

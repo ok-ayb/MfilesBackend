@@ -11,10 +11,7 @@ import org.apache.commons.exec.PumpStreamHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
-import static io.xhub.smwall.enumeration.MediaType.IMAGE;
 
 @Component
 @Slf4j

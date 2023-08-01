@@ -18,7 +18,7 @@ public class WallFooterService {
 
 
     public WallFooter getWallFooterInfo() throws BusinessException {
-        log.info("Begin fetching wall footer information");
+        log.info("Start fetching wall footer information");
         return wallFooterRepository.findFirstByIdIsNotNullOrderByTimestampDesc().orElseThrow(() -> new BusinessException(ApiClientErrorCodes.WALL_FOOTER_NOT_FOUND.getErrorMessage()));
     }
 }

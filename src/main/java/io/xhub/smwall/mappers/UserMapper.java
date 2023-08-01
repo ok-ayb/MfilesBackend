@@ -4,8 +4,6 @@ import io.xhub.smwall.domains.User;
 import io.xhub.smwall.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class UserMapper {
     public UserDTO toDTO(User user) {
