@@ -1,6 +1,8 @@
 package io.xhub.smwall.service;
 
+
 import com.querydsl.core.types.Predicate;
+import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.RoleName;
 import io.xhub.smwall.domains.Authority;
@@ -21,6 +23,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -32,7 +35,7 @@ public class UserServiceTest {
     private UserService userService;
     private User user;
     private UserUpdateCommand userUpdateCommand;
-
+    private UserAddCommand addCommand;
 
     @BeforeEach
     void setup() {
@@ -41,6 +44,12 @@ public class UserServiceTest {
         authority1.setName(RoleName.ROLE_ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority1);
+        addCommand = new UserAddCommand(
+                "testUser",
+                "test",
+                "testUser@gmail.com",
+                authorities
+        );
 
         user = new User();
         user.setId("123");
@@ -143,8 +152,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_toggleUserActivation_when_userExist(){
-        User user1= new User();
+    public void should_toggleUserActivation_when_userExist() {
+        User user1 = new User();
         user1.setId("testId");
         user1.setActivated(true);
 
@@ -154,6 +163,18 @@ public class UserServiceTest {
         assertEquals(false, user1.isActivated());
 
         verify(userRepository).save(user1);
+    }
+
+    @Test
+    void should_CreateUser_when_UserIsValid() {
+        User expectedUser = User.create(addCommand);
+
+        when(userRepository.save(any())).thenReturn(expectedUser);
+        User result = userService.createUser(addCommand);
+
+        assertNotNull(result);
+        assertEquals(expectedUser, result);
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
