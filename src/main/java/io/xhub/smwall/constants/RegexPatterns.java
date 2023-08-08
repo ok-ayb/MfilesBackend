@@ -8,4 +8,5 @@ public class RegexPatterns {
     public final static String ANNOUNCEMENT_TITLE = "^[a-zA-Z0-9'\\- ]{5,50}$";
     public final static String ANNOUNCEMENT_DESCRIPTION = "^(.{25,200})$";
     public final static String ALPHANUMERIC_DASH_APOS_SPACE = "^[a-zA-Z0-9\\-' ]+$";
+
 }

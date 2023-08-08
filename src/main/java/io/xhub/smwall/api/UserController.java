@@ -1,7 +1,9 @@
 package io.xhub.smwall.api;
 
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.UserDTO;
@@ -9,10 +11,11 @@ import io.xhub.smwall.mappers.UserMapper;
 import io.xhub.smwall.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "User management resource")
+@Api(tags = "User Management Resource")
 @RestController
 @RequestMapping(ApiPaths.V1 + ApiPaths.USERS)
 @RequiredArgsConstructor
@@ -28,4 +31,11 @@ public class UserController {
         return ResponseEntity.ok()
                 .body(userMapper.toDTO(userService.updateUser(userId, userUpdateCommand)));
     }
+
+    @ApiOperation(value = "Create a new User")
+    @PostMapping
+    public ResponseEntity<UserDTO> CreateUser(@RequestBody @Valid UserAddCommand userAddCommand) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDTO(userService.createUser(userAddCommand)));
+    }
+
 }

@@ -1,5 +1,6 @@
 package io.xhub.smwall.domains;
 
+import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,5 +56,15 @@ public class User extends AbstractAuditingDocument {
         if (userUpdateCommand.getAuthorities() != null) {
             this.setAuthorities(userUpdateCommand.getAuthorities());
         }
+    }
+
+    public static User create(final UserAddCommand command) {
+        User user = new User();
+        user.setFirstName(command.getFirstName());
+        user.setLastName(command.getLastName());
+        user.setEmail(command.getEmail());
+        user.setAuthorities(command.getAuthorities());
+
+        return user;
     }
 }

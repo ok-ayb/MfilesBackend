@@ -1,5 +1,7 @@
 package io.xhub.smwall.service;
 
+
+import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.User;
@@ -42,4 +44,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User createUser(final UserAddCommand userAddCommand) {
+        log.info("Start creating a new user");
+        return userRepository.save(User.create(userAddCommand));
+    }
 }
