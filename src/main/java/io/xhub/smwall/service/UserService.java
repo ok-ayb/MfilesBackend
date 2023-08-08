@@ -1,5 +1,6 @@
 package io.xhub.smwall.service;
 
+import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.User;
 import io.xhub.smwall.exceptions.BusinessException;
@@ -27,4 +28,18 @@ public class UserService {
         return userRepository.findFirstByEmailIgnoreCase(login)
                 .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()));
     }
+
+    public User getUserById(String id) {
+        log.info("Start getting user by id");
+        return userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()));
+    }
+
+    public User updateUser(String userId, UserUpdateCommand userUpdateCommand) {
+        log.info("Start updating user by id {} :", userId);
+        User user = getUserById(userId);
+        user.update(userUpdateCommand);
+        return userRepository.save(user);
+    }
+
 }
