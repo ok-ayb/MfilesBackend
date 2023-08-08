@@ -28,7 +28,5 @@ public class UserUpdateCommand {
     @Email
     private final String email;
 
-    private final Boolean activated;
-
     private final Set<Authority> authorities;
 }

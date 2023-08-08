@@ -35,7 +35,7 @@ public class User extends AbstractAuditingDocument {
     private String password;
 
     @Field("activated")
-    private boolean activated;
+    private boolean activated = true;
 
     @Field("authorities")
     @DBRef
@@ -48,9 +48,6 @@ public class User extends AbstractAuditingDocument {
         }
         if (userUpdateCommand.getLastName() != null) {
             this.setLastName(userUpdateCommand.getLastName());
-        }
-        if (userUpdateCommand.getActivated() != null) {
-            this.setActivated(userUpdateCommand.getActivated());
         }
         if (userUpdateCommand.getEmail() != null) {
             this.setEmail(userUpdateCommand.getEmail());
