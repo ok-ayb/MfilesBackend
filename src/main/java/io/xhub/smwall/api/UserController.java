@@ -9,9 +9,13 @@ import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.dto.UserDTO;
 import io.xhub.smwall.mappers.UserMapper;
 import io.xhub.smwall.service.UserService;
+import io.xhub.smwall.service.query.UserQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,15 @@ public class UserController {
     private final UserService userService;
 
     private final UserMapper userMapper;
+
+    @ApiOperation(value = "List of users")
+    @GetMapping
+    public ResponseEntity<Page<UserDTO>> getAllUsers(UserQuery userQuery, @ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(
+                userService.getAllUsers(userQuery.buildPredicate(), pageable)
+                        .map(userMapper::toDTO)
+        );
+    }
 
     @ApiOperation(value = "Update user")
     @PatchMapping("/{userId}")

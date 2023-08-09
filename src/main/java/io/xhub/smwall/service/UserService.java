@@ -2,6 +2,7 @@ package io.xhub.smwall.service;
 
 
 import io.xhub.smwall.commands.UserAddCommand;
+import com.querydsl.core.types.Predicate;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
 import io.xhub.smwall.domains.User;
@@ -10,6 +11,8 @@ import io.xhub.smwall.repositories.UserRepository;
 import io.xhub.smwall.utlis.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,15 @@ public class UserService {
     public User findUserByLogin(String login) {
         return userRepository.findFirstByEmailIgnoreCase(login)
                 .orElseThrow(() -> new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<User> getAllUsers(Predicate predicate, Pageable pageable) {
+        log.info("Start getting all users");
+        if (predicate == null) {
+            return userRepository.findAll(pageable);
+        }
+        return userRepository.findAll(predicate, pageable);
     }
 
     public User getUserById(String id) {

@@ -1,5 +1,6 @@
 package io.xhub.smwall.domains;
 
+import io.xhub.smwall.constants.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,5 @@ public class Authority {
     private String id;
 
     @Field("name")
-    private String name;
+    private RoleName name;
 }

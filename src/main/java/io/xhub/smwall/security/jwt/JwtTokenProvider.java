@@ -104,7 +104,7 @@ public class JwtTokenProvider implements AuthenticationProvider {
             final List<GrantedAuthority> authorities = user
                     .getAuthorities()
                     .stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+                    .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))
                     .collect(Collectors.toList());
 
             return new UsernamePasswordAuthenticationToken(login, password, authorities);
