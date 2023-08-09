@@ -20,7 +20,6 @@ public enum ApiClientErrorCodes {
     ANNOUNCEMENT_ALREADY_EXISTS(13, "announcement.already.exists"),
     MEDIA_HIDDEN(14, "media.hidden");
 
-
     private final Integer code;
     private final String messageKey;
 

@@ -20,5 +20,6 @@ public final class ApiPaths {
     public static final String LATEST = "/latest";
     public static final String MEDIA_VISIBILITY_STATUS = "/hide-show-media";
     public static final String USERS = "/users";
+    public static final String AUTHORITIES = "/authorities";
 
 }
