@@ -12,10 +12,10 @@ import io.xhub.smwall.service.UserService;
 import io.xhub.smwall.service.query.UserQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +49,13 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDTO> CreateUser(@RequestBody @Valid UserAddCommand userAddCommand) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDTO(userService.createUser(userAddCommand)));
+    }
+
+    @ApiOperation(value = "Delete user by ID")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+        userService.deleteUserById(userId);
+        return ResponseEntity.noContent().build();
     }
 
 }
