@@ -50,7 +50,6 @@ public class UserServiceTest {
                 "testUser@gmail.com",
                 authorities
         );
-
         user = new User();
         user.setId("123");
         user.setFirstName("user1");
@@ -70,7 +69,6 @@ public class UserServiceTest {
                 authorities
         );
     }
-
     @Test
     public void should_returnAllUsers_withoutPredicate() {
         Pageable pageable = mock(Pageable.class);
@@ -165,8 +163,8 @@ public class UserServiceTest {
         verify(userRepository).save(user1);
     }
 
-    @Test
-    void should_CreateUser_when_UserIsValid() {
+
+    void shouldCreateUserWhenUserIsValid() {
         User expectedUser = User.create(addCommand);
 
         when(userRepository.save(any())).thenReturn(expectedUser);

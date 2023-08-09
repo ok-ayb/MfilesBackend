@@ -161,6 +161,7 @@ public class UserControllerTest {
         verify(userService, times(1)).deleteUserById(invalidId);
     }
 
+
     @Test
     public void should_toggleUserActivation_when_userExist() throws Exception {
         String userId = "testId";
@@ -172,8 +173,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void should_Create_NewUser() throws Exception {
-        Authority authority = new Authority("1", RoleName.ROLE_ADMIN);
+    public void shouldCreateNewUser() throws Exception {
+        Authority authority = new Authority("authorityId1", RoleName.ROLE_ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         addCommand = new UserAddCommand(

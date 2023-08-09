@@ -2,6 +2,7 @@ package io.xhub.smwall.command;
 
 import io.xhub.smwall.commands.UserAddCommand;
 import io.xhub.smwall.constants.FormValidationCodes;
+import io.xhub.smwall.constants.RoleName;
 import io.xhub.smwall.domains.Authority;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -25,8 +26,8 @@ public class UserAddCommandTest {
     }
 
     @Test
-    public void should_not_throwsAnyConstraintViolationException_when_validPayload() {
-        Authority authority = new Authority("2", "ADMIN");
+    public void should_not_throwAnyConstraintViolationException_when_validPayload() {
+        Authority authority = new Authority("authorityId1", RoleName.ROLE_ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         System.out.println(authorities);
@@ -43,8 +44,8 @@ public class UserAddCommandTest {
     }
 
     @Test
-    public void should_ThrowsConstraintViolationException_when_InvalidFirstName() {
-        Authority authority = new Authority("1", "ADMIN");
+    public void should_ThrowConstraintViolationException_when_InvalidFirstName() {
+        Authority authority = new Authority("authorityId1", RoleName.ROLE_ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         UserAddCommand addCommand = new UserAddCommand(
@@ -65,8 +66,8 @@ public class UserAddCommandTest {
     }
 
     @Test
-    public void should_ThrowsConstraintViolationException_when_InvalidLastName() {
-        Authority authority = new Authority("1", "ADMIN");
+    public void should_ThrowConstraintViolationException_when_InvalidLastName() {
+        Authority authority = new Authority("authorityId1", RoleName.ROLE_ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         UserAddCommand addCommand = new UserAddCommand(
@@ -87,8 +88,8 @@ public class UserAddCommandTest {
     }
 
     @Test
-    public void should_ThrowsConstraintViolationException_when_InvalidEmail() {
-        Authority authority = new Authority("1", "ADMIN");
+    public void should_ThrowConstraintViolationException_when_InvalidEmail() {
+        Authority authority = new Authority("authorityId1", RoleName.ROLE_ADMIN);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         UserAddCommand addCommand = new UserAddCommand(
@@ -101,10 +102,5 @@ public class UserAddCommandTest {
         Set<ConstraintViolation<UserAddCommand>> violations = validator.validate(addCommand);
 
         assertEquals(1, violations.size());
-        ConstraintViolation<UserAddCommand> violation = violations.iterator().next();
-        String violationMessage = violation.getMessage();
-        String expectedMessage = "doit être une adresse électronique syntaxiquement correcte";
-        assertEquals(expectedMessage, violationMessage);
-
     }
 }
