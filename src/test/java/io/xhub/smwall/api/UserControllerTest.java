@@ -3,6 +3,7 @@ package io.xhub.smwall.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.ApiClientErrorCodes;
+import io.xhub.smwall.constants.ApiPaths;
 import io.xhub.smwall.constants.RoleName;
 import io.xhub.smwall.domains.Authority;
 import io.xhub.smwall.domains.User;
@@ -13,18 +14,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -89,6 +94,43 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         verify(userService, times(0))
                 .updateUser(anyString(), any(UserUpdateCommand.class));
+    }
+
+    @Test
+    public void should_get_allUsers() throws Exception {
+        List<User> userList = new ArrayList<>();
+        User user1 = new User();
+        user1.setId("1");
+        user1.setFirstName("First Name 1");
+        user1.setLastName("Last Name 1");
+
+        User user2 = new User();
+        user2.setId("2");
+        user2.setFirstName("First Name 2");
+        user2.setLastName("Last Name 2");
+
+        userList.add(user1);
+        userList.add(user2);
+
+        when(userService.getAllUsers(any(), any())).thenReturn(new PageImpl<>(userList));
+
+        mockMvc.perform(get(ApiPaths.V1 + ApiPaths.USERS)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(userService, times(1)).getAllUsers(any(), any());
+    }
+
+    @Test
+    public void should_get_empty_user_list() throws Exception {
+        List<User> emptyUserList = Collections.emptyList();
+        Page<User> emptyUserPage = new PageImpl<>(emptyUserList);
+
+        when(userService.getAllUsers(any(), any())).thenReturn(emptyUserPage);
+
+        mockMvc.perform(get(ApiPaths.V1 + ApiPaths.USERS))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty());
     }
 
 }
