@@ -1,6 +1,7 @@
 package io.xhub.smwall.service;
 
 import com.querydsl.core.types.Predicate;
+import io.xhub.smwall.commands.UserUpdateCommand;
 import io.xhub.smwall.constants.RoleName;
 import io.xhub.smwall.domains.Authority;
 import io.xhub.smwall.domains.User;
@@ -29,6 +30,8 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
     private User user;
+    private UserUpdateCommand userUpdateCommand;
+
 
     @BeforeEach
     void setup() {
@@ -44,6 +47,18 @@ public class UserServiceTest {
         user.setLastName("user2");
         user.setEmail("user@email.com");
         user.setAuthorities(authorities);
+
+        Authority adminAuthority = new Authority(
+                "6466001f342fd96df0b30fae",
+                RoleName.ROLE_ADMIN
+        );
+        authorities.add(adminAuthority);
+        userUpdateCommand = new UserUpdateCommand(
+                "newFirstName",
+                "newLastName",
+                "newEmail@gmail.com",
+                authorities
+        );
     }
 
     @Test
@@ -95,5 +110,35 @@ public class UserServiceTest {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
         assertThrows(BusinessException.class, () -> userService.getUserById(anyString()));
         verify(userRepository, times(1)).findById(anyString());
+    }
+
+    @Test
+    public void should_updateUser_when_userExists() {
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+
+        User result = userService.updateUser(user.getId(), userUpdateCommand);
+
+        assertEquals(user, result);
+        assertNotNull(result);
+        assertEquals(user.getId(), result.getId());
+        assertEquals(user.getEmail(), userUpdateCommand.getEmail());
+        assertEquals(user.getFirstName(), userUpdateCommand.getFirstName());
+        assertEquals(user.getLastName(), userUpdateCommand.getLastName());
+
+        verify(userRepository, times(1)).findById(user.getId());
+    }
+
+
+    @Test
+    public void should_throwBusinessException_when_userDoesNotExist() {
+
+        String invalidId = "invalidId";
+
+        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(BusinessException.class, () -> userService.updateUser(invalidId, userUpdateCommand));
+
     }
 }
