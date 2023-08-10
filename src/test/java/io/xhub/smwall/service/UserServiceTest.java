@@ -141,4 +141,26 @@ public class UserServiceTest {
         assertThrows(BusinessException.class, () -> userService.updateUser(invalidId, userUpdateCommand));
 
     }
+
+    @Test
+    public void should_deleteUser_when_userExists() {
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        userService.deleteUserById(user.getId());
+
+        verify(userRepository, times(1)).delete(user);
+    }
+
+    @Test
+    public void should_throwBusinessException_when_deleting_user_with_invalidId() {
+
+        String invalidId = "invalidId";
+
+        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(BusinessException.class, () -> userService.deleteUserById(invalidId));
+
+        verify(userRepository, never()).delete(any(User.class));
+    }
 }

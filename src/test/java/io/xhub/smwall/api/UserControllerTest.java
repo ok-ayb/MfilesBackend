@@ -27,6 +27,7 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -131,6 +132,30 @@ public class UserControllerTest {
         mockMvc.perform(get(ApiPaths.V1 + ApiPaths.USERS))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isEmpty());
+    }
+
+    @Test
+    public void should_deleteUser_when_userExists() throws Exception {
+    User user = new User();
+    user.setId("userId");
+
+        mockMvc.perform(delete(ApiPaths.V1 + ApiPaths.USERS + "/" + user.getId()))
+                .andExpect(status().isNoContent());
+
+        verify(userService, times(1)).deleteUserById(user.getId());
+    }
+
+    @Test
+    public void should_throwBusinessException_when_deleting_user_with_invalidId() throws Exception {
+        String invalidId = "invalidId";
+
+        doThrow(new BusinessException(ApiClientErrorCodes.USER_NOT_FOUND.getErrorMessage()))
+                .when(userService).deleteUserById(invalidId);
+
+        mockMvc.perform(delete(ApiPaths.V1 + ApiPaths.USERS + "/" + invalidId))
+                .andExpect(status().isBadRequest());
+
+        verify(userService, times(1)).deleteUserById(invalidId);
     }
 
 }
