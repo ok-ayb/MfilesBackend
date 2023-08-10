@@ -1,13 +1,12 @@
-package contracts.media
+package contracts.user
+
 import org.springframework.cloud.contract.spec.Contract
 
-
 Contract.make {
-    description "should update media visibility status"
-
+    description "should update user status"
     request {
-        method 'PUT'
-        url '/api/v1/media/{mediaId}/visibility'
+        method POST()
+        url '/api/v1/users/{userId}/activate-deactivate-user'
         headers {
             contentType applicationJson()
         }
@@ -18,4 +17,5 @@ Contract.make {
             contentType applicationJson()
         }
     }
+
 }
