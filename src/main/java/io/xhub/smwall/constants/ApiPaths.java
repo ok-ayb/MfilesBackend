@@ -21,5 +21,6 @@ public final class ApiPaths {
     public static final String MEDIA_VISIBILITY_STATUS = "/hide-show-media";
     public static final String USERS = "/users";
     public static final String AUTHORITIES = "/authorities";
+    public static final String USER_ACCOUNT_STATUS = "/toggle-status";
 
 }

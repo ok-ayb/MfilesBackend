@@ -58,4 +58,10 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @ApiOperation(value = "Activate or Deactivate User Account")
+    @PutMapping("/{userId}" + ApiPaths.USER_ACCOUNT_STATUS)
+    public ResponseEntity<Void> toggleUserActivation(@PathVariable("userId") String userId) {
+        userService.toggleUserActivation(userId);
+        return ResponseEntity.ok().build();
+    }
 }

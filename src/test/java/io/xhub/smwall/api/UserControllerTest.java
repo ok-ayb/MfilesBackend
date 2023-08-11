@@ -158,4 +158,14 @@ public class UserControllerTest {
         verify(userService, times(1)).deleteUserById(invalidId);
     }
 
+    public void should_toggleUserActivation_when_userExist() throws Exception {
+        String userId = "testId";
+        mockMvc.perform(MockMvcRequestBuilders.put(ApiPaths.V1 + ApiPaths.USERS + "/" + userId + ApiPaths.USER_ACCOUNT_STATUS)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(userService, times(1)).toggleUserActivation(userId);
+    }
 }
+
+

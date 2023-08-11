@@ -11,7 +11,6 @@ import io.xhub.smwall.repositories.UserRepository;
 import io.xhub.smwall.utlis.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+
 
     public User getUser() {
         return SecurityUtils.getCurrentUserLogin()
@@ -69,4 +69,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public void toggleUserActivation(String userId) {
+        User user = getUserById(userId);
+            user.setActivated(!user.isActivated());
+            userRepository.save(user);
+    }
 }

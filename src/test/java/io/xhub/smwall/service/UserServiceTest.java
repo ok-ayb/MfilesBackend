@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -139,7 +140,20 @@ public class UserServiceTest {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThrows(BusinessException.class, () -> userService.updateUser(invalidId, userUpdateCommand));
+    }
 
+    @Test
+    public void should_toggleUserActivation_when_userExist(){
+        User user1= new User();
+        user1.setId("testId");
+        user1.setActivated(true);
+
+        when(userRepository.findById(user1.getId())).thenReturn(Optional.of(user1));
+        userService.toggleUserActivation(user1.getId());
+
+        assertEquals(false, user1.isActivated());
+
+        verify(userRepository).save(user1);
     }
 
     @Test
