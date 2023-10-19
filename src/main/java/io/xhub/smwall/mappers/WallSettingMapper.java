@@ -27,5 +27,6 @@ public class WallSettingMapper {
         wallSettingDTO.setLogoBase64(StringUtils.getBase64Data(logo.getContentType(), logoBase64Data));
 
         return wallSettingDTO;
+        Itirator itirator = lis
     }
 }
